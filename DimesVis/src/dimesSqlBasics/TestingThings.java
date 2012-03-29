@@ -13,7 +13,7 @@ public class TestingThings {
 					 + "FROM DIMES_PLAYGROUND.IPsTblFull "
 					 + "WHERE Country=\"Israel\" " + "ORDER BY City " + "LIMIT 10;";
 
-		Connector connector = new Connector(5551, "DIMES_PLAYGROUND", "codeLimited", "");
+		Connector connector = new Connector(5551, "codeLimited", "", "DIMES_PLAYGROUND");
 		connector.connect();
 		ResultSet rs = connector.submitStatement(query);
 		try {
