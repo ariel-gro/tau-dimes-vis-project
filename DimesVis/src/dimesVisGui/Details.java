@@ -1,10 +1,12 @@
 package dimesVisGui;
 
+import dimesSqlBasics.DimesQueryTimeOption;
+
 public class Details {
 	private int firstViewRadioButtonNumber;
 	private int secondViewRadioButtonNumber;
 	private int[] sourceIp;
-	private int timeChoiceRadioButtonNumber;
+	private DimesQueryTimeOption timeChoiceRadioButtonNumber;
 	private int[] date;
 	private String hostName;
 	private int connectionPort;
@@ -21,11 +23,11 @@ public class Details {
 		firstViewRadioButtonNumber=-1;
 		secondViewRadioButtonNumber=-1;
 		sourceIp=new int[4];
-		timeChoiceRadioButtonNumber=-1;
+		timeChoiceRadioButtonNumber=DimesQueryTimeOption.None;
 		date=new int[3];
-		hostName="";
+		hostName="localhost";
 		connectionPort=-1;
-		userName="";
+		userName="codeLimited";
 		password="";
 		schemaName="";
 		tableName="";
@@ -90,14 +92,29 @@ public class Details {
 	 * @param btnNum
 	 */
 	public void setTimeChoiceRadioButton(int btnNum){
-		timeChoiceRadioButtonNumber=btnNum;
+		switch (btnNum)
+		{
+			case 0:
+				timeChoiceRadioButtonNumber=DimesQueryTimeOption.Best;
+				break;
+			case 1:
+				timeChoiceRadioButtonNumber=DimesQueryTimeOption.Average;
+				break;
+			case 2:
+				timeChoiceRadioButtonNumber=DimesQueryTimeOption.Worst;
+				break;
+				
+			default:
+				timeChoiceRadioButtonNumber=DimesQueryTimeOption.None;
+				break;
+		}
 	}
 	
 	/*
 	 * get time choice radio button
 	 * @return timeChoiceRadioButtonNumber
 	 */
-	public int getTimeChoiceRadioButton(){
+	public DimesQueryTimeOption getTimeChoiceRadioButton(){
 		return timeChoiceRadioButtonNumber;
 	}
 	

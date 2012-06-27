@@ -5,48 +5,24 @@ import java.sql.*;
 public class Connector
 {
 
-	private Connection	conn	= null;
-	private Statement	stmt	= null;
-	private ResultSet	rs		= null;
-	private int			port	= 0;
-	private String		user	= null;
-	private String		pass	= null;
-	private String		schema	= null;
-
-	public Connector()
-	{
-		//System.out.println("Starting constructor");
-		try
-		{
-			Class.forName("com.mysql.jdbc.Driver").newInstance();
-		}
-		catch (IllegalAccessException ex)
-		{
-			System.out.println("Default Constructor: IllegalAccessException");
-			ex.printStackTrace();
-		}
-		catch (InstantiationException e)
-		{
-			System.out.println("Default Constructor: InstantiationException");
-			e.printStackTrace();
-		}
-		catch (ClassNotFoundException e)
-		{
-			System.out.println("Default Constructor: ClassNotFoundException");
-			e.printStackTrace();
-		}
-
-		//System.out.println("Finished constructor");
-	}
+	private Connection	conn		= null;
+	private Statement	stmt		= null;
+	private ResultSet	rs			= null;
+	private int			port		= 0;
+	private String		user		= null;
+	private String		pass		= null;
+	private String		schema		= null;
+	private String		hostName	= null;
 
 	public Connector(int portNumber, String userName, String password,
-			String schema)
+			String schema, String hostName)
 	{
 		//System.out.println("Starting constructor");
 		this.port = portNumber;
 		this.user = userName;
 		this.pass = password;
 		this.schema = schema;
+		this.hostName = hostName;
 
 		try
 		{
@@ -129,18 +105,18 @@ public class Connector
 		}
 	}
 
-	public String getPass()
+	public String getPassword()
 	{
 		return pass;
 	}
 
-	public void setPass(String pass)
+	public void setPassword(String password)
 	{
 		try
 		{
 			if ((this.conn == null) || (this.conn.isClosed()))
 			{
-				this.pass = pass;
+				this.pass = password;
 			}
 			else
 			{
@@ -186,8 +162,36 @@ public class Connector
 			// ex.printStackTrace();
 		}
 	}
+	
+	public String getHostName()
+	{
+		return this.hostName;
+	}
 
-	//TODO: host-name should be a variable
+	public void setHostName(String hostName)
+	{
+		try
+		{
+			if ((this.conn == null) || (this.conn.isClosed()))
+			{
+				this.user = hostName;
+			}
+			else
+			{
+				System.out.println("Can't set host name when connection is opened. Call closeConection() first");
+			}
+		}
+		catch (SQLException ex)
+		{
+			// handle any errors
+			System.out.println("SQLException @ setHostName()");
+			System.out.println("SQLException: " + ex.getMessage());
+			System.out.println("SQLState: " + ex.getSQLState());
+			System.out.println("VendorError: " + ex.getErrorCode());
+			// ex.printStackTrace();
+		}
+	}
+
 	public void connect()
 	{
 		//System.out.println("Starting connect()");
@@ -196,7 +200,7 @@ public class Connector
 			if ((conn == null) || (conn.isClosed()))
 			{
 				//System.out.println("connect(): getting connection");
-				String connectionString = "jdbc:mysql://localhost:" + this.port
+				String connectionString = "jdbc:mysql://"+this.hostName+":" + this.port
 						+ "/" + this.schema + "?" + "user=" + this.user
 						+ "&password=" + this.pass;
 				//System.out.println("connect(): connectionString = " + connectionString);

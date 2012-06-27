@@ -2,7 +2,19 @@ package dimesSqlBasics;
 
 public enum DimesQueryTimeOption
 {
-	Best, Average, Worst; 
+	None(-1), Best(0), Average(1), Worst(2);
+	
+	private int opt;
+	
+	DimesQueryTimeOption(int option)
+	{
+		this.opt = option;
+	}
+	
+	public int getOptionNum()
+	{
+		return this.opt;
+	}
 	
 	public String toString()
 	{

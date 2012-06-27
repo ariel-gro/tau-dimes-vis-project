@@ -109,9 +109,9 @@ public class visualizationStartGui {
 		spinner[i].setMaximum(255);
 		// set the increment value to 1
 		spinner[i].setIncrement(1);
-		// set the selection to 255
-		spinner[i].setSelection(255);
-		if (i<3) new Label (composite, SWT.NONE).setText(":");
+		// set the selection to 0
+		spinner[i].setSelection(0);
+		if (i<3) new Label (composite, SWT.NONE).setText(".");
 		}
 		
 		items[2] = new ExpandItem (bar, SWT.NONE, 2);
@@ -135,11 +135,11 @@ public class visualizationStartGui {
 		final Button[] thirdbuttonArr=new Button[3];
 		for (int i=0; i<3; i++) {
 			thirdbuttonArr[i] = new Button (composite, SWT.RADIO);
-			if (i==0) thirdbuttonArr[i].setText ("( average )");
-			if (i==1) thirdbuttonArr[i].setText ("( best time )");
-			if (i==2) thirdbuttonArr[i].setText ("( worst time )");
+			if (i==1) thirdbuttonArr[i].setText ("( Average time )");
+			if (i==0) thirdbuttonArr[i].setText ("( Best time )");
+			if (i==2) thirdbuttonArr[i].setText ("( Worst time )");
 			
-			if (i == 0) thirdbuttonArr[i].setSelection (true);
+			if (i == 1) thirdbuttonArr[i].setSelection (true);
 		}
 
 		// item configuration
@@ -215,6 +215,7 @@ public class visualizationStartGui {
 		hostnameLabel = new Label (composite, SWT.CENTER);
 		hostnameLabel.setText ("Enter Host Name");
 		hostnameText = new Text(composite, SWT.LEFT | SWT.BORDER);
+		hostnameText.setText("127.0.0.1");
 		
 		//port number;
 		final Label portnumberLabel;
@@ -222,7 +223,7 @@ public class visualizationStartGui {
 		portnumberLabel = new Label (composite, SWT.CENTER);
 		portnumberLabel.setText ("Enter Port Number");
 		portnumberText = new Text(composite, SWT.LEFT | SWT.BORDER);
-		portnumberText.setText("9999");
+		portnumberText.setText("3306");
 		
 		//user name;
 		final Label usernameLabel;

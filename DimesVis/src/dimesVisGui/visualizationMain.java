@@ -2,7 +2,7 @@ package dimesVisGui;
 import java.io.IOException;
 
 import dimesSqlBasics.Connector;
-import dimesSqlBasics.TestingThings;
+import dimesSqlBasics.DimesDbOperationsMain;
 
 
 
@@ -17,7 +17,7 @@ public class visualizationMain {
 //									"time measurement method - "+details.getTimeChoiceRadioButton()+"\n\n"+
 //									"date of measurement - "+details.getDate()[0]+":"+details.getDate()[1]+":"+details.getDate()[2]+"\n\n");
 	try {
-		TestingThings.runArielsCode(details.getFirstRadioButton(), details.getSecondRadioButton());
+		DimesDbOperationsMain.startDimesDbOperations(details);
 	} catch (IOException e) {
 		System.out.println("Something went wrong in Ariel's code");
 		e.printStackTrace();
