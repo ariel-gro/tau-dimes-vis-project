@@ -187,6 +187,7 @@ public class Connector
 		}
 	}
 
+	//TODO: host-name should be a variable
 	public void connect()
 	{
 		//System.out.println("Starting connect()");
