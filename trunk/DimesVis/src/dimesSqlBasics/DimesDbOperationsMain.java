@@ -23,20 +23,9 @@ public class DimesDbOperationsMain
 		return sdf.format(cal.getTime());
 	}
 
-	public static void startDimesDbOperations(Details guiDetails) throws IOException
+	public static String startDimesDbOperations(Details guiDetails) throws IOException
 	{
-		//DimesQuery dimesQuery = new DimesQuery(QueryType.MainQuery, "dimes_results_2007", "141.35.186.237", null, DimesQueryTimeOption.Average, 10000);
-		//String     mainQuery  = dimesQuery.toString();
-		
-		String mainSchema   = guiDetails.getSchemaName();
-		int[]  mainSrcIpArr	= guiDetails.getSourceIp();
-		String mainSrcIp	= mainSrcIpArr[0]+"."+mainSrcIpArr[1]+"."+mainSrcIpArr[2]+"."+mainSrcIpArr[3];
-		String mainDate		= guiDetails.getDate()[2] + "";
-		DimesQueryTimeOption mainTimeopt = guiDetails.getTimeChoiceRadioButton();
-		int    mainLimit    = 1000;
-		DimesQuery queryFromGui = new DimesQuery(QueryType.MainQuery, mainSchema, mainSrcIp, mainDate, mainTimeopt, mainLimit);
-		String mainQuery = queryFromGui.toString();
-		
+		String retVal = "Success";
 //				  "SELECT SourceIP, SequenceNum, DestIP, avgTime "
 //				+ "FROM dimes_results_2007.raw_res_main_2007, dimes_results_2007.raw_res_tr_2007 "
 //				+ "WHERE ((dimes_results_2007.raw_res_main_2007.reachedDest = 1) "
@@ -47,13 +36,32 @@ public class DimesDbOperationsMain
 		int    mainPort     = guiDetails.getConnectionPort();
 		String mainUserName = guiDetails.getUserName();
 		String mainPassword = guiDetails.getPassword();
+		String mainSchema   = guiDetails.getSchemaName();
 		String mainHostName = guiDetails.getHostName();
+		
+		if ((null == mainUserName) || (mainUserName.equals("")))
+		{
+			mainUserName = "codeLimited";
+		}
+		
 		Connector mainConnector = new Connector(mainPort, mainUserName, mainPassword, mainSchema, mainHostName);
 		mainConnector.connect();
 		
 		Connector secondConnector = new Connector(5551, "codeLimited", "", "DIMES_PLAYGROUND", "localhost");
 		secondConnector.connect();
 
+		//DimesQuery dimesQuery = new DimesQuery(QueryType.MainQuery, "dimes_results_2007", "141.35.186.237", null, DimesQueryTimeOption.Average, 100);
+		//String     mainQuery  = dimesQuery.toString();
+		
+		int[]  mainSrcIpArr	= guiDetails.getSourceIp();
+		String mainSrcIp	= mainSrcIpArr[0]+"."+mainSrcIpArr[1]+"."+mainSrcIpArr[2]+"."+mainSrcIpArr[3];
+		String mainDate		= guiDetails.getDate()[2] + "";
+		DimesQueryTimeOption mainTimeopt = guiDetails.getTimeChoiceRadioButton();
+		int    mainLimit    = guiDetails.getLimit();
+		
+		DimesQuery queryFromGui = new DimesQuery(QueryType.MainQuery, mainSchema, mainSrcIp, mainDate, mainTimeopt, mainLimit);
+		String mainQuery = queryFromGui.toString();
+		
 		System.out.println("Submit Main Statement Started at: " + now());
 		ResultSet rs = mainConnector.submitStatement(mainQuery);
 		System.out.println("Submit Main Statement Ended at: " + now());
@@ -92,12 +100,16 @@ public class DimesDbOperationsMain
 				}
 				else
 				{
-					System.out.println("Error in main: Second result-set is empty for source");
+					retVal = "Error in main: Second result-set is empty for source";
+					System.out.println(retVal);
+					return retVal;
 				}
 			}
 			else
 			{
-				System.out.println("Error in main: Result-Set is empty");
+				retVal = "Error in main: Result-Set is empty";
+				System.out.println(retVal);
+				return retVal;
 			}
 			
 			while ((rs != null) && (rsNotEmpty))
@@ -136,11 +148,13 @@ public class DimesDbOperationsMain
 				{
 					td.setTargetLatitude(secRs.getDouble(1));
 					td.setTargetLongitude(secRs.getDouble(2));
-					System.out.println("\t"+td.getTargetLatitude()+"\t"+td.getTargetLongitude());
+					//System.out.println("\t"+td.getTargetLatitude()+"\t"+td.getTargetLongitude());
 				}
 				else
 				{
-					System.out.println("Error in main: Second result-set is empty for target: " + dstIp);
+					retVal = "Error in main: Second result-set is empty for target: " + dstIp;
+					System.out.println(retVal);
+					return retVal;
 				}
 				
 				sd.addTarget(seqNum, td);
@@ -153,21 +167,27 @@ public class DimesDbOperationsMain
 			dfw.writeFullDataToFile(sd, guiDetails.getFirstRadioButton(), guiDetails.getSecondRadioButton());
 			dfw.closeDataFileWriter();
 		}
-		catch (SQLException ex)
+		catch (SQLException sqlEx)
 		{
 			// handle any errors
-			System.out.println("SQLException @ main()");
-			System.out.println("SQLException: " + ex.getMessage());
-			System.out.println("SQLState: " + ex.getSQLState());
-			System.out.println("VendorError: " + ex.getErrorCode());
-			ex.printStackTrace();
+			retVal = "SQLException @ main() \n"
+					+"SQLException: " + sqlEx.getMessage() + "\n"
+					+"SQLState: " + sqlEx.getSQLState() + "\n"
+					+"VendorError: " + sqlEx.getErrorCode();
+			System.out.println(retVal);
+			sqlEx.printStackTrace();
+			return retVal;
 		}
-		catch (IOException e)
+		catch (IOException ioEx)
 		{
-			System.out.println("IO error while writing to file:");
-			e.printStackTrace();
+			retVal = "IO error while writing to file:";
+			System.out.println(retVal);
+			ioEx.printStackTrace();
+			return retVal;
 		}
 		secondConnector.closeConnection();
+		
+		return retVal;
 	}
 
 }

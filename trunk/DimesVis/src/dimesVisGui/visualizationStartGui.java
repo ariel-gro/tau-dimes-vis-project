@@ -1,4 +1,5 @@
 package dimesVisGui;
+import java.io.IOException;
 import java.util.Date;
 import org.eclipse.swt.*;
 import org.eclipse.swt.layout.*;
@@ -8,6 +9,8 @@ import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.*;
+
+import dimesSqlBasics.DimesDbOperationsMain;
 
 public class visualizationStartGui {
 
@@ -135,10 +138,11 @@ public class visualizationStartGui {
 		final Button[] thirdbuttonArr=new Button[3];
 		for (int i=0; i<3; i++) {
 			thirdbuttonArr[i] = new Button (composite, SWT.RADIO);
-			if (i==1) thirdbuttonArr[i].setText ("( Average time )");
 			if (i==0) thirdbuttonArr[i].setText ("( Best time )");
+			if (i==1) thirdbuttonArr[i].setText ("( Average time )");
 			if (i==2) thirdbuttonArr[i].setText ("( Worst time )");
 			
+			//set average as default
 			if (i == 1) thirdbuttonArr[i].setSelection (true);
 		}
 
@@ -272,6 +276,20 @@ public class visualizationStartGui {
 		tablenameLabel.setText ("Enter Table Name");
 		tablenameText = new Text(composite, SWT.LEFT | SWT.BORDER);
 		
+		//limit number of returned lines
+		final Label limitLabel = new Label (composite, SWT.CENTER);
+		limitLabel.setText("Set limit to the number of returned lines (0 = Unlimited (Might cause memory problems))");
+		final Spinner limitSpinner = new Spinner(composite, SWT.NONE);
+		// don't allow decimal places
+		limitSpinner.setDigits(0);
+		// set the minimum value to 0
+		limitSpinner.setMinimum(0);
+		// set the maximum value to integer max
+		limitSpinner.setMaximum(Integer.MAX_VALUE);
+		// set the increment value to 1
+		limitSpinner.setIncrement(1);
+		// set the selection to 250
+		limitSpinner.setSelection(250);
 		
 		// item configuration
 		items[6] = new ExpandItem (bar, SWT.NONE, 6);
@@ -287,7 +305,7 @@ public class visualizationStartGui {
 		//layout.verticalSpacing = 10;
 		composite.setLayout(layout);
 		Button doneButton = new Button (composite, SWT.PUSH);
-		doneButton.setText ("done");
+		doneButton.setText ("Done");
 		
 		doneButton.addSelectionListener(new ButtonHandler() {
 
@@ -337,9 +355,11 @@ public class visualizationStartGui {
 					// schema name selection
 					details.setSchemaName(((schemaText.getText())));
 					
-					// table named selection
+					// table name selection
 					details.setTableName(((tablenameText.getText())));
 					
+					// lines limit selection
+					details.setLimit(((limitSpinner.getSelection())));
 					
 				}
 				
@@ -361,11 +381,21 @@ public class visualizationStartGui {
 									"user name - "+details.getUserName()+"\n\n" +
 									"password - "+details.getPassword()+"\n\n" +
 									"schema name - "+details.getSchemaName()+"\n\n" +
-									"table name - "+details.getTableName()+"\n\n"
+									"table name - "+details.getTableName()+"\n\n" +
+									"line limit - "+details.getLimit()+"\n\n"
 									);
 				if (mainMessageBox.open() == SWT.OK)
 				{
 					System.out.println("Ok is pressed.");
+					String dbReturnd = "DB operation return value has no value yet";
+					try {
+						dbReturnd = DimesDbOperationsMain.startDimesDbOperations(details);
+						System.out.println("DB operations returned: " + dbReturnd);
+					} catch (IOException ioEx) {
+						System.out.println("DB operations returned with error!!");
+						System.out.println(dbReturnd);
+						ioEx.printStackTrace();
+					}
 					try {
 		                Runtime rt = Runtime.getRuntime();
 		                //Process pr = rt.exec("cmd /c dir");
