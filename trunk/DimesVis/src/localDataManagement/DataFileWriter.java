@@ -16,12 +16,16 @@ public class DataFileWriter
 		this.matlabInput = new File(path);
 		this.fstream = new FileWriter(matlabInput);
 		this.bwriter = new BufferedWriter(fstream);
+		//TODO: what happens when
+		//1. file doesn't exist
+		//2. file exists and not empty
 	}
 
-	public void writeFullDataToFile(SourceData sd) throws IOException
+	public void writeFullDataToFile(SourceData sd, int firstRadioButton, int secondRadioButton) throws IOException
 	{
 		writeSourceData(sd);
 		writeAllDestData(sd);
+		writeOptions(firstRadioButton, secondRadioButton);
 	}
 
 	public void closeDataFileWriter() throws IOException
@@ -44,6 +48,7 @@ public class DataFileWriter
 	{
 		TargetData td = null;
 		Long[] allSeqNums = sd.getAllSequenceNumbers();
+		String dstNums = "";
 		String dstNames = "";
 		String dstLats = "";
 		String dstLongs = "";
@@ -53,15 +58,19 @@ public class DataFileWriter
 			td = sd.getTarget(allSeqNums[i]);
 
 			dstNames += td.getTargetIpAsString();
+			dstNums += (i+1) + "";
 			if (i < allSeqNums.length - 1)
 			{
 				dstNames += ", ";
+				dstNums += ", ";
 			}
 			dstLats += td.getTargetLatitude() + " ";
 			dstLongs += td.getTargetLongitude() + " ";
 			dstTimes += td.getMeasuredTime() + " ";
 		}
 
+		bwriter.write(dstNums);
+		bwriter.newLine();
 		bwriter.write(dstNames);
 		bwriter.newLine();
 		bwriter.write(dstLats);
@@ -69,6 +78,13 @@ public class DataFileWriter
 		bwriter.write(dstLongs);
 		bwriter.newLine();
 		bwriter.write(dstTimes);
-
+		bwriter.newLine();
+	}
+	
+	private void writeOptions(int firstRadioButton, int secondRadioButton) throws IOException
+	{
+		bwriter.write(firstRadioButton+"");
+		bwriter.newLine();
+		bwriter.write(secondRadioButton+"");
 	}
 }

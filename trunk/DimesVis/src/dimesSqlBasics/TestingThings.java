@@ -25,7 +25,7 @@ public class TestingThings
 	 * @param args
 	 * @throws IOException 
 	 */
-	public static void main(String[] args) throws IOException
+	public static void runArielsCode(int firstRadioButton, int secondRadioButton) throws IOException
 	{
 		/*
 		 * String query = "SELECT City, IP, Hostname, ASNumber " +
@@ -35,24 +35,25 @@ public class TestingThings
 		
 		String mainQuery =
 				  "SELECT SourceIP, SequenceNum, DestIP, avgTime "
-				+ "FROM DIMES_PLAYGROUND.raw_res_main_2007_21, DIMES_PLAYGROUND.raw_res_traceroute_2007_21 "
-				+ "WHERE ((DIMES_PLAYGROUND.raw_res_main_2007_21.reachedDest = 1) "
-				+ "AND (DIMES_PLAYGROUND.raw_res_main_2007_21.DestAddress = DIMES_PLAYGROUND.raw_res_traceroute_2007_21.hopAddress) "
-				+ "AND (DIMES_PLAYGROUND.raw_res_main_2007_21.SequenceNum = DIMES_PLAYGROUND.raw_res_traceroute_2007_21.MainSequenceNum) "
-				+ "AND (INET_ATON(DIMES_PLAYGROUND.raw_res_main_2007_21.SourceIP) = INET_ATON('141.35.186.237')));";
+				+ "FROM dimes_results_2007.raw_res_main_2007, dimes_results_2007.raw_res_tr_2007 "
+				+ "WHERE ((dimes_results_2007.raw_res_main_2007.reachedDest = 1) "
+				+ "AND (dimes_results_2007.raw_res_main_2007.DestAddress = dimes_results_2007.raw_res_tr_2007.hopAddress) "
+				+ "AND (dimes_results_2007.raw_res_main_2007.SequenceNum = dimes_results_2007.raw_res_tr_2007.MainSequenceNum) "
+				+ "AND (dimes_results_2007.raw_res_main_2007.SourceIP = '141.35.186.237')) "
+				+ "LIMIT 200;";
 
 		/*
 		 * Connector connector = new Connector(5551, "codeLimited", "",
 		 * "DIMES_PLAYGROUND");
 		 */
-		//Connector connector = new Connector(5563, "codeLimited", "", "DIMES_PLAYGROUND");
-		//connector.connect();
+		Connector connector = new Connector(4555, "codeLimited", "", "dimes_results_2007");
+		connector.connect();
 		
 		Connector connector2 = new Connector(5551, "codeLimited", "", "DIMES_PLAYGROUND");
 		connector2.connect();
 
 		//System.out.println("Submit Statement Started at: " + now());
-		//ResultSet rs = connector.submitStatement(mainQuery);
+		ResultSet rs = connector.submitStatement(mainQuery);
 		//System.out.println("Submit Statement Ended at: " + now());
 		try
 		{
@@ -64,13 +65,13 @@ public class TestingThings
 			long		seqNum = 0, avgTime = 0;
 			SourceData	sd	= null;
 			TargetData	td	= null;
-			boolean		rsNotEmpty = true;//rs.next();
+			boolean		rsNotEmpty = rs.next();
 			ResultSet	secRs;
 			String		secQuery;
 			
 			if (rsNotEmpty)
 			{
-				srcIp = "141.35.186.237";//rs.getString(1);
+				srcIp = rs.getString(1);
 				sd = new SourceData(srcIp);
 				
 				secQuery = "SELECT latitude, longitude FROM DIMES_PLAYGROUND.IPsTblFull "
@@ -92,21 +93,21 @@ public class TestingThings
 				System.out.println("Error in main: Result-Set is empty");
 			}
 			
-			//while ((rs != null) && (rsNotEmpty))
-			long[] seqNums = {14139275, 14139277, 14139289, 14139291, 14139317,
-							  15128682, 15128696, 15128702, 15167885, 15167887};
-			String[] destIps = {"217.12.208.2", "202.55.80.1", "203.14.32.1", "202.176.208.1", "65.122.92.2",
-								"194.8.5.2", "153.96.12.1", "66.195.7.1", "212.150.32.1", "66.38.255.1"};
-			long[] avgTimes = {114, 373, 329, 304, 143,
-							    79,  14, 121, 104, 210};
+			while ((rs != null) && (rsNotEmpty))
+//			long[] seqNums = {14139275, 14139277, 14139289, 14139291, 14139317,
+//							  15128682, 15128696, 15128702, 15167885, 15167887};
+//			String[] destIps = {"217.12.208.2", "202.55.80.1", "203.14.32.1", "202.176.208.1", "65.122.92.2",
+//								"194.8.5.2", "153.96.12.1", "66.195.7.1", "212.150.32.1", "66.38.255.1"};
+//			long[] avgTimes = {114, 373, 329, 304, 143,
+//							    79,  14, 121, 104, 210};
 			//for (int i = 0; i < sd.getNumOfTargets(); i++)
-			for (int i = 0; i < 10; i++)
+			//for (int i = 0; i < 10; i++)
 			{
 				td		= new TargetData();
-				srcIp   = "141.35.186.237";//rs.getString(1);
-				seqNum  = seqNums[i];//rs.getLong(2);
-				dstIp   = destIps[i];//rs.getString(3);
-				avgTime = avgTimes[i];//rs.getLong(4);
+				srcIp   = rs.getString(1);
+				seqNum  = rs.getLong(2);
+				dstIp   = rs.getString(3);
+				avgTime = rs.getLong(4);
 				
 				secQuery = "SELECT latitude, longitude FROM DIMES_PLAYGROUND.IPsTblFull "
 					     + "WHERE (DIMES_PLAYGROUND.IPsTblFull.IP = '"+dstIp+"');";
@@ -130,12 +131,12 @@ public class TestingThings
 				
 				sd.addTarget(seqNum, td);
 				
-				//rsNotEmpty = rs.next();
+				rsNotEmpty = rs.next();
 			}
 			/* write data to file */
 			DataFileWriter dfw = new DataFileWriter(
-					"C:\\Documents and Settings\\Ariel\\Desktop\\Ariel\\eclipse-rcp-helios-SR2-win32\\workspace\\javaTimesfile.txt");
-			dfw.writeFullDataToFile(sd);
+					"C:\\javaTimesfile2.txt");
+			dfw.writeFullDataToFile(sd, firstRadioButton, secondRadioButton);
 			dfw.closeDataFileWriter();
 		}
 		catch (SQLException ex)
@@ -145,7 +146,7 @@ public class TestingThings
 			System.out.println("SQLException: " + ex.getMessage());
 			System.out.println("SQLState: " + ex.getSQLState());
 			System.out.println("VendorError: " + ex.getErrorCode());
-			// ex.printStackTrace();
+			ex.printStackTrace();
 		}
 		catch (IOException e)
 		{
