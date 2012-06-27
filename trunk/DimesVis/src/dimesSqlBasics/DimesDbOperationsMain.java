@@ -102,14 +102,12 @@ public class DimesDbOperationsMain
 				{
 					retVal = "Error in main: Second result-set is empty for source";
 					System.out.println(retVal);
-					return retVal;
 				}
 			}
 			else
 			{
 				retVal = "Error in main: Result-Set is empty";
 				System.out.println(retVal);
-				return retVal;
 			}
 			
 			while ((rs != null) && (rsNotEmpty))
@@ -154,7 +152,6 @@ public class DimesDbOperationsMain
 				{
 					retVal = "Error in main: Second result-set is empty for target: " + dstIp;
 					System.out.println(retVal);
-					return retVal;
 				}
 				
 				sd.addTarget(seqNum, td);
