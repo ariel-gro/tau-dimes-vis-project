@@ -110,8 +110,16 @@ public class DimesQuery
 			  + "WHERE (("+this.schema+"."+this.tables.get(resMainIndex)+".reachedDest = 1) "
 			  + "AND ("+this.schema+"."+this.tables.get(resMainIndex)+".DestAddress = "+this.schema+"."+this.tables.get(resTraceIndex)+".hopAddress) "
 			  + "AND ("+this.schema+"."+this.tables.get(resMainIndex)+".SequenceNum = "+this.schema+"."+this.tables.get(resTraceIndex)+".MainSequenceNum) "
-			  + "AND ("+this.schema+"."+this.tables.get(resMainIndex)+".SourceIP = '"+this.ip+"')) "
-			  +	"LIMIT "+this.limit+";";
+			  + "AND ("+this.schema+"."+this.tables.get(resMainIndex)+".SourceIP = '"+this.ip+"'))";
+		
+		if (this.limit != 0)	  
+		{
+			query += " LIMIT "+this.limit+";";
+		}
+		else
+		{
+			query += ";";
+		}
 		
 		return query;
 	}

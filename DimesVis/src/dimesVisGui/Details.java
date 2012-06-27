@@ -14,6 +14,7 @@ public class Details {
 	private String password;
 	private String schemaName;
 	private String tableName;
+	private int limit;
 	
 	
 	/*
@@ -31,6 +32,7 @@ public class Details {
 		password="";
 		schemaName="";
 		tableName="";
+		limit=-1;
 	}
 	
 	/*
@@ -225,12 +227,30 @@ public class Details {
 	public void setTableName(String tablename){
 		tableName=tablename;
 	}
-	
+
 	/*
 	 * get Table Name
 	 * @return tableName
 	 */
 	public String getTableName(){
 		return tableName;
+	}
+	
+	/*
+	 * get Limit for number of returned lines
+	 * @return tableName
+	 */
+	public int getLimit()
+	{
+		return limit;
+	}
+
+	/*
+	 * set Limit for number of returned lines
+	 * @param limit - the limit to set
+	 */
+	public void setLimit(int limit)
+	{
+		this.limit = limit;
 	}
 }
