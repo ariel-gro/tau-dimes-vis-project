@@ -8,10 +8,14 @@ public class Details {
 	private int[] sourceIp;
 	private DimesQueryTimeOption timeChoiceRadioButtonNumber;
 	private int[] date;
-	private String hostName;
-	private int connectionPort;
-	private String userName;
-	private String password;
+	private String host1Name;
+	private String host2Name;
+	private int connection1Port;
+	private int connection2Port;
+	private String user1Name;
+	private String user2Name;
+	private String password1;
+	private String password2;
 	private String schemaName;
 	private String tableName;
 	private int limit;
@@ -26,10 +30,14 @@ public class Details {
 		sourceIp=new int[4];
 		timeChoiceRadioButtonNumber=DimesQueryTimeOption.None;
 		date=new int[3];
-		hostName="localhost";
-		connectionPort=-1;
-		userName="codeLimited";
-		password="";
+		host1Name="localhost";
+		host2Name="localhost";
+		connection1Port=-1;
+		connection2Port=-1;
+		user1Name="codeLimited";
+		user2Name="codeLimited";
+		password1="";
+		password2="";
 		schemaName="";
 		tableName="";
 		limit=-1;
@@ -141,67 +149,131 @@ public class Details {
 	}
 	
 	/*
-	 * set host name
+	 * set first host name
 	 * @param hostname
 	 */
-	public void setHostName(String hostname){
-		hostName=hostname;
+	public void setFirstHostName(String hostname){
+		host1Name=hostname;
 	}
 	
 	/*
-	 * get host name
+	 * get first host name
 	 * @return hostname
 	 */
-	public String getHostName(){
-		return hostName;
+	public String getFirstHostName(){
+		return host1Name;
 	}
 	
 	/*
-	 * set Connection Port
+	 * set second host name
+	 * @param hostname
+	 */
+	public void setSecondHostName(String hostname){
+		host2Name=hostname;
+	}
+	
+	/*
+	 * get second host name
+	 * @return hostname
+	 */
+	public String getSecondHostName(){
+		return host2Name;
+	}
+	
+	/*
+	 * set first Connection Port
 	 * @param port
 	 */
-	public void setConnectionPort(int port){
-		connectionPort=port;
+	public void setFirstConnectionPort(int port){
+		connection1Port=port;
 	}
 	
 	/*
-	 * get Connection Port
+	 * get first Connection Port
 	 * @return connectionPort
 	 */
-	public int getConnectionPort(){
-		return connectionPort;
+	public int getFirstConnectionPort(){
+		return connection1Port;
 	}
 	
 	/*
-	 * set user Name
+	 * set second Connection Port
+	 * @param port
+	 */
+	public void setSecondConnectionPort(int port){
+		connection2Port=port;
+	}
+	
+	/*
+	 * get second Connection Port
+	 * @return connectionPort
+	 */
+	public int getSecondConnectionPort(){
+		return connection2Port;
+	}
+	
+	/*
+	 * set first user Name
 	 * @param username
 	 */
-	public void setUserName(String username){
-		userName=username;
+	public void setFirstUserName(String username){
+		user1Name=username;
 	}
 	
 	/*
-	 * get user Name
+	 * get first user Name
 	 * @return userName
 	 */
-	public String getUserName(){
-		return userName;
+	public String getFirstUserName(){
+		return user1Name;
 	}
 	
 	/*
-	 * set password
+	 * set second user Name
+	 * @param username
+	 */
+	public void setSecondUserName(String username){
+		user2Name=username;
+	}
+	
+	/*
+	 * get second user Name
+	 * @return userName
+	 */
+	public String getSecondUserName(){
+		return user2Name;
+	}
+	
+	/*
+	 * set first password
 	 * @param password
 	 */
-	public void setPassword(String password){
-		this.password=password;
+	public void setFirstPassword(String password){
+		this.password1=password;
 	}
 	
 	/*
-	 * get host name
+	 * get first host name
 	 * @return password
 	 */
-	public String getPassword(){
-		return password;
+	public String getFirstPassword(){
+		return password1;
+	}
+	
+	/*
+	 * set second password
+	 * @param password
+	 */
+	public void setSecondPassword(String password){
+		this.password2=password;
+	}
+	
+	/*
+	 * get second host name
+	 * @return password
+	 */
+	public String getSecondPassword(){
+		return password2;
 	}
 	
 	/*
