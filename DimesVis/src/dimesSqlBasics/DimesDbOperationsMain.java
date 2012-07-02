@@ -33,11 +33,11 @@ public class DimesDbOperationsMain
 //				+ "AND (dimes_results_2007.raw_res_main_2007.SequenceNum = dimes_results_2007.raw_res_tr_2007.MainSequenceNum) "
 //				+ "AND (dimes_results_2007.raw_res_main_2007.SourceIP = '141.35.186.237')) "
 //				+ "LIMIT 150;";
-		int    mainPort     = guiDetails.getConnectionPort();
-		String mainUserName = guiDetails.getUserName();
-		String mainPassword = guiDetails.getPassword();
+		int    mainPort     = guiDetails.getFirstConnectionPort();
+		String mainUserName = guiDetails.getFirstUserName();
+		String mainPassword = guiDetails.getFirstPassword();
 		String mainSchema   = guiDetails.getSchemaName();
-		String mainHostName = guiDetails.getHostName();
+		String mainHostName = guiDetails.getFirstHostName();
 		
 		if ((null == mainUserName) || (mainUserName.equals("")))
 		{

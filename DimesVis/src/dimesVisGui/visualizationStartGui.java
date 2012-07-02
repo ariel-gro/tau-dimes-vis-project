@@ -24,7 +24,7 @@ public class visualizationStartGui {
 		shell.setText("Welcome to Visual Distance");
 		ExpandBar bar = new ExpandBar (shell, SWT.V_SCROLL);
 		bar.setBounds(0, 0, 471, 566);
-		ExpandItem items[] = new ExpandItem[8];
+		ExpandItem items[] = new ExpandItem[9];
 		Image image = display.getSystemImage(SWT.ICON_QUESTION);
 		
 		/*
@@ -246,14 +246,61 @@ public class visualizationStartGui {
 
 		// item configuration
 		items[5] = new ExpandItem (bar, SWT.NONE, 5);
-		items[5].setText("Connection Parameters");
+		items[5].setText("First Connection Parameters");
 		items[5].setHeight(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
 		items[5].setControl(composite);
 		items[5].setImage(image);
 		
-		
 		/*
 		 * item 6
+		 */
+		composite = new Composite (bar, SWT.NONE);
+		composite.setSize(400, 500);
+		layout = new GridLayout ();
+		layout.marginLeft = layout.marginTop = layout.marginRight = layout.marginBottom = 10;//distance from border
+		layout.verticalSpacing = 10;//distance between lines
+		composite.setLayout(layout);
+
+		//host name;
+		final Label hostnameLabel2;
+		final Text hostnameText2;
+		hostnameLabel2 = new Label (composite, SWT.CENTER);
+		hostnameLabel2.setText ("Enter Host Name");
+		hostnameText2 = new Text(composite, SWT.LEFT | SWT.BORDER);
+		hostnameText2.setText("127.0.0.1");
+		
+		//port number;
+		final Label portnumberLabel2;
+		final Text portnumberText2;
+		portnumberLabel2 = new Label (composite, SWT.CENTER);
+		portnumberLabel2.setText ("Enter Port Number");
+		portnumberText2 = new Text(composite, SWT.LEFT | SWT.BORDER);
+		portnumberText2.setText("3306");
+		
+		//user name;
+		final Label usernameLabel2;
+		final Text usernameText2;
+		usernameLabel2 = new Label (composite, SWT.CENTER);
+		usernameLabel2.setText ("UserName (optional)");
+		usernameText2 = new Text(composite, SWT.LEFT | SWT.BORDER);
+		
+		//password;
+		final Label passwordLabel2;
+		final Text passwordText2;
+		passwordLabel2 = new Label (composite, SWT.CENTER);
+		passwordLabel2.setText ("Password (optional)");
+		passwordText2 = new Text(composite, SWT.LEFT | SWT.BORDER);
+		
+
+		// item configuration
+		items[6] = new ExpandItem (bar, SWT.NONE, 6);
+		items[6].setText("Second Connection Parameters");
+		items[6].setHeight(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
+		items[6].setControl(composite);
+		items[6].setImage(image);
+		
+		/*
+		 * item 7
 		 */
 		composite = new Composite (bar, SWT.NONE);
 		composite.setSize(400, 500);
@@ -292,11 +339,11 @@ public class visualizationStartGui {
 		limitSpinner.setSelection(250);
 		
 		// item configuration
-		items[6] = new ExpandItem (bar, SWT.NONE, 6);
-		items[6].setText("DB Parameters");
-		items[6].setHeight(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
-		items[6].setControl(composite);
-		items[6].setImage(image);
+		items[7] = new ExpandItem (bar, SWT.NONE, 7);
+		items[7].setText("DB Parameters");
+		items[7].setHeight(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
+		items[7].setControl(composite);
+		items[7].setImage(image);
 		
 		// Last item
 		composite = new Composite (bar, SWT.NONE);
@@ -341,16 +388,28 @@ public class visualizationStartGui {
 					details.setDate(date[0], date[1], date[2]);
 					
 					// Host Name selection
-					details.setHostName(hostnameText.getText());
+					details.setFirstHostName(hostnameText.getText());
+					
+					// Host Name 2 selection
+					details.setSecondHostName(hostnameText2.getText());
 					
 					// Port selection
-					details.setConnectionPort(Integer.parseInt(portnumberText.getText()));
+					details.setFirstConnectionPort(Integer.parseInt(portnumberText.getText()));
+					
+					// Port 2 selection
+					details.setSecondConnectionPort(Integer.parseInt(portnumberText2.getText()));
 					
 					// User Name selection
-					details.setUserName((usernameText.getText()));
+					details.setFirstUserName((usernameText.getText()));
+					
+					// User 2 Name selection
+					details.setSecondUserName((usernameText2.getText()));
 					
 					// Password selection
-					details.setPassword((passwordText.getText()));
+					details.setFirstPassword((passwordText.getText()));
+					
+					// Password 2 selection
+					details.setSecondPassword((passwordText2.getText()));
 					
 					// schema name selection
 					details.setSchemaName(((schemaText.getText())));
@@ -376,10 +435,14 @@ public class visualizationStartGui {
 									"source ip - "+details.getSourceIp()[0]+":"+details.getSourceIp()[1]+":"+details.getSourceIp()[2]+":"+details.getSourceIp()[3]+"\n\n"+
 									"time measurement method - "+details.getTimeChoiceRadioButton()+"\n\n"+
 									"date of measurement - "+details.getDate()[0]+":"+details.getDate()[1]+":"+details.getDate()[2]+"\n\n"+
-									"host name - "+details.getHostName()+"\n\n" +
-									"port number - "+details.getConnectionPort()+"\n\n" +
-									"user name - "+details.getUserName()+"\n\n" +
-									"password - "+details.getPassword()+"\n\n" +
+									"host 1 name - "+details.getFirstHostName()+"\n\n" +
+									"port 1 number - "+details.getFirstConnectionPort()+"\n\n" +
+									"user 1 name - "+details.getFirstUserName()+"\n\n" +
+									"password 1 - "+details.getFirstPassword()+"\n\n" +
+									"host 2 name - "+details.getSecondHostName()+"\n\n" +
+									"port 2 number - "+details.getSecondConnectionPort()+"\n\n" +
+									"user 2 name - "+details.getSecondUserName()+"\n\n" +
+									"password 2 - "+details.getSecondPassword()+"\n\n" +
 									"schema name - "+details.getSchemaName()+"\n\n" +
 									"table name - "+details.getTableName()+"\n\n" +
 									"line limit - "+details.getLimit()+"\n\n"
@@ -415,11 +478,11 @@ public class visualizationStartGui {
 				// TODO Auto-generated method stub
 			}
 		});
-		items[7] = new ExpandItem (bar, SWT.NONE, 7);
-		items[7].setText("finish");
-		items[7].setHeight(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
-		items[7].setControl(composite);
-		items[7].setImage(image);
+		items[8] = new ExpandItem (bar, SWT.NONE, 8);
+		items[8].setText("finish");
+		items[8].setHeight(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
+		items[8].setControl(composite);
+		items[8].setImage(image);
 		
 		items[0].setExpanded(true);
 		bar.setSpacing(8);
