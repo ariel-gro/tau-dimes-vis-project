@@ -8,6 +8,7 @@ public class DimesQuery
 	// class constants
 	private static final int		resMainIndex	= 0;
 	private static final int		resTraceIndex	= 1;
+	private static final int		resTablesMax	= 2;
 
 	// class members
 	private final QueryType			queryType;
@@ -17,8 +18,10 @@ public class DimesQuery
 	private String					date			= null;
 	private DimesQueryTimeOption	timeOpt			= null;
 	private int						limit			= 0;
+	private long					sequenceNum		= 0;
 	
-	DimesQuery(QueryType queryType, String schemaName, String sourceIP, String date,
+	DimesQuery(QueryType queryType, String schemaName, String mainTable,
+			   String tracerouteTable, String sourceIP, String date,
 			   DimesQueryTimeOption queryTimeOption, int limit)
 	{
 		this.queryType = queryType;
@@ -31,14 +34,14 @@ public class DimesQuery
 		}
 		
 		this.schema    = schemaName;
-		this.tables    = new Vector<String>();
-		this.ip     = sourceIP;
+		this.tables    = new Vector<String>(resTablesMax);
+		this.ip        = sourceIP;
 		this.date      = date;
 		this.timeOpt   = queryTimeOption;
 		this.limit     = limit;
 		
-		this.tables.add(resMainIndex, "raw_res_main_2007");
-		this.tables.add(resTraceIndex, "raw_res_tr_2007");
+		this.tables.add(resMainIndex, mainTable);
+		this.tables.add(resTraceIndex, tracerouteTable);
 	}
 	
 	DimesQuery(QueryType queryType, String schemaName, String ip)
@@ -54,6 +57,25 @@ public class DimesQuery
 		
 		this.schema = schemaName;
 		this.ip = ip;
+	}
+	
+	DimesQuery(QueryType queryType, long mainSequenceNumber, String schemaName, String tracerouteTable)
+	{
+		this.queryType = queryType;
+		
+		if (queryType != QueryType.TracerouteHopsQuery)
+		{
+			System.out.println("DimesQuery: Error, use of wrong QueryType and constructor type.");
+			System.out.println("Expected: "+QueryType.TracerouteHopsQuery+" but got: "+queryType);
+			return;
+		}
+		
+		this.sequenceNum = mainSequenceNumber;
+		this.schema      = schemaName;
+		this.tables      = new Vector<String>(resTablesMax);
+
+		this.tables.add(resMainIndex, ""); //dummy insert, to make size > 0
+		this.tables.add(resTraceIndex, tracerouteTable);
 	}
 	
 	DimesQuery()
@@ -88,6 +110,9 @@ public class DimesQuery
 			
 			case LatLongQuery:
 				return latLongToString();
+				
+			case TracerouteHopsQuery:
+				return traceHopsToString();
 			
 			default:
 				return null;
@@ -105,11 +130,12 @@ public class DimesQuery
 		}
 		
 		query = "SELECT SourceIP, SequenceNum, DestIP, "+this.timeOpt+" "
-			  + "FROM "+this.schema+"."+this.tables.get(resMainIndex)+", "
-			           +this.schema+"."+this.tables.get(resTraceIndex)+" "
-			  + "WHERE (("+this.schema+"."+this.tables.get(resMainIndex)+".reachedDest = 1) "
-			  + "AND ("+this.schema+"."+this.tables.get(resMainIndex)+".DestAddress = "+this.schema+"."+this.tables.get(resTraceIndex)+".hopAddress) "
-			  + "AND ("+this.schema+"."+this.tables.get(resMainIndex)+".SequenceNum = "+this.schema+"."+this.tables.get(resTraceIndex)+".MainSequenceNum) "
+			  + "FROM "+this.schema+"."+this.tables.get(resMainIndex)+" "
+			  + "LEFT JOIN "+this.schema+"."+this.tables.get(resTraceIndex)+" "
+			  + "ON ((" +this.schema+"."+this.tables.get(resMainIndex)+".SequenceNum = "+this.schema+"."+this.tables.get(resTraceIndex)+".MainSequenceNum) "
+			  + "AND ("+this.schema+"."+this.tables.get(resMainIndex)+".DestAddress = "+this.schema+"."+this.tables.get(resTraceIndex)+".hopAddress)) "
+			  + "WHERE (("+this.schema+"."+this.tables.get(resMainIndex)+".CommandType ='TRACEROUTE') "
+			  + "AND ("+this.schema+"."+this.tables.get(resMainIndex)+".reachedDest = 1) "
 			  + "AND ("+this.schema+"."+this.tables.get(resMainIndex)+".SourceIP = '"+this.ip+"'))";
 		
 		if (this.limit != 0)	  
@@ -141,6 +167,22 @@ public class DimesQuery
 				"FROM "+this.schema+".IPsTblFull "
 			  + "WHERE ("+this.schema+".IPsTblFull.IP = '"+this.ip+"');";
 		
+		return query;
+	}
+	
+	private String traceHopsToString()
+	{
+		if ((null == this.schema)	|| (null == this.tables)	||
+			(0 == this.sequenceNum))
+		{
+			return null;
+		}
+		
+		String query = null;
+		
+		query = "SELECT sequence, MainSequenceNum, hopAddressStr "
+			   +"FROM "+this.schema+"."+this.tables.get(resTraceIndex)+" "
+			   +"WHERE "+this.schema+"."+this.tables.get(resTraceIndex)+".MainSequenceNum = "+this.sequenceNum+";";
 		return query;
 	}
 

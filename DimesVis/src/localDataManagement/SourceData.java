@@ -19,6 +19,8 @@ public class SourceData implements SourceDataInterface
 	private long	sourceIP		= 0;
 	private double	sourceLongitude	= 0;
 	private double	sourceLatitude	= 0;
+	private boolean	isPrivateIP		= false;
+	private long	realSourceIP	= 0;
 	/*
 	 * In this HashMap we store a local list of all targets this source
 	 * performed a traceroute experiment to
@@ -28,6 +30,7 @@ public class SourceData implements SourceDataInterface
 	public SourceData(String srcIpAddr)
 	{
 		this.sourceIP = IpOperations.ipStrToLong(srcIpAddr);
+		this.isPrivateIP = IpOperations.isPrivateIp(srcIpAddr);
 		this.targetsDataMap = new HashMap<Long, TargetData>();
 	}
 
@@ -89,5 +92,44 @@ public class SourceData implements SourceDataInterface
 	public int getNumOfTargets()
 	{
 		return this.targetsDataMap.size();
+	}
+	
+	public boolean isPrivateIpAddress()
+	{
+		return this.isPrivateIP;
+	}
+	
+	public void setRealSourceIP(String realIp)
+	{
+		this.realSourceIP = IpOperations.ipStrToLong(realIp);
+	}
+	
+	public void setRealSourceIP(long realIp)
+	{
+		this.realSourceIP = realIp;
+	}
+	
+	public long getRealSourceIpAsLong()
+	{
+		if (this.isPrivateIP)
+		{
+			return this.realSourceIP;
+		}
+		else
+		{
+			return 0;
+		}
+	}
+
+	public String getRealSourceIpAsString()
+	{
+		if (this.isPrivateIP)
+		{
+			return IpOperations.ipLongToStr(this.realSourceIP);
+		}
+		else
+		{
+			return null;
+		}
 	}
 }

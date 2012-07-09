@@ -9,6 +9,7 @@ import java.util.Calendar;
 import dimesVisGui.Details;
 
 import localDataManagement.DataFileWriter;
+import localDataManagement.IpOperations;
 import localDataManagement.SourceData;
 import localDataManagement.TargetData;
 
@@ -33,10 +34,12 @@ public class DimesDbOperationsMain
 //				+ "AND (dimes_results_2007.raw_res_main_2007.SequenceNum = dimes_results_2007.raw_res_tr_2007.MainSequenceNum) "
 //				+ "AND (dimes_results_2007.raw_res_main_2007.SourceIP = '141.35.186.237')) "
 //				+ "LIMIT 150;";
+//																		'130.37.193.141'
+		// get parameters of first connection from the GUI
 		int    mainPort     = guiDetails.getFirstConnectionPort();
 		String mainUserName = guiDetails.getFirstUserName();
 		String mainPassword = guiDetails.getFirstPassword();
-		String mainSchema   = guiDetails.getSchemaName();
+		String mainSchema   = guiDetails.getFirstSchemaName();
 		String mainHostName = guiDetails.getFirstHostName();
 		
 		if ((null == mainUserName) || (mainUserName.equals("")))
@@ -47,19 +50,33 @@ public class DimesDbOperationsMain
 		Connector mainConnector = new Connector(mainPort, mainUserName, mainPassword, mainSchema, mainHostName);
 		mainConnector.connect();
 		
-		Connector secondConnector = new Connector(5551, "codeLimited", "", "DIMES_PLAYGROUND", "localhost");
+		// get parameters of second connection from the GUI		
+		int    secondPort     = guiDetails.getSecondConnectionPort();
+		String secondUserName = guiDetails.getSecondUserName();
+		String secondPassword = guiDetails.getSecondPassword();
+		String secondSchema   = "DIMES";//guiDetails.getSecondSchemaName();
+		String secondHostName = guiDetails.getSecondHostName();
+		
+		if ((null == secondUserName) || (secondUserName.equals("")))
+		{
+			secondUserName = "codeLimited";
+		}
+		
+		Connector secondConnector = new Connector(secondPort, secondUserName, secondPassword, secondSchema, secondHostName);
 		secondConnector.connect();
 
 		//DimesQuery dimesQuery = new DimesQuery(QueryType.MainQuery, "dimes_results_2007", "141.35.186.237", null, DimesQueryTimeOption.Average, 100);
 		//String     mainQuery  = dimesQuery.toString();
 		
+		String mainMainTable= guiDetails.getTableName();
+		String mainTracerouteTable = "raw_res_tr_2011_53";
 		int[]  mainSrcIpArr	= guiDetails.getSourceIp();
 		String mainSrcIp	= mainSrcIpArr[0]+"."+mainSrcIpArr[1]+"."+mainSrcIpArr[2]+"."+mainSrcIpArr[3];
 		String mainDate		= guiDetails.getDate()[2] + "";
 		DimesQueryTimeOption mainTimeopt = guiDetails.getTimeChoiceRadioButton();
 		int    mainLimit    = guiDetails.getLimit();
 		
-		DimesQuery queryFromGui = new DimesQuery(QueryType.MainQuery, mainSchema, mainSrcIp, mainDate, mainTimeopt, mainLimit);
+		DimesQuery queryFromGui = new DimesQuery(QueryType.MainQuery, mainSchema, mainMainTable, mainTracerouteTable, mainSrcIp, mainDate, mainTimeopt, mainLimit);
 		String mainQuery = queryFromGui.toString();
 		
 		System.out.println("Submit Main Statement Started at: " + now());
@@ -69,8 +86,7 @@ public class DimesDbOperationsMain
 		{
 			//System.out.println("SrcIP\tSequence#\tDestIP\tAvgTime\tDestLat\tDestLong");
 			//System.out.println("-----------------------------------");
-			
-			String		srcIp = null, dstIp = null;
+			String		dstIp = null;
 			long		seqNum = 0, avgTime = 0;
 			SourceData	sd	= null;
 			TargetData	td	= null;
@@ -82,31 +98,11 @@ public class DimesDbOperationsMain
 			//get source data from results
 			if (rsNotEmpty)
 			{
-				srcIp = rs.getString(1);
-				sd = new SourceData(srcIp);
-				
-				latLongQuery = new DimesQuery(QueryType.LatLongQuery, "DIMES_PLAYGROUND", srcIp);
-				
-//				String secQueryHard = "SELECT latitude, longitude FROM DIMES_PLAYGROUND.IPsTblFull "
-//									+ "WHERE (DIMES_PLAYGROUND.IPsTblFull.IP = '"+srcIp+"');";
-				secQuery = latLongQuery.toString();
-				
-				secRs = secondConnector.submitStatement(secQuery);
-				
-				if ((secRs != null) && (secRs.next()))
-				{
-					sd.setSourceLatitude(secRs.getDouble(1));
-					sd.setSourceLongitude(secRs.getDouble(2));
-				}
-				else
-				{
-					retVal = "Error in main: Second result-set is empty for source";
-					System.out.println(retVal);
-				}
+				sd = new SourceData(mainSrcIp);
 			}
 			else
 			{
-				retVal = "Error in main: Result-Set is empty";
+				retVal = "Error in main: Result-Set is empty - Source IP might not exist in given Schema and\\or Table";
 				System.out.println(retVal);
 			}
 			
@@ -121,14 +117,13 @@ public class DimesDbOperationsMain
 			//for (int i = 0; i < 10; i++)
 			{
 				td		= new TargetData();
-				srcIp   = rs.getString(1);
 				seqNum  = rs.getLong(2);
 				dstIp   = rs.getString(3);
 				avgTime = rs.getLong(4);
 				
 				if (null == latLongQuery)
 				{
-					latLongQuery = new DimesQuery(QueryType.LatLongQuery, "DIMES_PLAYGROUND", dstIp);
+					latLongQuery = new DimesQuery(QueryType.LatLongQuery, secondSchema, dstIp);
 				}
 				else
 				{
@@ -158,6 +153,44 @@ public class DimesDbOperationsMain
 				
 				rsNotEmpty = rs.next();
 			}
+			
+			//find latitude and longitude for source. 
+			//handle private IP addresses
+			if (sd.isPrivateIpAddress())
+			{
+				DimesQuery traceHopsQuery = new DimesQuery(QueryType.TracerouteHopsQuery, seqNum, mainSchema, mainTracerouteTable);
+				ResultSet traceHopsResultSet = mainConnector.submitStatement(traceHopsQuery.toString());
+				traceHopsResultSet.next();
+				String nextHop = traceHopsResultSet.getString(3);
+				while ((IpOperations.isPrivateIp(nextHop)) &&
+					   (traceHopsResultSet != null) &&
+					   (traceHopsResultSet.next()))
+				{
+					nextHop = traceHopsResultSet.getString(3);
+				}
+				sd.setRealSourceIP(nextHop);
+				mainSrcIp = nextHop;
+			}
+			
+			latLongQuery = new DimesQuery(QueryType.LatLongQuery, secondSchema, mainSrcIp);
+			
+//			String secQueryHard = "SELECT latitude, longitude FROM DIMES_PLAYGROUND.IPsTblFull "
+//								+ "WHERE (DIMES_PLAYGROUND.IPsTblFull.IP = '"+srcIp+"');";
+			secQuery = latLongQuery.toString();
+			
+			secRs = secondConnector.submitStatement(secQuery);
+			
+			if ((secRs != null) && (secRs.next()))
+			{
+				sd.setSourceLatitude(secRs.getDouble(1));
+				sd.setSourceLongitude(secRs.getDouble(2));
+			}
+			else
+			{
+				retVal = "Error in main: Second result-set is empty for source";
+				System.out.println(retVal);
+			}
+			
 			/* write data to file */
 			DataFileWriter dfw = new DataFileWriter(
 					"C:\\javaTimesfile2.txt");

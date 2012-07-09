@@ -16,7 +16,8 @@ public class Details {
 	private String user2Name;
 	private String password1;
 	private String password2;
-	private String schemaName;
+	private String schema1Name;
+	private String schema2Name;
 	private String tableName;
 	private int limit;
 	
@@ -38,7 +39,8 @@ public class Details {
 		user2Name="codeLimited";
 		password1="";
 		password2="";
-		schemaName="";
+		schema1Name="";
+		schema2Name="";
 		tableName="";
 		limit=-1;
 	}
@@ -277,19 +279,35 @@ public class Details {
 	}
 	
 	/*
-	 * set schema Name
+	 * set first schema Name
 	 * @param schemaname
 	 */
-	public void setSchemaName(String schemaname){
-		schemaName=schemaname;
+	public void setFirstSchemaName(String schemaname){
+		schema1Name=schemaname;
 	}
 	
 	/*
-	 * get schema Name
+	 * get first schema Name
 	 * @return schemaName
 	 */
-	public String getSchemaName(){
-		return schemaName;
+	public String getFirstSchemaName(){
+		return schema1Name;
+	}
+	
+	/*
+	 * set second schema Name
+	 * @param schemaname
+	 */
+	public void setSecondSchemaName(String schemaname){
+		schema2Name=schemaname;
+	}
+	
+	/*
+	 * get second schema Name
+	 * @return schemaName
+	 */
+	public String getSecondSchemaName(){
+		return schema2Name;
 	}
 	
 	/*
