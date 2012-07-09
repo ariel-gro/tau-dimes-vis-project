@@ -4,8 +4,6 @@ import java.util.Date;
 import org.eclipse.swt.*;
 import org.eclipse.swt.layout.*;
 import org.eclipse.swt.widgets.*;
-import org.eclipse.swt.events.KeyAdapter;
-import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.*;
@@ -315,6 +313,7 @@ public class visualizationStartGui {
 		schemaLabel = new Label (composite, SWT.CENTER);
 		schemaLabel.setText ("Enter Schema Name");
 		schemaText = new Text(composite, SWT.LEFT | SWT.BORDER);
+		schemaText.setText("dimes_results_2012");
 		
 		//table name;
 		final Label tablenameLabel;
@@ -322,6 +321,7 @@ public class visualizationStartGui {
 		tablenameLabel = new Label (composite, SWT.CENTER);
 		tablenameLabel.setText ("Enter Table Name");
 		tablenameText = new Text(composite, SWT.LEFT | SWT.BORDER);
+		tablenameText.setText("raw_res_main_2012_26");
 		
 		//limit number of returned lines
 		final Label limitLabel = new Label (composite, SWT.CENTER);
@@ -412,7 +412,7 @@ public class visualizationStartGui {
 					details.setSecondPassword((passwordText2.getText()));
 					
 					// schema name selection
-					details.setSchemaName(((schemaText.getText())));
+					details.setFirstSchemaName(((schemaText.getText())));
 					
 					// table name selection
 					details.setTableName(((tablenameText.getText())));
@@ -443,7 +443,7 @@ public class visualizationStartGui {
 									"port 2 number - "+details.getSecondConnectionPort()+"\n\n" +
 									"user 2 name - "+details.getSecondUserName()+"\n\n" +
 									"password 2 - "+details.getSecondPassword()+"\n\n" +
-									"schema name - "+details.getSchemaName()+"\n\n" +
+									"schema name - "+details.getFirstSchemaName()+"\n\n" +
 									"table name - "+details.getTableName()+"\n\n" +
 									"line limit - "+details.getLimit()+"\n\n"
 									);
