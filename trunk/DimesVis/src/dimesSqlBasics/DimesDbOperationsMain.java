@@ -69,7 +69,7 @@ public class DimesDbOperationsMain
 		//String     mainQuery  = dimesQuery.toString();
 		
 		String mainMainTable= guiDetails.getTableName();
-		String mainTracerouteTable = "raw_res_tr_2011_53";
+		String mainTracerouteTable = "raw_res_traceroute_2012_26";
 		int[]  mainSrcIpArr	= guiDetails.getSourceIp();
 		String mainSrcIp	= mainSrcIpArr[0]+"."+mainSrcIpArr[1]+"."+mainSrcIpArr[2]+"."+mainSrcIpArr[3];
 		String mainDate		= guiDetails.getDate()[2] + "";

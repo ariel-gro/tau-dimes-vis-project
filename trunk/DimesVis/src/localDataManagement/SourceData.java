@@ -68,7 +68,21 @@ public class SourceData implements SourceDataInterface
 	{
 		if (this.targetsDataMap.containsKey(seqNum))
 		{
-			System.out.println("Error in addTarget: sequence number " + seqNum + " already exists");
+			TargetData existingTarget = this.targetsDataMap.get(seqNum);
+			if (existingTarget.getTargetIpAsLong() == target.getTargetIpAsLong())
+			{
+				//do nothing!!
+				//this is a known issue (artifact) in traceroute,
+				//so we ignore the repeated target and stay with the
+				//first one we got, which is the first one showing
+				//in the trace hops.
+			}
+			else
+			{
+				//we have the same sequence number for different IPs.
+				//this is an error!!
+				System.out.println("Error in addTarget: sequence number " + seqNum + " already exists");
+			}
 		}
 		else
 		{
