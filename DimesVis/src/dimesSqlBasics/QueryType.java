@@ -2,7 +2,7 @@ package dimesSqlBasics;
 
 public enum QueryType
 {
-	MainQuery, LatLongQuery, TracerouteHopsQuery;
+	MainQuery, MainQuerySingleIp, LatLongQuery, TracerouteHopsQuery;
 	
 	public String toString()
 	{
@@ -10,6 +10,9 @@ public enum QueryType
 		{
 			case MainQuery:
 				return "MainQuery";
+			
+			case MainQuerySingleIp:
+				return "MainQuerySingleIp";
 				
 			case LatLongQuery:
 				return "LatLongQuery";

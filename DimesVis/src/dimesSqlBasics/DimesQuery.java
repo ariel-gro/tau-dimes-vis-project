@@ -2,6 +2,8 @@ package dimesSqlBasics;
 
 import java.util.Vector;
 
+import localDataManagement.IpOperations;
+
 public class DimesQuery
 {
 
@@ -14,7 +16,8 @@ public class DimesQuery
 	private final QueryType			queryType;
 	private String					schema			= null;
 	private Vector<String>			tables			= null;
-	private String					ip				= null;
+	private String					srcIp			= null;
+	private String					destIp			= null;
 	private String					date			= null;
 	private DimesQueryTimeOption	timeOpt			= null;
 	private int						limit			= 0;
@@ -35,7 +38,32 @@ public class DimesQuery
 		
 		this.schema    = schemaName;
 		this.tables    = new Vector<String>(resTablesMax);
-		this.ip        = sourceIP;
+		this.srcIp        = sourceIP;
+		this.date      = date;
+		this.timeOpt   = queryTimeOption;
+		this.limit     = limit;
+		
+		this.tables.add(resMainIndex, mainTable);
+		this.tables.add(resTraceIndex, tracerouteTable);
+	}
+	
+	DimesQuery(QueryType queryType, String schemaName, String mainTable,
+			   String tracerouteTable, String sourceIP, String destIp,
+			   String date, DimesQueryTimeOption queryTimeOption, int limit)
+	{
+		this.queryType = queryType;
+		
+		if (queryType != QueryType.MainQuerySingleIp)
+		{
+			System.out.println("DimesQuery: Error, use of wrong QueryType and constructor type.");
+			System.out.println("Expected: "+QueryType.MainQuerySingleIp+" but got: "+queryType);
+			return;
+		}
+		
+		this.schema    = schemaName;
+		this.tables    = new Vector<String>(resTablesMax);
+		this.srcIp     = sourceIP;
+		this.destIp    = destIp;
 		this.date      = date;
 		this.timeOpt   = queryTimeOption;
 		this.limit     = limit;
@@ -56,7 +84,7 @@ public class DimesQuery
 		}
 		
 		this.schema = schemaName;
-		this.ip = ip;
+		this.destIp = ip;
 	}
 	
 	DimesQuery(QueryType queryType, long mainSequenceNumber, String schemaName, String tracerouteTable)
@@ -83,7 +111,7 @@ public class DimesQuery
 		//TODO: fictional data in this constructor - need to create constructor with arguments
 		this.schema    = "dimes_results_2007";
 		this.tables    = new Vector<String>();
-		this.ip     = "141.35.186.237";
+		this.srcIp     = "141.35.186.237";
 		this.date      = "2007";
 		this.timeOpt   = DimesQueryTimeOption.Average;
 		this.limit     = 250;
@@ -108,6 +136,9 @@ public class DimesQuery
 //					return withDateToString();
 //				}
 			
+			case MainQuerySingleIp:
+				return singleIpToString();
+				
 			case LatLongQuery:
 				return latLongToString();
 				
@@ -123,8 +154,8 @@ public class DimesQuery
 	{
 		String query = null;
 		if ((null == this.schema)	|| (null == this.tables)	||
-			(null == this.ip)		|| (null == this.timeOpt)	||
-			(0    >= this.limit))
+			(null == this.srcIp)		|| (null == this.timeOpt)	||
+			(0    > this.limit))
 		{
 			return null;
 		}
@@ -136,7 +167,7 @@ public class DimesQuery
 			  + "AND ("+this.schema+"."+this.tables.get(resMainIndex)+".DestAddress = "+this.schema+"."+this.tables.get(resTraceIndex)+".hopAddress)) "
 			  + "WHERE (("+this.schema+"."+this.tables.get(resMainIndex)+".CommandType ='TRACEROUTE') "
 			  + "AND ("+this.schema+"."+this.tables.get(resMainIndex)+".reachedDest = 1) "
-			  + "AND ("+this.schema+"."+this.tables.get(resMainIndex)+".SourceIP = '"+this.ip+"'))";
+			  + "AND ("+this.schema+"."+this.tables.get(resMainIndex)+".SourceIP = '"+this.srcIp+"'))";
 		
 		if (this.limit != 0)	  
 		{
@@ -155,17 +186,50 @@ public class DimesQuery
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	private String singleIpToString()
+	{
+		String query = null;
+		if ((null == this.schema)	|| (null == this.tables)	||
+			(null == this.srcIp)	|| (null == this.timeOpt)	||
+			(null == this.destIp)	|| (0    >= this.limit))
+		{
+			return null;
+		}
+		
+		query = "SELECT SourceIP, SequenceNum, DestIP, "+this.timeOpt+" "
+			  + "FROM "+this.schema+"."+this.tables.get(resMainIndex)+" "
+			  + "LEFT JOIN "+this.schema+"."+this.tables.get(resTraceIndex)+" "
+			  + "ON (("+this.schema+"."+this.tables.get(resMainIndex)+".DestIP = '"+this.destIp+"') "
+			  + "AND ("+this.schema+"."+this.tables.get(resMainIndex)+".SequenceNum = "+this.schema+"."+this.tables.get(resTraceIndex)+".MainSequenceNum) "
+			  + "AND ("+this.schema+"."+this.tables.get(resMainIndex)+".DestAddress = "+this.schema+"."+this.tables.get(resTraceIndex)+".hopAddress)) "
+			  + "WHERE (("+this.schema+"."+this.tables.get(resMainIndex)+".CommandType ='TRACEROUTE') "
+			  + "AND ("+this.schema+"."+this.tables.get(resMainIndex)+".reachedDest = 1) "
+			  + "AND ("+this.schema+"."+this.tables.get(resMainIndex)+".SourceIP = '"+this.srcIp+"') "
+			  + "AND ("+this.schema+"."+this.tables.get(resMainIndex)+".DestIP = '"+this.destIp+"'))";
+		
+		if (this.limit != 0)	  
+		{
+			query += " LIMIT "+this.limit+";";
+		}
+		else
+		{
+			query += ";";
+		}
+		
+		return query;
+	}
 	
 	private String latLongToString()
 	{
 		String query = null;
-		if ((null == this.schema) || (null == this.ip))
+		if ((null == this.schema) || (null == this.destIp))
 		{
 			return null;
 		}
 		query = "SELECT latitude, longitude " +
 				"FROM "+this.schema+".IPsTblFull "
-			  + "WHERE ("+this.schema+".IPsTblFull.IP = '"+this.ip+"');";
+			  + "WHERE ("+this.schema+".IPsTblFull.IP = '"+this.destIp+"');";
 		
 		return query;
 	}
@@ -186,8 +250,13 @@ public class DimesQuery
 		return query;
 	}
 
-	public void setIp(String newIp)
+	public void setLatLongIp(String newIp)
 	{
-		this.ip = newIp;
+		this.destIp = newIp;
+	}
+	
+	public void setDestIp(String newDestIp)
+	{
+		this.destIp = newDestIp;
 	}
 }

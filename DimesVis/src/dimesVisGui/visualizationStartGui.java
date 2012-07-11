@@ -321,7 +321,7 @@ public class visualizationStartGui {
 		tablenameLabel = new Label (composite, SWT.CENTER);
 		tablenameLabel.setText ("Enter Table Name");
 		tablenameText = new Text(composite, SWT.LEFT | SWT.BORDER);
-		tablenameText.setText("raw_res_main_2012_26");
+		tablenameText.setText("raw_res_main_2012_28");
 		
 		//limit number of returned lines
 		final Label limitLabel = new Label (composite, SWT.CENTER);
@@ -451,14 +451,16 @@ public class visualizationStartGui {
 				{
 					System.out.println("Ok is pressed.");
 					String dbReturnd = "DB operation return value has no value yet";
-					try {
-						dbReturnd = DimesDbOperationsMain.startDimesDbOperations(details);
-						System.out.println("DB operations returned: " + dbReturnd);
-					} catch (IOException ioEx) {
+
+					dbReturnd = DimesDbOperationsMain.startDimesDbOperations(details);
+					
+					if (!(dbReturnd.equalsIgnoreCase("Success")))
+					{
 						System.out.println("DB operations returned with error!!");
 						System.out.println(dbReturnd);
-						ioEx.printStackTrace();
+						//TODO: exit? terminate? notify user with pop-up and let him try again?
 					}
+					
 					try {
 		                Runtime rt = Runtime.getRuntime();
 		                //Process pr = rt.exec("cmd /c dir");
