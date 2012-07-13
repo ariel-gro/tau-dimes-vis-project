@@ -63,4 +63,16 @@ public class IpOperations
 		
 		return retVal;
 	}
+	
+	public static String intArrToIpStr(int[] ipIntArr)
+	{
+		if (ipIntArr.length != 4)
+		{
+			System.out.println("Error in intArrToIpStr(): int array length != 4");
+		}
+		
+		String retIpStr = ipIntArr[0]+"."+ipIntArr[1]+"."+ipIntArr[2]+"."+ipIntArr[3];
+		
+		return retIpStr;
+	}
 }

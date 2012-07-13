@@ -11,6 +11,7 @@ public class DimesQuery
 	private static final int		resMainIndex	= 0;
 	private static final int		resTraceIndex	= 1;
 	private static final int		resTablesMax	= 2;
+	private static final int		ipsTblFullIndex	= 0;	
 
 	// class members
 	private final QueryType			queryType;
@@ -23,9 +24,7 @@ public class DimesQuery
 	private int						limit			= 0;
 	private long					sequenceNum		= 0;
 	
-	DimesQuery(QueryType queryType, String schemaName, String mainTable,
-			   String tracerouteTable, String sourceIP, String date,
-			   DimesQueryTimeOption queryTimeOption, int limit)
+	DimesQuery(QueryType queryType, String schemaName, String mainTable,  String tracerouteTable, String sourceIP, String date, DimesQueryTimeOption queryTimeOption, int limit)
 	{
 		this.queryType = queryType;
 		
@@ -38,7 +37,7 @@ public class DimesQuery
 		
 		this.schema    = schemaName;
 		this.tables    = new Vector<String>(resTablesMax);
-		this.srcIp        = sourceIP;
+		this.srcIp     = sourceIP;
 		this.date      = date;
 		this.timeOpt   = queryTimeOption;
 		this.limit     = limit;
@@ -72,7 +71,7 @@ public class DimesQuery
 		this.tables.add(resTraceIndex, tracerouteTable);
 	}
 	
-	DimesQuery(QueryType queryType, String schemaName, String ip)
+	DimesQuery(QueryType queryType, String schemaName, String ipsTblName, String ip)
 	{
 		this.queryType = queryType;
 		
@@ -85,6 +84,9 @@ public class DimesQuery
 		
 		this.schema = schemaName;
 		this.destIp = ip;
+		this.tables = new Vector<String>(resTablesMax);
+
+		this.tables.add(ipsTblFullIndex, ipsTblName);
 	}
 	
 	DimesQuery(QueryType queryType, long mainSequenceNumber, String schemaName, String tracerouteTable)
@@ -223,13 +225,14 @@ public class DimesQuery
 	private String latLongToString()
 	{
 		String query = null;
-		if ((null == this.schema) || (null == this.destIp))
+		if ((null == this.schema) || (null == this.tables) ||
+			(null == this.destIp))
 		{
 			return null;
 		}
 		query = "SELECT latitude, longitude " +
-				"FROM "+this.schema+".IPsTblFull "
-			  + "WHERE ("+this.schema+".IPsTblFull.IP = '"+this.destIp+"');";
+				"FROM "  +this.schema+"."+this.tables.get(ipsTblFullIndex)+" "
+			  + "WHERE ("+this.schema+"."+this.tables.get(ipsTblFullIndex)+".IP = '"+this.destIp+"');";
 		
 		return query;
 	}
@@ -245,7 +248,7 @@ public class DimesQuery
 		String query = null;
 		
 		query = "SELECT sequence, MainSequenceNum, hopAddressStr "
-			   +"FROM "+this.schema+"."+this.tables.get(resTraceIndex)+" "
+			   +"FROM " +this.schema+"."+this.tables.get(resTraceIndex)+" "
 			   +"WHERE "+this.schema+"."+this.tables.get(resTraceIndex)+".MainSequenceNum = "+this.sequenceNum+";";
 		return query;
 	}
