@@ -1,5 +1,6 @@
 package dimesVisGui;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import org.eclipse.swt.*;
 import org.eclipse.swt.layout.*;
@@ -22,7 +23,7 @@ public class visualizationStartGui {
 		shell.setText("Welcome to Visual Distance");
 		ExpandBar bar = new ExpandBar (shell, SWT.V_SCROLL);
 		bar.setBounds(0, 0, 471, 566);
-		ExpandItem items[] = new ExpandItem[9];
+		ExpandItem items[] = new ExpandItem[10];
 		Image image = display.getSystemImage(SWT.ICON_QUESTION);
 		
 		/*
@@ -241,6 +242,30 @@ public class visualizationStartGui {
 		passwordLabel.setText ("Password (optional)");
 		passwordText = new Text(composite, SWT.LEFT | SWT.BORDER);
 		
+		//schema name;
+		final Label firstSchemaLabel;
+		final Text firstSchemaText;
+		firstSchemaLabel = new Label (composite, SWT.CENTER);
+		firstSchemaLabel.setText ("Enter Schema Name for raw_res_main/traceroute");
+		firstSchemaText = new Text(composite, SWT.LEFT | SWT.BORDER);
+		firstSchemaText.setText("dimes_results_2012");
+		
+		//table name;
+		final Label rawResMainTablenameLabel;
+		final Text rawResMainTablenameText;
+		rawResMainTablenameLabel = new Label (composite, SWT.CENTER);
+		rawResMainTablenameLabel.setText ("Enter Main Results Table Name");
+		rawResMainTablenameText = new Text(composite, SWT.LEFT | SWT.BORDER);
+		rawResMainTablenameText.setText("raw_res_main_2012_28");
+		
+		//table name;
+		final Label rawResTraceTablenameLabel;
+		final Text rawResTraceTablenameText;
+		rawResTraceTablenameLabel = new Label (composite, SWT.CENTER);
+		rawResTraceTablenameLabel.setText ("Enter Traceroute Results Table Name");
+		rawResTraceTablenameText = new Text(composite, SWT.LEFT | SWT.BORDER);
+		rawResTraceTablenameText.setText("raw_res_traceroute_2012_28");
+		
 
 		// item configuration
 		items[5] = new ExpandItem (bar, SWT.NONE, 5);
@@ -289,6 +314,22 @@ public class visualizationStartGui {
 		passwordLabel2.setText ("Password (optional)");
 		passwordText2 = new Text(composite, SWT.LEFT | SWT.BORDER);
 		
+		//schema name;
+		final Label secondSchemaLabel;
+		final Text secondSchemaText;
+		secondSchemaLabel = new Label (composite, SWT.CENTER);
+		secondSchemaLabel.setText ("Enter Schema Name for IPs Table");
+		secondSchemaText = new Text(composite, SWT.LEFT | SWT.BORDER);
+		secondSchemaText.setText("DIMES");
+		
+		//table name;
+		final Label ipsTblFullTablenameLabel;
+		final Text ipsTblFullTablenameText;
+		ipsTblFullTablenameLabel = new Label (composite, SWT.CENTER);
+		ipsTblFullTablenameLabel.setText ("Enter IPs Table Name");
+		ipsTblFullTablenameText = new Text(composite, SWT.LEFT | SWT.BORDER);
+		ipsTblFullTablenameText.setText("IPsTblFull");
+		
 
 		// item configuration
 		items[6] = new ExpandItem (bar, SWT.NONE, 6);
@@ -307,21 +348,6 @@ public class visualizationStartGui {
 		layout.verticalSpacing = 10;//distance between lines
 		composite.setLayout(layout);
 
-		//schema name;
-		final Label schemaLabel;
-		final Text schemaText;
-		schemaLabel = new Label (composite, SWT.CENTER);
-		schemaLabel.setText ("Enter Schema Name");
-		schemaText = new Text(composite, SWT.LEFT | SWT.BORDER);
-		schemaText.setText("dimes_results_2012");
-		
-		//table name;
-		final Label tablenameLabel;
-		final Text tablenameText;
-		tablenameLabel = new Label (composite, SWT.CENTER);
-		tablenameLabel.setText ("Enter Table Name");
-		tablenameText = new Text(composite, SWT.LEFT | SWT.BORDER);
-		tablenameText.setText("raw_res_main_2012_28");
 		
 		//limit number of returned lines
 		final Label limitLabel = new Label (composite, SWT.CENTER);
@@ -340,10 +366,59 @@ public class visualizationStartGui {
 		
 		// item configuration
 		items[7] = new ExpandItem (bar, SWT.NONE, 7);
-		items[7].setText("DB Parameters");
+		items[7].setText("Query Parameters");
 		items[7].setHeight(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
 		items[7].setControl(composite);
 		items[7].setImage(image);
+		
+		/*
+		 * item 8
+		 */
+		composite = new Composite (bar, SWT.NONE);
+		layout = new GridLayout (8, false);
+		layout.marginLeft = layout.marginTop = layout.marginRight = layout.marginBottom = 10;
+		layout.verticalSpacing = 10;
+		composite.setLayout(layout);
+		final Spinner additionalIpSpinner[] = new Spinner[40];
+		for (int i=0; i<10; i++){
+			new Label (composite, SWT.NONE).setText(i+1+") ");
+			for (int j=0; j<4; j++){
+				additionalIpSpinner[i*4+j]=new Spinner(composite, SWT.NONE);
+				// don't allow decimal places
+				additionalIpSpinner[i*4+j].setDigits(0);
+				// set the minimum value to 0
+				additionalIpSpinner[i*4+j].setMinimum(0);
+				// set the maximum value to 255
+				additionalIpSpinner[i*4+j].setMaximum(255);
+				// set the increment value to 1
+				additionalIpSpinner[i*4+j].setIncrement(1);
+				// set the selection to 0
+				additionalIpSpinner[i*4+j].setSelection(0);
+				if (j<3) new Label (composite, SWT.NONE).setText(".");
+			}
+		}
+		Button addIpButton = new Button (composite, SWT.PUSH);
+		addIpButton.setText ("Add IP");
+		addIpButton.addSelectionListener(new ButtonHandler() {
+
+			public void widgetSelected(SelectionEvent e) {
+				if (e.getSource() instanceof Button) {
+					
+				}
+			}
+
+
+			public void widgetDefaultSelected(SelectionEvent e){
+				// TODO Auto-generated method stub
+			}
+		});
+		
+		// item configuration
+		items[8] = new ExpandItem (bar, SWT.NONE, 8);
+		items[8].setText("specific IP's");
+		items[8].setHeight(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
+		items[8].setControl(composite);
+		items[8].setImage(image);
 		
 		// Last item
 		composite = new Composite (bar, SWT.NONE);
@@ -411,15 +486,37 @@ public class visualizationStartGui {
 					// Password 2 selection
 					details.setSecondPassword((passwordText2.getText()));
 					
-					// schema name selection
-					details.setFirstSchemaName(((schemaText.getText())));
+					// 1st schema name selection
+					details.setFirstSchemaName(((firstSchemaText.getText())));
+					
+					// 2nd schema name selection
+					details.setSecondSchemaName(((secondSchemaText.getText())));
 					
 					// table name selection
-					details.setTableName(((tablenameText.getText())));
+					details.setResMainTableName(((rawResMainTablenameText.getText())));
+					details.setResTraceTableName(rawResTraceTablenameText.getText());
+					details.setIpsTblTableName(ipsTblFullTablenameText.getText());
 					
 					// lines limit selection
 					details.setLimit(((limitSpinner.getSelection())));
 					
+					int counter=0;
+					ArrayList<Integer> listIP=new ArrayList<Integer>();
+					for (int i=0; i<10; i++){
+						if ( 0 < (additionalIpSpinner[i*4].getSelection() +
+								additionalIpSpinner[i*4+1].getSelection() +
+								additionalIpSpinner[i*4+2].getSelection() +
+								additionalIpSpinner[i*4+3].getSelection())){
+
+							counter++;
+							listIP.add(additionalIpSpinner[i*4].getSelection());
+							listIP.add(additionalIpSpinner[i*4+1].getSelection());
+							listIP.add(additionalIpSpinner[i*4+2].getSelection());
+							listIP.add(additionalIpSpinner[i*4+3].getSelection());
+						}
+
+					}
+					details.setAdditionalIp(counter, listIP);
 				}
 				
 				/*MessageBox messageBox = new MessageBox(shell, SWT.OK |SWT.ICON_INFORMATION);
@@ -443,9 +540,13 @@ public class visualizationStartGui {
 									"port 2 number - "+details.getSecondConnectionPort()+"\n\n" +
 									"user 2 name - "+details.getSecondUserName()+"\n\n" +
 									"password 2 - "+details.getSecondPassword()+"\n\n" +
-									"schema name - "+details.getFirstSchemaName()+"\n\n" +
-									"table name - "+details.getTableName()+"\n\n" +
-									"line limit - "+details.getLimit()+"\n\n"
+									"1st schema name - "+details.getFirstSchemaName()+"\n\n" +
+									"raw res main table name - "+details.getResMainTableName()+"\n\n" +
+									"raw res traceroute table name - "+details.getResTraceTableName()+"\n\n"+
+									"2nd schema name - "+details.getSecondSchemaName()+"\n\n" +
+									"IPs table name - "+details.getIpsTblTableName()+"\n\n"+
+									"line limit - "+details.getLimit()+"\n\n" +
+									"additional ip's - \n"+details.getAdditionalIpAsString()+"\n\n"
 									);
 				if (mainMessageBox.open() == SWT.OK)
 				{
@@ -480,11 +581,11 @@ public class visualizationStartGui {
 				// TODO Auto-generated method stub
 			}
 		});
-		items[8] = new ExpandItem (bar, SWT.NONE, 8);
-		items[8].setText("finish");
-		items[8].setHeight(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
-		items[8].setControl(composite);
-		items[8].setImage(image);
+		items[9] = new ExpandItem (bar, SWT.NONE, 9);
+		items[9].setText("finish");
+		items[9].setHeight(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
+		items[9].setControl(composite);
+		items[9].setImage(image);
 		
 		items[0].setExpanded(true);
 		bar.setSpacing(8);

@@ -1,5 +1,10 @@
 package dimesVisGui;
 
+import java.util.ArrayList;
+
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Label;
+
 import dimesSqlBasics.DimesQueryTimeOption;
 
 public class Details {
@@ -18,8 +23,11 @@ public class Details {
 	private String password2;
 	private String schema1Name;
 	private String schema2Name;
-	private String tableName;
+	private String resMainTableName;
+	private String resTraceTableName;
+	private String ipsTblTableName;
 	private int limit;
+	private int[][] additionalIp;
 	
 	
 	/*
@@ -41,7 +49,9 @@ public class Details {
 		password2="";
 		schema1Name="";
 		schema2Name="";
-		tableName="";
+		resMainTableName="";
+		resTraceTableName="";
+		ipsTblTableName="";
 		limit=-1;
 	}
 	
@@ -314,16 +324,48 @@ public class Details {
 	 * set Table Name
 	 * @param tablename
 	 */
-	public void setTableName(String tablename){
-		tableName=tablename;
+	public void setResMainTableName(String tablename){
+		resMainTableName=tablename;
 	}
 
 	/*
 	 * get Table Name
 	 * @return tableName
 	 */
-	public String getTableName(){
-		return tableName;
+	public String getResMainTableName(){
+		return resMainTableName;
+	}
+	
+	/*
+	 * set Table Name
+	 * @param tablename
+	 */
+	public void setResTraceTableName(String tablename){
+		resTraceTableName=tablename;
+	}
+
+	/*
+	 * get Table Name
+	 * @return tableName
+	 */
+	public String getResTraceTableName(){
+		return resTraceTableName;
+	}
+	
+	/*
+	 * set Table Name
+	 * @param tablename
+	 */
+	public void setIpsTblTableName(String tablename){
+		ipsTblTableName=tablename;
+	}
+
+	/*
+	 * get Table Name
+	 * @return tableName
+	 */
+	public String getIpsTblTableName(){
+		return ipsTblTableName;
 	}
 	
 	/*
@@ -342,5 +384,43 @@ public class Details {
 	public void setLimit(int limit)
 	{
 		this.limit = limit;
+	}
+	
+	/*
+	 * set Additional Ip
+	 * @param IpCount
+	 * @param ipIndexes
+	 */
+	public void setAdditionalIp(int IpCount, ArrayList<Integer> ipIndexes){
+		additionalIp = new int[IpCount][4];
+		for (int i=0; i<IpCount; i++){
+			for (int j=0; j<4; j++){
+				additionalIp[i][j]=ipIndexes.get(i*4+j);
+			}
+		}
+	}
+
+	/*
+	 * get Additional Ip
+	 * @return additionalIp[][]
+	 */
+	public int[][] getAdditionalIp(){
+		return additionalIp;
+	}
+	
+	/*
+	 * get Additional Ip
+	 * @return additionalIp[][]
+	 */
+	public String getAdditionalIpAsString(){
+		String str="";
+		for (int i=0; i<additionalIp.length; i++){
+			if (i>0) str=str+"\n"; 
+			for (int j=0; j<4; j++){
+				if (j>0) str=str+".";
+				str=str+additionalIp[i][j];
+			}
+		}
+		return str;
 	}
 }

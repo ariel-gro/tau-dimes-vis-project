@@ -98,9 +98,9 @@ public class SourceData implements SourceDataInterface
 		return retArr;
 	}
 	
-	public TargetData getTarget(long seqNum)
+	public TargetData getTarget(long sequenceNum)
 	{
-		return this.targetsDataMap.get(seqNum);
+		return this.targetsDataMap.get(sequenceNum);
 	}
 	
 	public int getNumOfTargets()
