@@ -26,6 +26,7 @@ public class DimesDbOperationsMain
 	private static String		mainSchema		= null;
 	private static String		secondSchema	= null;
 	private static String		ipsTblName		= null;
+	private static SourceData	srcData			= null;
 
 	public static String now()
 	{
@@ -104,7 +105,7 @@ public class DimesDbOperationsMain
 		String dstIp = null;
 		long seqNum = 0, measuredTime = 0;
 		double lat = 0, lon = 0;
-		SourceData sd = new SourceData(mainSrcIp);
+		srcData = new SourceData(mainSrcIp);
 		TargetData td = null;
 		ResultSet secRs;
 
@@ -126,7 +127,7 @@ public class DimesDbOperationsMain
 
 				td = createTargetDataSingleIP(secondSchema, seqNum, dstIp, measuredTime);
 
-				sd.addTarget(seqNum, td);
+				srcData.addTarget(seqNum, td);
 			}
 			
 			//using specific IPs destinations list
@@ -172,7 +173,7 @@ public class DimesDbOperationsMain
 
 						td = createTargetDataSingleIP(secondSchema, seqNum, dstIp, measuredTime, lat, lon);
 
-						sd.addTarget(seqNum, td);
+						srcData.addTarget(seqNum, td);
 					}
 
 					index++;
@@ -181,7 +182,7 @@ public class DimesDbOperationsMain
 			}
 
 			// handle private source IP addresses
-			if (sd.isPrivateIpAddress())
+			if (srcData.isPrivateIpAddress())
 			{
 				DimesQuery traceHopsQuery = new DimesQuery(
 						QueryType.TracerouteHopsQuery, seqNum, mainSchema,
@@ -196,7 +197,7 @@ public class DimesDbOperationsMain
 				{
 					nextHop = traceHopsResultSet.getString(3);
 				}
-				sd.setRealSourceIP(nextHop);
+				srcData.setRealSourceIP(nextHop);
 				mainSrcIp = nextHop;
 			}
 
@@ -205,8 +206,8 @@ public class DimesDbOperationsMain
 
 			if ((secRs != null) && (secRs.next()))
 			{
-				sd.setSourceLatitude(secRs.getDouble(1));
-				sd.setSourceLongitude(secRs.getDouble(2));
+				srcData.setSourceLatitude(secRs.getDouble(1));
+				srcData.setSourceLongitude(secRs.getDouble(2));
 			}
 			else
 			{
@@ -216,7 +217,7 @@ public class DimesDbOperationsMain
 
 			// write data to file
 			DataFileWriter dfw = new DataFileWriter("C:\\javaTimesfile.txt");
-			dfw.writeFullDataToFile(sd, guiDetails.getFirstRadioButton(), guiDetails.getSecondRadioButton());
+			dfw.writeFullDataToFile(srcData, guiDetails.getFirstRadioButton(), guiDetails.getSecondRadioButton());
 			dfw.closeDataFileWriter();
 		}
 		catch (SQLException sqlEx)
@@ -296,5 +297,19 @@ public class DimesDbOperationsMain
 		localTargetData.setTargetLongitude(lon);
 
 		return localTargetData;
+	}
+	
+	public static String[] getDestStringsArray()
+	{
+		int numOfTargets = srcData.getNumOfTargets();
+		String retVal[] = new String[numOfTargets];
+		Long[] allSeqNums = srcData.getAllSequenceNumbers();
+		
+		for (int i=0; i<numOfTargets; i++)
+		{
+			retVal[i] = srcData.getTarget(allSeqNums[i]).getTargetIpAsString();
+		}
+		
+		return retVal;
 	}
 }
