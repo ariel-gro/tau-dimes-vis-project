@@ -15,6 +15,11 @@ import localDataManagement.TargetData;
 
 public class DimesDbOperationsMain
 {
+	//constants
+	private static final int	guiDateYearIndex	= 2;
+	private static final int	guiDateMonthIndex	= 1;
+	private static final int	guiDateDayIndex		= 0;
+	
 	private static Connector	mainConnector	= null;
 	private static Connector	secondConnector	= null;
 	private static DimesQuery	latLongQuery	= null;
@@ -86,7 +91,9 @@ public class DimesDbOperationsMain
 		String mainMainTable = guiDetails.getResMainTableName();
 		String mainTracerouteTable = guiDetails.getResTraceTableName();
 		String mainSrcIp = IpOperations.intArrToIpStr(guiDetails.getSourceIp());
-		String mainDate = guiDetails.getDate()[2] + "";
+		Calendar cal = Calendar.getInstance();
+		cal.set(guiDetails.getDate()[guiDateYearIndex], guiDetails.getDate()[guiDateMonthIndex]-1, guiDetails.getDate()[guiDateDayIndex]);
+		int mainDate = cal.get(Calendar.DAY_OF_YEAR);
 		DimesQueryTimeOption mainTimeopt = guiDetails.getTimeChoiceRadioButton();
 		int mainLimit = guiDetails.getLimit();
 		ipsTblName = guiDetails.getIpsTblTableName();
