@@ -94,7 +94,7 @@ public class DimesDbOperationsMain
 		String mainSrcIp = IpOperations.intArrToIpStr(guiDetails.getSourceIp());
 		Calendar cal = Calendar.getInstance();
 		cal.set(guiDetails.getDate()[guiDateYearIndex], guiDetails.getDate()[guiDateMonthIndex]-1, guiDetails.getDate()[guiDateDayIndex]);
-		int mainDate = cal.get(Calendar.DAY_OF_YEAR);
+		int mainDayOfYear = cal.get(Calendar.DAY_OF_YEAR);
 		DimesQueryTimeOption mainTimeopt = guiDetails.getTimeChoiceRadioButton();
 		int mainLimit = guiDetails.getLimit();
 		ipsTblName = guiDetails.getIpsTblTableName();
@@ -112,7 +112,7 @@ public class DimesDbOperationsMain
 		try
 		{
 			// non specific IPs, query for all available destinations
-			queryFromGui = new DimesQuery(QueryType.MainQuery, mainSchema, mainMainTable, mainTracerouteTable, mainSrcIp, mainDate, mainTimeopt, mainLimit);
+			queryFromGui = new DimesQuery(QueryType.MainQuery, mainSchema, mainMainTable, mainTracerouteTable, mainSrcIp, mainDayOfYear, mainTimeopt, mainLimit);
 			mainQuery = queryFromGui.toString();
 
 			System.out.println("Submit Main Statement Started at: " + now());
@@ -145,7 +145,7 @@ public class DimesDbOperationsMain
 				boolean newTarget = true;
 				do
 				{
-					queryFromGui = new DimesQuery(QueryType.MainQuerySingleIp, mainSchema, mainMainTable, mainTracerouteTable, mainSrcIp, destArr[index], mainDate, mainTimeopt, mainLimit);
+					queryFromGui = new DimesQuery(QueryType.MainQuerySingleIp, mainSchema, mainMainTable, mainTracerouteTable, mainSrcIp, destArr[index], mainDayOfYear, mainTimeopt, mainLimit);
 					mainQuery = queryFromGui.toString();
 					rs = mainConnector.submitStatement(mainQuery);
 
