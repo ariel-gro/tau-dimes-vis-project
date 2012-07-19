@@ -1,6 +1,7 @@
 package dimesVisGui;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import org.eclipse.swt.*;
 import org.eclipse.swt.layout.*;
@@ -243,12 +244,16 @@ public class visualizationStartGui {
 		passwordText = new Text(composite, SWT.LEFT | SWT.BORDER);
 		
 		//schema name;
+		Calendar cal = Calendar.getInstance();
+		int currWeekOfYear = cal.get(Calendar.WEEK_OF_YEAR);
+		int currYear = cal.get(Calendar.YEAR);
+		
 		final Label firstSchemaLabel;
 		final Text firstSchemaText;
 		firstSchemaLabel = new Label (composite, SWT.CENTER);
 		firstSchemaLabel.setText ("Enter Schema Name for raw_res_main/traceroute");
 		firstSchemaText = new Text(composite, SWT.LEFT | SWT.BORDER);
-		firstSchemaText.setText("dimes_results_2012");
+		firstSchemaText.setText("dimes_results_"+currYear);
 		
 		//table name;
 		final Label rawResMainTablenameLabel;
@@ -256,7 +261,7 @@ public class visualizationStartGui {
 		rawResMainTablenameLabel = new Label (composite, SWT.CENTER);
 		rawResMainTablenameLabel.setText ("Enter Main Results Table Name");
 		rawResMainTablenameText = new Text(composite, SWT.LEFT | SWT.BORDER);
-		rawResMainTablenameText.setText("raw_res_main_2012_28");
+		rawResMainTablenameText.setText("raw_res_main_"+currYear+"_"+currWeekOfYear);
 		
 		//table name;
 		final Label rawResTraceTablenameLabel;
@@ -264,7 +269,7 @@ public class visualizationStartGui {
 		rawResTraceTablenameLabel = new Label (composite, SWT.CENTER);
 		rawResTraceTablenameLabel.setText ("Enter Traceroute Results Table Name");
 		rawResTraceTablenameText = new Text(composite, SWT.LEFT | SWT.BORDER);
-		rawResTraceTablenameText.setText("raw_res_traceroute_2012_28");
+		rawResTraceTablenameText.setText("raw_res_traceroute_"+currYear+"_"+currWeekOfYear);
 		
 
 		// item configuration

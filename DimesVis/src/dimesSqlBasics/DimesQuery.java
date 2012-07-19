@@ -19,12 +19,12 @@ public class DimesQuery
 	private Vector<String>			tables			= null;
 	private String					srcIp			= null;
 	private String					destIp			= null;
-	private int						date			= 0;
+	private int						dayOfYear		= 0;
 	private DimesQueryTimeOption	timeOpt			= null;
 	private int						limit			= 0;
 	private long					sequenceNum		= 0;
 	
-	DimesQuery(QueryType queryType, String schemaName, String mainTable,  String tracerouteTable, String sourceIP, int date, DimesQueryTimeOption queryTimeOption, int limit)
+	DimesQuery(QueryType queryType, String schemaName, String mainTable,  String tracerouteTable, String sourceIP, int dayOfYear, DimesQueryTimeOption queryTimeOption, int limit)
 	{
 		this.queryType = queryType;
 		
@@ -38,7 +38,7 @@ public class DimesQuery
 		this.schema    = schemaName;
 		this.tables    = new Vector<String>(resTablesMax);
 		this.srcIp     = sourceIP;
-		this.date      = date;
+		this.dayOfYear = dayOfYear;
 		this.timeOpt   = queryTimeOption;
 		this.limit     = limit;
 		
@@ -46,7 +46,7 @@ public class DimesQuery
 		this.tables.add(resTraceIndex, tracerouteTable);
 	}
 	
-	DimesQuery(QueryType queryType, String schemaName, String mainTable, String tracerouteTable, String sourceIP, String destIp, int date, DimesQueryTimeOption queryTimeOption, int limit)
+	DimesQuery(QueryType queryType, String schemaName, String mainTable, String tracerouteTable, String sourceIP, String destIp, int dayOfYear, DimesQueryTimeOption queryTimeOption, int limit)
 	{
 		this.queryType = queryType;
 		
@@ -61,7 +61,7 @@ public class DimesQuery
 		this.tables    = new Vector<String>(resTablesMax);
 		this.srcIp     = sourceIP;
 		this.destIp    = destIp;
-		this.date      = date;
+		this.dayOfYear = dayOfYear;
 		this.timeOpt   = queryTimeOption;
 		this.limit     = limit;
 		
@@ -112,7 +112,7 @@ public class DimesQuery
 		{
 			case MainQuery:
 				//return noDateToString();
-				if (0 == this.date)
+				if (0 == this.dayOfYear)
 				{
 					return noDateToString();
 				}
@@ -171,7 +171,7 @@ public class DimesQuery
 		String query = null;
 		if ((null == this.schema)	|| (null == this.tables)	||
 			(null == this.srcIp)	|| (null == this.timeOpt)	||
-			(0    == this.date)		|| (0    > this.limit))
+			(0    == this.dayOfYear)|| (0    > this.limit))
 		{
 			return null;
 		}
@@ -184,7 +184,7 @@ public class DimesQuery
 			  + "WHERE (("+this.schema+"."+this.tables.get(resMainIndex)+".CommandType ='TRACEROUTE') "
 			  + "AND ("+this.schema+"."+this.tables.get(resMainIndex)+".reachedDest = 1) "
 			  + "AND ("+this.schema+"."+this.tables.get(resMainIndex)+".SourceIP = '"+this.srcIp+"') "
-			  + "AND (DAYOFYEAR("+this.schema+"."+this.tables.get(resMainIndex)+".InsertTime) = "+this.date+"))";
+			  + "AND (DAYOFYEAR("+this.schema+"."+this.tables.get(resMainIndex)+".InsertTime) = "+this.dayOfYear+"))";
 		
 		if (this.limit != 0)	  
 		{
