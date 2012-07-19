@@ -13,7 +13,7 @@ package localDataManagement;
 
 import java.util.HashMap;
 
-public class SourceData implements SourceDataInterface
+public class SourceData
 {
 
 	private long	sourceIP		= 0;

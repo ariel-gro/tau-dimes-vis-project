@@ -17,7 +17,7 @@ public class visualizationStartGui {
 	{
 		final Details details=new Details();
 		
-		Display display = new Display ();
+		final Display display = new Display ();
 		final Shell shell = new Shell (display);
 		shell.setMinimumSize(480,600);
 		shell.setText("Welcome to Visual Distance");
@@ -555,17 +555,28 @@ public class visualizationStartGui {
 
 					dbReturnd = DimesDbOperationsMain.startDimesDbOperations(details);
 					
+					String allDestIPsStringsArray[] = null;
+					
 					if (!(dbReturnd.equalsIgnoreCase("Success")))
 					{
 						System.out.println("DB operations returned with error!!");
 						System.out.println(dbReturnd);
 						//TODO: exit? terminate? notify user with pop-up and let him try again?
 					}
+					else //DB operations succeeded, open legend and Matlab
+					{
+						allDestIPsStringsArray = DimesDbOperationsMain.getDestStringsArray();
+					}
 					
 					try {
 		                Runtime rt = Runtime.getRuntime();
 		                //Process pr = rt.exec("cmd /c dir");
 		                Process pr = rt.exec("d:\\testing java\\runMatlab.cmd");
+		                
+		                if (null != allDestIPsStringsArray)
+		                {
+		                	DialogLegend.runDialogLegend(display, allDestIPsStringsArray);
+		                }
 		 
 		                int exitVal = pr.waitFor();
 		                System.out.println("Exited with error code "+exitVal);
