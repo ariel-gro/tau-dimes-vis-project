@@ -2,12 +2,16 @@ package dimesVisGui;
 
 import java.util.ArrayList;
 
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Label;
-
 import dimesSqlBasics.DimesQueryTimeOption;
 
 public class Details {
+	
+	public static final int addIpRadioOptDontUse = 0;
+	public static final int addIpRadioOptAdd     = 1;
+	public static final int addIpRadioOptOnlyAdd = 2;
+	public static final int excIpRadioOptDontUse = 0;
+	public static final int excIpRadioOptUse     = 1;
+	
 	private int firstViewRadioButtonNumber;
 	private int secondViewRadioButtonNumber;
 	private int[] sourceIp;
@@ -29,6 +33,11 @@ public class Details {
 	private String ipsTblTableName;
 	private int limit;
 	private int[][] additionalIp;
+	private int additionalIpRadioButton;
+	private String additionalIpRadioButtonInfo;
+	private int[][] excludeIp;
+	private int excludeIpRadioButton;
+	private String excludeIpRadioButtonInfo;
 	
 	
 	/*
@@ -55,6 +64,10 @@ public class Details {
 		resTraceTableName="";
 		ipsTblTableName="";
 		limit=-1;
+		additionalIpRadioButton=0;
+		excludeIpRadioButton=0;
+		additionalIpRadioButtonInfo="";
+		excludeIpRadioButtonInfo="";
 	}
 	
 	/*
@@ -440,5 +453,93 @@ public class Details {
 			}
 		}
 		return str;
+	}
+	
+	/*
+	 * set Exclude Ip
+	 * @param IpCount
+	 * @param ipIndexes
+	 */
+	public void setExcludeIp(int IpCount, ArrayList<Integer> ipIndexes){
+		excludeIp = new int[IpCount][4];
+		for (int i=0; i<IpCount; i++){
+			for (int j=0; j<4; j++){
+				excludeIp[i][j]=ipIndexes.get(i*4+j);
+			}
+		}
+	}
+
+	/*
+	 * get Exclude Ip
+	 * @return excludeIp[][]
+	 */
+	public int[][] getExcludeIp(){
+		return excludeIp;
+	}
+	
+	/*
+	 * get Exclude Ip
+	 * @return excludeIp[][]
+	 */
+	public String getExcludeIpAsString(){
+		String str="";
+		for (int i=0; i<excludeIp.length; i++){
+			if (i>0) str=str+"\n"; 
+			for (int j=0; j<4; j++){
+				if (j>0) str=str+".";
+				str=str+excludeIp[i][j];
+			}
+		}
+		return str;
+	}
+
+	/*
+	 * set Additional Ip Radio Button
+	 * @param btnNum
+	 */
+	public void setAdditionalIpRadioButton(int btnNum, String info){
+		additionalIpRadioButton=btnNum;
+		additionalIpRadioButtonInfo=info;
+	}
+
+	/*
+	 * get Additional Ip Radio Button
+	 * @return firstViewRadioButtonNumber
+	 */
+	public int getAdditionalIpRadioButton(){
+		return additionalIpRadioButton;
+	}
+	
+	/*
+	 * get info of Additional Ip Radio Button
+	 * @return additionalIpRadioButtonInfo
+	 */
+	public String getAdditionalIpRadioButtonInfo(){
+		return additionalIpRadioButtonInfo;
+	}
+
+	/*
+	 * set Exclude Ip Radio Button
+	 * @param btnNum
+	 */
+	public void setExcludeIpRadioButton(int btnNum, String info){
+		excludeIpRadioButton=btnNum;
+		excludeIpRadioButtonInfo=info;
+	}
+
+	/*
+	 * get Exclude Ip Radio Button
+	 * @return etAdditionalIpRadioButton
+	 */
+	public int getExcludeIpRadioButton(){
+		return excludeIpRadioButton;
+	}
+	
+	/*
+	 * get info of Exclude Ip Radio Button
+	 * @return excludeIpRadioButtonInfo
+	 */
+	public String getExcludeIpRadioButtonInfo(){
+		return excludeIpRadioButtonInfo;
 	}
 }

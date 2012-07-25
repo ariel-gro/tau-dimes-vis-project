@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 
 import dimesVisGui.Details;
 
@@ -38,9 +39,27 @@ public class DimesDbOperationsMain
 	public static String startDimesDbOperations(Details guiDetails)
 	{
 		String retVal = "Success";
-		int[][] specificIpsMatrix = guiDetails.getAdditionalIp();
-		boolean isIpList = (0 < specificIpsMatrix.length);
-		String[] destArr = new String[specificIpsMatrix.length];
+		boolean noErrors = true;
+		int additionIpRadioButtonVal = guiDetails.getAdditionalIpRadioButton();
+		boolean isIpList = ((Details.addIpRadioOptAdd == additionIpRadioButtonVal) || (Details.addIpRadioOptOnlyAdd == additionIpRadioButtonVal));
+		boolean isGenIps = ((Details.addIpRadioOptAdd == additionIpRadioButtonVal) || (Details.addIpRadioOptDontUse == additionIpRadioButtonVal));
+		
+		HashMap<Integer, String> excludedIps = null;
+		
+		boolean isExcludeList = (Details.excIpRadioOptUse == guiDetails.getExcludeIpRadioButton());
+		
+		if (isExcludeList)
+		{
+			int[][] excludedIpsMatrix = guiDetails.getExcludeIp();
+			excludedIps = new HashMap<Integer, String>();
+			String exIp;
+			
+			for (int exInd = 0; exInd < excludedIpsMatrix.length; exInd++)
+			{
+				exIp = IpOperations.intArrToIpStr(excludedIpsMatrix[exInd]);
+				excludedIps.put(exInd, exIp);
+			}
+		}
 									// from guiDetails
 		// "SELECT SourceIP, SequenceNum, DestIP, avgTime "
 		// +
@@ -116,40 +135,52 @@ public class DimesDbOperationsMain
 		try
 		{
 			// non specific IPs, query for all available destinations
-			queryFromGui = new DimesQuery(QueryType.MainQuery, mainSchema, mainMainTable, mainTracerouteTable, mainSrcIp, mainDayOfYear, mainTimeopt, mainLimit);
-			mainQuery = queryFromGui.toString();
+			if (isGenIps)
+			{	
+				queryFromGui = new DimesQuery(QueryType.MainQuery, mainSchema, mainMainTable, mainTracerouteTable, mainSrcIp, mainDayOfYear, mainTimeopt, mainLimit);
+				mainQuery = queryFromGui.toString();
 
-			System.out.println("Submit Main Statement Started at: " + now());
-			rs = mainConnector.submitStatement(mainQuery);
-			System.out.println("Submit Main Statement Ended at: " + now());
+				System.out.println("Submit Main Statement Started at: " + now());
+				rs = mainConnector.submitStatement(mainQuery);
+				System.out.println("Submit Main Statement Ended at: " + now());
 
-			while ((rs != null) && (rs.next()))
-			{
-				seqNum = rs.getLong(2);
-				dstIp = rs.getString(3);
-				measuredTime = rs.getLong(4);
+				while ((rs != null) && (rs.next()))
+				{
+					seqNum = rs.getLong(2);
+					dstIp = rs.getString(3);
+					measuredTime = rs.getLong(4);
 
-				td = createTargetDataSingleIP(secondSchema, seqNum, dstIp, measuredTime);
-
-				srcData.addTarget(seqNum, td);
+					//insert destination if:
+					//there is no exclude list
+					//or
+					//there is an exclude list and the destination is not in it 
+					if ((!isExcludeList) || ((isExcludeList) && (!excludedIps.containsValue(dstIp))))
+					{
+						td = createTargetDataSingleIP(secondSchema, seqNum, dstIp, measuredTime);
+						srcData.addTarget(seqNum, td);
+					}
+				}
 			}
 			
 			//using specific IPs destinations list
 			if (isIpList)
 			{
+				int[][] additionalIpsMatrix = guiDetails.getAdditionalIp();
+				String[] additionalDestArr  = new String[additionalIpsMatrix.length];
 				int index = 0;
 				
 				//prepare IP strings
-				for (index = 0; index < specificIpsMatrix.length; index++)
+				for (index = 0; index < additionalIpsMatrix.length; index++)
 				{
-					destArr[index] = IpOperations.intArrToIpStr(specificIpsMatrix[index]);
+					additionalDestArr[index] = IpOperations.intArrToIpStr(additionalIpsMatrix[index]);;
 				}
 				
 				index = 0;
 				boolean newTarget = true;
-				do
+				
+				while (index < additionalDestArr.length)
 				{
-					queryFromGui = new DimesQuery(QueryType.MainQuerySingleIp, mainSchema, mainMainTable, mainTracerouteTable, mainSrcIp, destArr[index], mainDayOfYear, mainTimeopt, mainLimit);
+					queryFromGui = new DimesQuery(QueryType.MainQuerySingleIp, mainSchema, mainMainTable, mainTracerouteTable, mainSrcIp, additionalDestArr[index], mainDayOfYear, mainTimeopt, mainLimit);
 					mainQuery = queryFromGui.toString();
 					rs = mainConnector.submitStatement(mainQuery);
 
@@ -182,27 +213,32 @@ public class DimesDbOperationsMain
 
 					index++;
 					newTarget = true;
-				} while (index < destArr.length);
+				}
 			}
 
 			// handle private source IP addresses
 			if (srcData.isPrivateIpAddress())
 			{
-				DimesQuery traceHopsQuery = new DimesQuery(
-						QueryType.TracerouteHopsQuery, seqNum, mainSchema,
-						mainTracerouteTable);
-				ResultSet traceHopsResultSet = mainConnector
-						.submitStatement(traceHopsQuery.toString());
-				traceHopsResultSet.next();
-				String nextHop = traceHopsResultSet.getString(3);
-				while ((IpOperations.isPrivateIp(nextHop))
-						&& (traceHopsResultSet != null)
-						&& (traceHopsResultSet.next()))
+				DimesQuery traceHopsQuery = new DimesQuery(QueryType.TracerouteHopsQuery, seqNum, mainSchema, mainTracerouteTable);
+				ResultSet traceHopsResultSet = mainConnector.submitStatement(traceHopsQuery.toString());
+				
+				if ((null != traceHopsResultSet) && (traceHopsResultSet.next()))
 				{
-					nextHop = traceHopsResultSet.getString(3);
+					String nextHop = traceHopsResultSet.getString(3);
+					while ((IpOperations.isPrivateIp(nextHop))	&&
+						   (traceHopsResultSet != null)			&&
+						   (traceHopsResultSet.next()))
+					{
+						nextHop = traceHopsResultSet.getString(3);
+					}
+					srcData.setRealSourceIP(nextHop);
+					mainSrcIp = nextHop;
 				}
-				srcData.setRealSourceIP(nextHop);
-				mainSrcIp = nextHop;
+				else
+				{
+					retVal = (!noErrors)?retVal:"Error in main: IP "+mainSrcIp+" is private, but trace hops query is empty or null";
+					noErrors = false;
+				}
 			}
 
 			// find latitude and longitude for source IP
@@ -215,10 +251,17 @@ public class DimesDbOperationsMain
 			}
 			else
 			{
-				retVal = "Error in main: Second result-set is empty for source";
+				retVal = (!noErrors)?retVal:"Error in main: Second result-set is empty for source";
+				noErrors = false;
 				System.out.println(retVal);
 			}
 
+			if (0 == srcData.getNumOfTargets())
+			{
+				retVal = (!noErrors)?retVal:"Source IP "+srcData.getSourceIpAsString()+" has no results in specified Schema and Table";
+				noErrors = false;
+			}
+			
 			// write data to file
 			DataFileWriter dfw = new DataFileWriter("C:\\javaTimesfile.txt");
 			dfw.writeFullDataToFile(srcData, guiDetails.getFirstRadioButton(), guiDetails.getSecondRadioButton());
@@ -227,25 +270,30 @@ public class DimesDbOperationsMain
 		catch (SQLException sqlEx)
 		{
 			// handle any errors
-			retVal = "SQLException @ main() \n" + "SQLException: "
-					+ sqlEx.getMessage() + "\n" + "SQLState: "
-					+ sqlEx.getSQLState() + "\n" + "VendorError: "
-					+ sqlEx.getErrorCode();
+			retVal = (!noErrors)?retVal:"SQLException @ main() \n" + "SQLException: "
+									   + sqlEx.getMessage() + "\n" + "SQLState: "
+									   + sqlEx.getSQLState() + "\n" + "VendorError: "
+									   + sqlEx.getErrorCode();
+			noErrors = false;
 			System.out.println(retVal);
 			sqlEx.printStackTrace();
 			return retVal;
 		}
 		catch (IOException ioEx)
 		{
-			retVal = "IO error while writing to file:";
+			retVal = (!noErrors)?retVal:"IO error while writing to file:";
+			noErrors = false;
 			System.out.println(retVal);
 			ioEx.printStackTrace();
 			return retVal;
 		}
 
-		mainConnector.closeConnection();
-		secondConnector.closeConnection();
-
+		finally
+		{
+			mainConnector.closeConnection();
+			secondConnector.closeConnection();
+		}
+		
 		return retVal;
 	}
 
