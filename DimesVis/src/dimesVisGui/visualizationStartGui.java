@@ -699,10 +699,20 @@ public class visualizationStartGui {
 								//if there is a match between the n'th ip and the i'th ip
 								if ((additional[n][0]==exclude[i][0])&&(additional[n][1]==exclude[i][1])&&(additional[n][2]==exclude[i][2])&&(additional[n][3]==exclude[i][3])){
 									dataValid=false;
-									errormsg=errormsg+"you have the same IP in additional Ip's, and exclude Ip's !!!\n";
+									errormsg=errormsg+"you have the same IP in additional IPs, and exclude IPs !!!\n";
 									break;
 								}
 							}
+						}
+						
+						if ((details.getAdditionalIpRadioButton()!=Details.addIpRadioOptDontUse)&&(details.getAdditionalIp().length<1)){
+							dataValid=false;
+							errormsg=errormsg+"you want to choose additional IPs but didn't choose any !!!\n";
+						}
+						
+						if ((details.getExcludeIpRadioButton()!=Details.excIpRadioOptDontUse)&&(details.getExcludeIp().length<1)){
+							dataValid=false;
+							errormsg=errormsg+"you chose to exclude IPs but didn't choose any !!!\n";
 						}
 						
 						if (dataValid){
