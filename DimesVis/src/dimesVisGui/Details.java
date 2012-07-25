@@ -13,6 +13,7 @@ public class Details {
 	private int[] sourceIp;
 	private DimesQueryTimeOption timeChoiceRadioButtonNumber;
 	private int[] date;
+	private boolean isDate;
 	private String host1Name;
 	private String host2Name;
 	private int connection1Port;
@@ -39,6 +40,7 @@ public class Details {
 		sourceIp=new int[4];
 		timeChoiceRadioButtonNumber=DimesQueryTimeOption.None;
 		date=new int[3];
+		isDate=false;
 		host1Name="localhost";
 		host2Name="localhost";
 		connection1Port=-1;
@@ -138,6 +140,22 @@ public class Details {
 	 */
 	public DimesQueryTimeOption getTimeChoiceRadioButton(){
 		return timeChoiceRadioButtonNumber;
+	}
+	
+	/*
+	 * set is Date
+	 * @param isDate
+	 */
+	public void setIsDate(boolean isDate){
+		this.isDate=isDate;
+	}
+
+	/*
+	 * get is Date
+	 * @return isDate
+	 */
+	public boolean getIsDate(){
+		return isDate;
 	}
 	
 	/*
