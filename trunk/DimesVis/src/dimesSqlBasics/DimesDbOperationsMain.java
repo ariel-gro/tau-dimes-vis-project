@@ -92,9 +92,13 @@ public class DimesDbOperationsMain
 		String mainMainTable = guiDetails.getResMainTableName();
 		String mainTracerouteTable = guiDetails.getResTraceTableName();
 		String mainSrcIp = IpOperations.intArrToIpStr(guiDetails.getSourceIp());
-		Calendar cal = Calendar.getInstance();
-		cal.set(guiDetails.getDate()[guiDateYearIndex], guiDetails.getDate()[guiDateMonthIndex]-1, guiDetails.getDate()[guiDateDayIndex]);
-		int mainDayOfYear = cal.get(Calendar.DAY_OF_YEAR);
+		int mainDayOfYear = -1;
+		if (guiDetails.getIsDate())
+		{
+			Calendar cal = Calendar.getInstance();
+			cal.set(guiDetails.getDate()[guiDateYearIndex], guiDetails.getDate()[guiDateMonthIndex]-1, guiDetails.getDate()[guiDateDayIndex]);
+			mainDayOfYear = cal.get(Calendar.DAY_OF_YEAR);
+		}
 		DimesQueryTimeOption mainTimeopt = guiDetails.getTimeChoiceRadioButton();
 		int mainLimit = guiDetails.getLimit();
 		ipsTblName = guiDetails.getIpsTblTableName();

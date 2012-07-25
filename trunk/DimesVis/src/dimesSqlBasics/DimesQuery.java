@@ -19,7 +19,7 @@ public class DimesQuery
 	private Vector<String>			tables			= null;
 	private String					srcIp			= null;
 	private String					destIp			= null;
-	private int						dayOfYear		= 0;
+	private int						dayOfYear		= -1;
 	private DimesQueryTimeOption	timeOpt			= null;
 	private int						limit			= 0;
 	private long					sequenceNum		= 0;
@@ -112,7 +112,7 @@ public class DimesQuery
 		{
 			case MainQuery:
 				//return noDateToString();
-				if (0 == this.dayOfYear)
+				if (0 < this.dayOfYear)
 				{
 					return noDateToString();
 				}
