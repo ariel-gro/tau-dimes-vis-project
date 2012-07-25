@@ -138,26 +138,29 @@ public class DimesDbOperationsMain
 			if (isGenIps)
 			{	
 				queryFromGui = new DimesQuery(QueryType.MainQuery, mainSchema, mainMainTable, mainTracerouteTable, mainSrcIp, mainDayOfYear, mainTimeopt, mainLimit);
-				mainQuery = queryFromGui.toString();
-
-				System.out.println("Submit Main Statement Started at: " + now());
-				rs = mainConnector.submitStatement(mainQuery);
-				System.out.println("Submit Main Statement Ended at: " + now());
-
-				while ((rs != null) && (rs.next()))
+				while(srcData.getNumOfTargets() < mainLimit)
 				{
-					seqNum = rs.getLong(2);
-					dstIp = rs.getString(3);
-					measuredTime = rs.getLong(4);
+					mainQuery = queryFromGui.toString();
 
-					//insert destination if:
-					//there is no exclude list
-					//or
-					//there is an exclude list and the destination is not in it 
-					if ((!isExcludeList) || ((isExcludeList) && (!excludedIps.containsValue(dstIp))))
+					System.out.println("Submit Main Statement Started at: " + now());
+					rs = mainConnector.submitStatement(mainQuery);
+					System.out.println("Submit Main Statement Ended at: " + now());
+
+					while ((rs != null) && (rs.next()) && (srcData.getNumOfTargets() < mainLimit))
 					{
-						td = createTargetDataSingleIP(secondSchema, seqNum, dstIp, measuredTime);
-						srcData.addTarget(seqNum, td);
+						seqNum = rs.getLong(2);
+						dstIp = rs.getString(3);
+						measuredTime = rs.getLong(4);
+
+						//insert destination if:
+						//there is no exclude list
+						//or
+						//there is an exclude list and the destination is not in it 
+						if ((!isExcludeList) || ((isExcludeList) && (!excludedIps.containsValue(dstIp))))
+						{
+							td = createTargetDataSingleIP(secondSchema, seqNum, dstIp, measuredTime);
+							srcData.addTarget(seqNum, td);
+						}
 					}
 				}
 			}
