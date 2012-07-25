@@ -437,14 +437,14 @@ public class visualizationStartGui {
 				if (j<3) new Label (composite, SWT.NONE).setText(".");
 			}
 		}
-		
+
 		// item configuration
 		items[8] = new ExpandItem (bar, SWT.NONE, 8);
 		items[8].setText("additional specific IP's");
 		items[8].setHeight(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
 		items[8].setControl(composite);
 		items[8].setImage(image);
-		
+
 		/*
 		 * item 9
 		 */
@@ -466,7 +466,7 @@ public class visualizationStartGui {
 				case Details.excIpRadioOptUse:
 					excludeIpRadioButton[Details.excIpRadioOptUse].setText ("exclude these ip's");
 					break;
-				
+
 			}
 			if (i == 0) excludeIpRadioButton[i].setSelection (true);
 			emptyLabel1 = new Label (composite, SWT.CENTER);
@@ -477,7 +477,7 @@ public class visualizationStartGui {
 			emptyLabel1 = new Label (composite, SWT.CENTER);
 			emptyLabel1 = new Label (composite, SWT.CENTER);
 		}
-		
+
 		final Spinner excludeIpSpinner[] = new Spinner[40];
 		for (int i=0; i<10; i++){
 			new Label (composite, SWT.NONE).setText(i+1+") ");
@@ -496,14 +496,14 @@ public class visualizationStartGui {
 				if (j<3) new Label (composite, SWT.NONE).setText(".");
 			}
 		}
-		
+
 		// item configuration
 		items[9] = new ExpandItem (bar, SWT.NONE, 9);
 		items[9].setText("exclude specific IP's");
 		items[9].setHeight(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
 		items[9].setControl(composite);
 		items[9].setImage(image);
-		
+
 		// Last item (10)
 		composite = new Composite (bar, SWT.NONE);
 		layout = new GridLayout ();
@@ -512,81 +512,81 @@ public class visualizationStartGui {
 		composite.setLayout(layout);
 		Button doneButton = new Button (composite, SWT.PUSH);
 		doneButton.setText ("Done");
-		
+
 		doneButton.addSelectionListener(new ButtonHandler() {
 
 			public void widgetSelected(SelectionEvent e) {
-				
+
 				if (e.getSource() instanceof Button) {
-					
+
 					// first view radio button
 					int x=-1;
 					for (int i=0; i<5; i++){
 						if (firstbuttonArr[i].getSelection()==true) x=i;
 					}
 					details.setFirstRadioButton(x);
-					
+
 					// second view radio button
 					x=-1;
 					for (int i=0; i<2; i++){
 						if (secondbuttonArr[i].getSelection()==true)x=i;
 					}
 					details.setSecondRadioButton(x);
-					
+
 					// user IP
 					details.setSourceIp(spinner[0].getSelection(), spinner[1].getSelection(), spinner[2].getSelection(), spinner[3].getSelection());
-					
+
 					// time choice radio button
 					x=-1;
 					for (int i=0; i<3; i++){
 						if (thirdbuttonArr[i].getSelection()==true)x=i;
 					}
 					details.setTimeChoiceRadioButton(x);
-					
+
 					// date selection
 					details.setDate(date[0], date[1], date[2]);
 
 					// if specific date selection
 					details.setIsDate(dateCheckBox.getSelection());
-					
+
 					// Host Name selection
 					details.setFirstHostName(hostnameText.getText());
-					
+
 					// Host Name 2 selection
 					details.setSecondHostName(hostnameText2.getText());
-					
+
 					// Port selection
 					details.setFirstConnectionPort(Integer.parseInt(portnumberText.getText()));
-					
+
 					// Port 2 selection
 					details.setSecondConnectionPort(Integer.parseInt(portnumberText2.getText()));
-					
+
 					// User Name selection
 					details.setFirstUserName((usernameText.getText()));
-					
+
 					// User 2 Name selection
 					details.setSecondUserName((usernameText2.getText()));
-					
+
 					// Password selection
 					details.setFirstPassword((passwordText.getText()));
-					
+
 					// Password 2 selection
 					details.setSecondPassword((passwordText2.getText()));
-					
+
 					// 1st schema name selection
 					details.setFirstSchemaName(((firstSchemaText.getText())));
-					
+
 					// 2nd schema name selection
 					details.setSecondSchemaName(((secondSchemaText.getText())));
-					
+
 					// table name selection
 					details.setResMainTableName(((rawResMainTablenameText.getText())));
 					details.setResTraceTableName(rawResTraceTablenameText.getText());
 					details.setIpsTblTableName(ipsTblFullTablenameText.getText());
-					
+
 					// lines limit selection
 					details.setLimit(((limitSpinner.getSelection())));
-					
+
 					// additional ip's
 					int additionalcounter=0;
 					ArrayList<Integer> additionallistIP=new ArrayList<Integer>();
@@ -605,7 +605,7 @@ public class visualizationStartGui {
 
 					}
 					details.setAdditionalIp(additionalcounter, additionallistIP);
-					
+
 					// additional ip's radio button
 					int additionalChoice=-1;
 					String additionalInfo="";
@@ -616,7 +616,7 @@ public class visualizationStartGui {
 						}
 					}
 					details.setAdditionalIpRadioButton(additionalChoice, additionalInfo);
-					
+
 					// exclude ip's
 					int excludecounter=0;
 					ArrayList<Integer> excludelistIP=new ArrayList<Integer>();
@@ -635,7 +635,7 @@ public class visualizationStartGui {
 
 					}
 					details.setExcludeIp(excludecounter, excludelistIP);
-					
+
 					// exclude ip's radio button
 					int excludeChoice=-1;
 					String excludeInfo="";
@@ -646,82 +646,117 @@ public class visualizationStartGui {
 						}
 					}
 					details.setExcludeIpRadioButton(excludeChoice, excludeInfo);
-				}
-				
-				/*MessageBox messageBox = new MessageBox(shell, SWT.OK |SWT.ICON_INFORMATION);
-				messageBox.setText("Please Confirm Your Preferences");
-				messageBox.setMessage("");
-				*/
-				
-				MessageBox mainMessageBox = new MessageBox(shell, SWT.OK |SWT.ICON_INFORMATION |SWT.CANCEL);
-				mainMessageBox.setText("Please Confirm Your Preferences");
-				String msg = "first view choice - "+details.getFirstRadioButton()+"\n\n"+
-							 "second view choice - "+details.getSecondRadioButton()+"\n\n"+
-							 "source ip - "+details.getSourceIp()[0]+"."+details.getSourceIp()[1]+"."+details.getSourceIp()[2]+"."+details.getSourceIp()[3]+"\n\n"+
-							 "time measurement method - "+details.getTimeChoiceRadioButton()+"\n\n"+
-							 "do you want specific date : "+details.getIsDate()+"\n\n";
-				if (details.getIsDate())
-				{
-							 msg += "date of measurement - "+details.getDate()[0]+"/"+details.getDate()[1]+"/"+details.getDate()[2]+"\n\n";
-				}
-				
-				msg +=		 "host 1 name - "+details.getFirstHostName()+"\n\n" +
-							 "port 1 number - "+details.getFirstConnectionPort()+"\n\n" +
-							 "user 1 name - "+((details.getFirstUserName().equals(""))?"Default":details.getFirstUserName())+"\n\n" +
-							 "password 1 - "+((details.getFirstPassword().equals(""))?"Default":details.getFirstPassword())+"\n\n" +
-							 "host 2 name - "+details.getSecondHostName()+"\n\n" +
-							 "port 2 number - "+details.getSecondConnectionPort()+"\n\n" +
-							 "user 2 name - "+((details.getSecondUserName().equals(""))?"Default":details.getSecondUserName())+"\n\n" +
-							 "password 2 - "+((details.getSecondPassword().equals(""))?"Default":details.getSecondPassword())+"\n\n" +
-							 "1st schema name - "+details.getFirstSchemaName()+"\n\n" +
-							 "raw res main table name - "+details.getResMainTableName()+"\n\n" +
-							 "raw res traceroute table name - "+details.getResTraceTableName()+"\n\n"+
-							 "2nd schema name - "+details.getSecondSchemaName()+"\n\n" +
-							 "IPs table name - "+details.getIpsTblTableName()+"\n\n"+
-							 "line limit - "+details.getLimit()+"\n\n" +
-							 "additional ip's choice - "+details.getAdditionalIpRadioButtonInfo()+"\n"+
-							 (details.getAdditionalIpRadioButton()!=0?((1 > details.getAdditionalIpAsString().length())?"":(details.getAdditionalIpAsString())+"\n"):"") +
-							 "\nexclude ip's choice - "+details.getExcludeIpRadioButtonInfo()+"\n"+
-							 (details.getExcludeIpRadioButton()!=0?((1 > details.getExcludeIpAsString().length())?"":(details.getExcludeIpAsString())+"\n\n"):"");
-				mainMessageBox.setMessage(msg);
-				if (mainMessageBox.open() == SWT.OK)
-				{
-					System.out.println("Ok is pressed.");
-					String dbReturnd = "DB operation return value has no value yet";
 
-					dbReturnd = DimesDbOperationsMain.startDimesDbOperations(details);
-					
-					String allDestIPsStringsArray[] = null;
-					
-					if (!(dbReturnd.equalsIgnoreCase("Success")))
+					/*MessageBox messageBox = new MessageBox(shell, SWT.OK |SWT.ICON_INFORMATION);
+					messageBox.setText("Please Confirm Your Preferences");
+					messageBox.setMessage("");
+					 */
+
+					MessageBox mainMessageBox = new MessageBox(shell, SWT.OK |SWT.ICON_INFORMATION |SWT.CANCEL);
+					mainMessageBox.setText("Please Confirm Your Preferences");
+					String msg = "first view choice - "+details.getFirstRadioButton()+"\n\n"+
+							"second view choice - "+details.getSecondRadioButton()+"\n\n"+
+							"source ip - "+details.getSourceIp()[0]+"."+details.getSourceIp()[1]+"."+details.getSourceIp()[2]+"."+details.getSourceIp()[3]+"\n\n"+
+							"time measurement method - "+details.getTimeChoiceRadioButton()+"\n\n"+
+							"do you want specific date : "+details.getIsDate()+"\n\n";
+					if (details.getIsDate())
 					{
-						System.out.println("DB operations returned with error!!");
-						System.out.println(dbReturnd);
-						//TODO: exit? terminate? notify user with pop-up and let him try again?
+						msg += "date of measurement - "+details.getDate()[0]+"/"+details.getDate()[1]+"/"+details.getDate()[2]+"\n\n";
 					}
-					else //DB operations succeeded, open legend and Matlab
-					{
-						allDestIPsStringsArray = DimesDbOperationsMain.getDestStringsArray();
-					}
+
+					msg +=		 "host 1 name - "+details.getFirstHostName()+"\n\n" +
+							"port 1 number - "+details.getFirstConnectionPort()+"\n\n" +
+							"user 1 name - "+((details.getFirstUserName().equals(""))?"Default":details.getFirstUserName())+"\n\n" +
+							"password 1 - "+((details.getFirstPassword().equals(""))?"Default":details.getFirstPassword())+"\n\n" +
+							"host 2 name - "+details.getSecondHostName()+"\n\n" +
+							"port 2 number - "+details.getSecondConnectionPort()+"\n\n" +
+							"user 2 name - "+((details.getSecondUserName().equals(""))?"Default":details.getSecondUserName())+"\n\n" +
+							"password 2 - "+((details.getSecondPassword().equals(""))?"Default":details.getSecondPassword())+"\n\n" +
+							"1st schema name - "+details.getFirstSchemaName()+"\n\n" +
+							"raw res main table name - "+details.getResMainTableName()+"\n\n" +
+							"raw res traceroute table name - "+details.getResTraceTableName()+"\n\n"+
+							"2nd schema name - "+details.getSecondSchemaName()+"\n\n" +
+							"IPs table name - "+details.getIpsTblTableName()+"\n\n"+
+							"line limit - "+details.getLimit()+"\n\n" +
+							"additional ip's choice - "+details.getAdditionalIpRadioButtonInfo()+"\n"+
+							(details.getAdditionalIpRadioButton()!=0?((1 > details.getAdditionalIpAsString().length())?"":(details.getAdditionalIpAsString())+"\n"):"") +
+							"\nexclude ip's choice - "+details.getExcludeIpRadioButtonInfo()+"\n"+
+							(details.getExcludeIpRadioButton()!=0?((1 > details.getExcludeIpAsString().length())?"":(details.getExcludeIpAsString())+"\n\n"):"");
+					mainMessageBox.setMessage(msg);
 					
-					try {
-		                Runtime rt = Runtime.getRuntime();
-		                //Process pr = rt.exec("cmd /c dir");
-		                Process pr = rt.exec("d:\\testing java\\runMatlab.cmd");
-		                
-		                if (null != allDestIPsStringsArray)
-		                {
-		                	DialogLegend.runDialogLegend(display, allDestIPsStringsArray);
-		                }
-		 
-		                int exitVal = pr.waitFor();
-		                System.out.println("Exited with error code "+exitVal);
-		 
-		            } catch(Exception exception) {
-		                System.out.println(exception.toString());
-		                exception.printStackTrace();
-		            }
-					shell.close();
+					if (mainMessageBox.open() == SWT.OK)
+					{
+						boolean dataValid=true;
+						int[][] additional,exclude;
+						String errormsg="";
+						
+						additional=details.getAdditionalIp();
+						exclude=details.getExcludeIp();
+						
+						for (int n=0; n<additional.length; n++){
+							for (int i=0; i<exclude.length; i++){
+								
+								//if there is a match between the n'th ip and the i'th ip
+								if ((additional[n][0]==exclude[i][0])&&(additional[n][1]==exclude[i][1])&&(additional[n][2]==exclude[i][2])&&(additional[n][3]==exclude[i][3])){
+									dataValid=false;
+									errormsg=errormsg+"you have the same IP in additional Ip's, and exclude Ip's !!!\n";
+									break;
+								}
+							}
+						}
+						
+						if (dataValid){
+							shell.close();
+							System.out.println("Ok is pressed.");
+							String dbReturnd = "DB operation return value has no value yet";
+
+							dbReturnd = DimesDbOperationsMain.startDimesDbOperations(details);
+
+							String allDestIPsStringsArray[] = null;
+
+							if (!(dbReturnd.equalsIgnoreCase("Success")))
+							{
+								System.out.println("DB operations returned with error!!");
+								System.out.println(dbReturnd);
+								final Shell shell2 = new Shell (display);
+								shell2.setMinimumSize(480,600);
+								shell2.setText("Error");
+								MessageBox errorDBMessageBox = new MessageBox(shell2, SWT.OK |SWT.ICON_INFORMATION);
+								errorDBMessageBox.setMessage("DB returned with the following ERROR : "+dbReturnd);
+								errorDBMessageBox.open();
+							}
+							else //DB operations succeeded, open legend and Matlab
+							{
+								allDestIPsStringsArray = DimesDbOperationsMain.getDestStringsArray();
+							}
+
+							try {
+								Runtime rt = Runtime.getRuntime();
+								//Process pr = rt.exec("cmd /c dir");
+								Process pr = rt.exec("d:\\testing java\\runMatlab.cmd");
+
+								if (null != allDestIPsStringsArray)
+								{
+									DialogLegend.runDialogLegend(display, allDestIPsStringsArray);
+								}
+
+								int exitVal = pr.waitFor();
+								System.out.println("Exited with error code "+exitVal);
+
+							} catch(Exception exception) {
+								System.out.println(exception.toString());
+								exception.printStackTrace();
+							}
+							
+						}
+						else{//dataValid==false
+							MessageBox ErrorMessageBox = new MessageBox(shell, SWT.OK |SWT.ICON_INFORMATION);
+							ErrorMessageBox.setText("Error in inputs");
+							errormsg=errormsg+"\n\nPlease try again ...";
+							ErrorMessageBox.setMessage(errormsg);
+							ErrorMessageBox.open();
+						}
+					}
 				}
 			}
 			public void widgetDefaultSelected(SelectionEvent e){
@@ -733,12 +768,12 @@ public class visualizationStartGui {
 		items[10].setHeight(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
 		items[10].setControl(composite);
 		items[10].setImage(image);
-		
+
 		bar.setSpacing(8);
-		
+
 		/*Label label2 = new Label(bar, SWT.BORDER );
 		label2.setImage(new Image(display,"startPagePic.bmp"));*/
-		
+
 		shell.setSize(480, 600);
 		shell.open();
 		while (!shell.isDisposed ()) {
@@ -748,7 +783,7 @@ public class visualizationStartGui {
 		}
 		image.dispose();
 		display.dispose();
-		
+
 		return details;
 	}
 
