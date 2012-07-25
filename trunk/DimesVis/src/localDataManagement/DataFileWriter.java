@@ -16,9 +16,6 @@ public class DataFileWriter
 		this.matlabInput = new File(path);
 		this.fstream = new FileWriter(matlabInput);
 		this.bwriter = new BufferedWriter(fstream);
-		//TODO: what happens when
-		//1. file doesn't exist
-		//2. file exists and not empty
 	}
 
 	public void writeFullDataToFile(SourceData sd, int firstRadioButton, int secondRadioButton) throws IOException

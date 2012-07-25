@@ -258,12 +258,12 @@ public class DimesDbOperationsMain
 
 			if (0 == srcData.getNumOfTargets())
 			{
-				retVal = (!noErrors)?retVal:"Source IP "+srcData.getSourceIpAsString()+" has no results in specified Schema and Table";
+				retVal = (!noErrors)?retVal:"No results were returned";
 				noErrors = false;
 			}
 			
 			// write data to file
-			DataFileWriter dfw = new DataFileWriter("C:\\javaTimesfile.txt");
+			DataFileWriter dfw = new DataFileWriter("OutputFiles\\javaTimesfile.txt");
 			dfw.writeFullDataToFile(srcData, guiDetails.getFirstRadioButton(), guiDetails.getSecondRadioButton());
 			dfw.closeDataFileWriter();
 		}
