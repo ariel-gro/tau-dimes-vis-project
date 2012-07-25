@@ -728,26 +728,24 @@ public class visualizationStartGui {
 							else //DB operations succeeded, open legend and Matlab
 							{
 								allDestIPsStringsArray = DimesDbOperationsMain.getDestStringsArray();
-							}
+								try {
+									Runtime rt = Runtime.getRuntime();
+									//Process pr = rt.exec("cmd /c dir");
+									Process pr = rt.exec("d:\\testing java\\runMatlab.cmd");
 
-							try {
-								Runtime rt = Runtime.getRuntime();
-								//Process pr = rt.exec("cmd /c dir");
-								Process pr = rt.exec("d:\\testing java\\runMatlab.cmd");
+									if (null != allDestIPsStringsArray)
+									{
+										DialogLegend.runDialogLegend(display, allDestIPsStringsArray);
+									}
 
-								if (null != allDestIPsStringsArray)
-								{
-									DialogLegend.runDialogLegend(display, allDestIPsStringsArray);
+									int exitVal = pr.waitFor();
+									System.out.println("Exited with error code "+exitVal);
+
+								} catch(Exception exception) {
+									System.out.println(exception.toString());
+									exception.printStackTrace();
 								}
-
-								int exitVal = pr.waitFor();
-								System.out.println("Exited with error code "+exitVal);
-
-							} catch(Exception exception) {
-								System.out.println(exception.toString());
-								exception.printStackTrace();
 							}
-							
 						}
 						else{//dataValid==false
 							MessageBox ErrorMessageBox = new MessageBox(shell, SWT.OK |SWT.ICON_INFORMATION);
