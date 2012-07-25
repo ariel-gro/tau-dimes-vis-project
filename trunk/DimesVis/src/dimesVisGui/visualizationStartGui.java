@@ -16,27 +16,27 @@ public class visualizationStartGui {
 	public static Details startMenu()
 	{
 		final Details details=new Details();
-		
+
 		final Display display = new Display ();
 		final Shell shell = new Shell (display);
 		shell.setMinimumSize(480,600);
 		shell.setText("Welcome to Visual Distance");
 		ExpandBar bar = new ExpandBar (shell, SWT.V_SCROLL);
 		bar.setBounds(0, 0, 471, 566);
-		ExpandItem items[] = new ExpandItem[10];
+		ExpandItem items[] = new ExpandItem[11];
 		Image image = display.getSystemImage(SWT.ICON_QUESTION);
-		
+
 		/*
-	 	 * item 0
-	 	 */	
+		 * item 0
+		 */	
 		Composite composite = new Composite (bar, SWT.NONE);
 		composite.setBounds(0, 0, 400, 500);
 		GridLayout layout = new GridLayout (4,false);
 		layout.marginLeft = layout.marginTop = layout.marginRight = layout.marginBottom = 10;//distance from border
 		layout.verticalSpacing = 10;//distance between lines
 		composite.setLayout(layout);
-		
-		
+
+
 		//creation of radio buttons
 		final Button[] firstbuttonArr=new Button[5];
 		for (int i=0; i<5; i++) {
@@ -46,15 +46,15 @@ public class visualizationStartGui {
 			Label label1 = new Label(composite, SWT.BORDER );
 			label1.setImage(new Image(display,"Images\\"+(i+1)+".bmp"));
 		}
-		
+
 		// item configuration
 		items[0] = new ExpandItem (bar, SWT.NONE, 0);
 		items[0].setText("visual preferences");
 		items[0].setHeight(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
 		items[0].setControl(composite);
 		items[0].setImage(image);
-		
-		
+
+
 		/*
 		 * item 1
 		 */
@@ -87,10 +87,10 @@ public class visualizationStartGui {
 			public void handleEvent(Event event) {
 				System.out.println("aaa");
 			}
-			
+
 		});
-		
-		
+
+
 		/*
 		 * item 2
 		 */
@@ -100,29 +100,29 @@ public class visualizationStartGui {
 		layout.verticalSpacing = 10;
 		composite.setLayout(layout);
 		final Spinner spinner[] = new Spinner[4];
-		
+
 		for (int i=0; i<4; i++){
-		spinner[i]=new Spinner(composite, SWT.NONE);
-		// don't allow decimal places
-		spinner[i].setDigits(0);
-		// set the minimum value to 0
-		spinner[i].setMinimum(0);
-		// set the maximum value to 255
-		spinner[i].setMaximum(255);
-		// set the increment value to 1
-		spinner[i].setIncrement(1);
-		// set the selection to 0
-		spinner[i].setSelection(0);
-		if (i<3) new Label (composite, SWT.NONE).setText(".");
+			spinner[i]=new Spinner(composite, SWT.NONE);
+			// don't allow decimal places
+			spinner[i].setDigits(0);
+			// set the minimum value to 0
+			spinner[i].setMinimum(0);
+			// set the maximum value to 255
+			spinner[i].setMaximum(255);
+			// set the increment value to 1
+			spinner[i].setIncrement(1);
+			// set the selection to 0
+			spinner[i].setSelection(0);
+			if (i<3) new Label (composite, SWT.NONE).setText(".");
 		}
-		
+
 		items[2] = new ExpandItem (bar, SWT.NONE, 2);
 		items[2].setText("Source IP");
 		items[2].setHeight(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
 		items[2].setControl(composite);
 		items[2].setImage(image);
-		
-		
+
+
 		/*
 		 * item 3
 		 */
@@ -140,7 +140,7 @@ public class visualizationStartGui {
 			if (i==0) thirdbuttonArr[i].setText ("( Best time )");
 			if (i==1) thirdbuttonArr[i].setText ("( Average time )");
 			if (i==2) thirdbuttonArr[i].setText ("( Worst time )");
-			
+
 			//set average as default
 			if (i == 1) thirdbuttonArr[i].setSelection (true);
 		}
@@ -161,25 +161,25 @@ public class visualizationStartGui {
 		layout.marginLeft = layout.marginTop = layout.marginRight = layout.marginBottom = 10;//distance from border
 		layout.verticalSpacing = 10;//distance between lines
 		composite.setLayout(layout);
-		
+
 		final Button dateCheckBox = new Button(composite, SWT.CHECK);
 		dateCheckBox.setSelection(false);
 		dateCheckBox.setText("get statistics from a specific date?");
 		dateCheckBox.setLocation(50,200);
 		dateCheckBox.pack();
-		
-		final Label emptyLable = new Label(composite, SWT.CENTER);
-		
-		Date cur_date=new Date();
-		final int date[]={cur_date.getDay(),cur_date.getMonth()+1,cur_date.getYear()+1900};
+
+		final Label emptyLabel = new Label (composite, SWT.CENTER);
+
+		Calendar cur_date = Calendar.getInstance();
+		final int date[]={cur_date.get(Calendar.DAY_OF_MONTH),cur_date.get(Calendar.MONTH)+1,cur_date.get(Calendar.YEAR)};
 		Button open = new Button (composite, SWT.PUSH);
 		open.setText ("Change Date");
 		final Label label = new Label (composite, SWT.CENTER);
 		label.setText ("     "+date[0]+" / "+date[1]+" / "+date[2]+"   ");
-		
+
 		open.addSelectionListener (new SelectionAdapter () {
 			public void widgetSelected (SelectionEvent e) {
-				
+
 				final Shell dialog = new Shell (shell, SWT.DIALOG_TRIM);
 				dialog.setLayout (new GridLayout (3, false));
 				final DateTime calendar = new DateTime (dialog, SWT.CALENDAR | SWT.BORDER);
@@ -202,14 +202,14 @@ public class visualizationStartGui {
 				dialog.open ();
 			}
 		});
-		
+
 		// item configuration
 		items[4] = new ExpandItem (bar, SWT.NONE, 4);
 		items[4].setText("choose date");
 		items[4].setHeight(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
 		items[4].setControl(composite);
 		items[4].setImage(image);
-		
+
 		/*
 		 * item 5
 		 */
@@ -227,7 +227,7 @@ public class visualizationStartGui {
 		hostnameLabel.setText ("Enter Host Name");
 		hostnameText = new Text(composite, SWT.LEFT | SWT.BORDER);
 		hostnameText.setText("127.0.0.1");
-		
+
 		//port number;
 		final Label portnumberLabel;
 		final Text portnumberText;
@@ -235,33 +235,33 @@ public class visualizationStartGui {
 		portnumberLabel.setText ("Enter Port Number");
 		portnumberText = new Text(composite, SWT.LEFT | SWT.BORDER);
 		portnumberText.setText("3306");
-		
+
 		//user name;
 		final Label usernameLabel;
 		final Text usernameText;
 		usernameLabel = new Label (composite, SWT.CENTER);
 		usernameLabel.setText ("UserName (optional)");
 		usernameText = new Text(composite, SWT.LEFT | SWT.BORDER);
-		
+
 		//password;
 		final Label passwordLabel;
 		final Text passwordText;
 		passwordLabel = new Label (composite, SWT.CENTER);
 		passwordLabel.setText ("Password (optional)");
 		passwordText = new Text(composite, SWT.LEFT | SWT.BORDER);
-		
+
 		//schema name;
 		Calendar cal = Calendar.getInstance();
 		int currWeekOfYear = cal.get(Calendar.WEEK_OF_YEAR);
 		int currYear = cal.get(Calendar.YEAR);
-		
+
 		final Label firstSchemaLabel;
 		final Text firstSchemaText;
 		firstSchemaLabel = new Label (composite, SWT.CENTER);
 		firstSchemaLabel.setText ("Enter Schema Name for raw_res_main/traceroute");
 		firstSchemaText = new Text(composite, SWT.LEFT | SWT.BORDER);
 		firstSchemaText.setText("dimes_results_"+currYear);
-		
+
 		//table name;
 		final Label rawResMainTablenameLabel;
 		final Text rawResMainTablenameText;
@@ -269,7 +269,7 @@ public class visualizationStartGui {
 		rawResMainTablenameLabel.setText ("Enter Main Results Table Name");
 		rawResMainTablenameText = new Text(composite, SWT.LEFT | SWT.BORDER);
 		rawResMainTablenameText.setText("raw_res_main_"+currYear+"_"+currWeekOfYear);
-		
+
 		//table name;
 		final Label rawResTraceTablenameLabel;
 		final Text rawResTraceTablenameText;
@@ -284,7 +284,7 @@ public class visualizationStartGui {
 		items[5].setHeight(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
 		items[5].setControl(composite);
 		items[5].setImage(image);
-		
+
 		/*
 		 * item 6
 		 */
@@ -302,7 +302,7 @@ public class visualizationStartGui {
 		hostnameLabel2.setText ("Enter Host Name");
 		hostnameText2 = new Text(composite, SWT.LEFT | SWT.BORDER);
 		hostnameText2.setText("127.0.0.1");
-		
+
 		//port number;
 		final Label portnumberLabel2;
 		final Text portnumberText2;
@@ -310,21 +310,21 @@ public class visualizationStartGui {
 		portnumberLabel2.setText ("Enter Port Number");
 		portnumberText2 = new Text(composite, SWT.LEFT | SWT.BORDER);
 		portnumberText2.setText("3306");
-		
+
 		//user name;
 		final Label usernameLabel2;
 		final Text usernameText2;
 		usernameLabel2 = new Label (composite, SWT.CENTER);
 		usernameLabel2.setText ("UserName (optional)");
 		usernameText2 = new Text(composite, SWT.LEFT | SWT.BORDER);
-		
+
 		//password;
 		final Label passwordLabel2;
 		final Text passwordText2;
 		passwordLabel2 = new Label (composite, SWT.CENTER);
 		passwordLabel2.setText ("Password (optional)");
 		passwordText2 = new Text(composite, SWT.LEFT | SWT.BORDER);
-		
+
 		//schema name;
 		final Label secondSchemaLabel;
 		final Text secondSchemaText;
@@ -332,7 +332,7 @@ public class visualizationStartGui {
 		secondSchemaLabel.setText ("Enter Schema Name for IPs Table");
 		secondSchemaText = new Text(composite, SWT.LEFT | SWT.BORDER);
 		secondSchemaText.setText("DIMES");
-		
+
 		//table name;
 		final Label ipsTblFullTablenameLabel;
 		final Text ipsTblFullTablenameText;
@@ -347,7 +347,7 @@ public class visualizationStartGui {
 		items[6].setHeight(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
 		items[6].setControl(composite);
 		items[6].setImage(image);
-		
+
 		/*
 		 * item 7
 		 */
@@ -358,7 +358,8 @@ public class visualizationStartGui {
 		layout.verticalSpacing = 10;//distance between lines
 		composite.setLayout(layout);
 
-		
+
+
 		//limit number of returned lines
 		final Label limitLabel = new Label (composite, SWT.CENTER);
 		limitLabel.setText("Set limit to the number of returned lines (0 = Unlimited (Might cause memory problems))");
@@ -373,14 +374,14 @@ public class visualizationStartGui {
 		limitSpinner.setIncrement(1);
 		// set the selection to 250
 		limitSpinner.setSelection(250);
-		
+
 		// item configuration
 		items[7] = new ExpandItem (bar, SWT.NONE, 7);
 		items[7].setText("Query Parameters");
 		items[7].setHeight(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
 		items[7].setControl(composite);
 		items[7].setImage(image);
-		
+
 		/*
 		 * item 8
 		 */
@@ -389,6 +390,35 @@ public class visualizationStartGui {
 		layout.marginLeft = layout.marginTop = layout.marginRight = layout.marginBottom = 10;
 		layout.verticalSpacing = 10;
 		composite.setLayout(layout);
+
+		//creation of radio buttons
+				final Button[] additionalIpRadioButton=new Button[3];
+				Label emptyLabel1;
+				for (int i=0; i<3; i++) {
+					additionalIpRadioButton[i] = new Button (composite, SWT.RADIO);
+					switch (i)
+					{
+						case Details.addIpRadioOptDontUse:
+							additionalIpRadioButton[Details.addIpRadioOptDontUse].setText ("don't use additional ip's");
+							break;
+						case Details.addIpRadioOptAdd:
+							additionalIpRadioButton[Details.addIpRadioOptAdd].setText ("add as additional ip's");
+							break;
+						case Details.addIpRadioOptOnlyAdd:
+							additionalIpRadioButton[Details.addIpRadioOptOnlyAdd].setText ("use only these ip's");
+							break;
+					}
+					if (i == 0) additionalIpRadioButton[i].setSelection (true);
+					emptyLabel1 = new Label (composite, SWT.CENTER);
+					emptyLabel1 = new Label (composite, SWT.CENTER);
+					emptyLabel1 = new Label (composite, SWT.CENTER);
+					emptyLabel1 = new Label (composite, SWT.CENTER);
+					emptyLabel1 = new Label (composite, SWT.CENTER);
+					emptyLabel1 = new Label (composite, SWT.CENTER);
+					emptyLabel1 = new Label (composite, SWT.CENTER);
+				}
+				
+				
 		final Spinner additionalIpSpinner[] = new Spinner[40];
 		for (int i=0; i<10; i++){
 			new Label (composite, SWT.NONE).setText(i+1+") ");
@@ -407,30 +437,74 @@ public class visualizationStartGui {
 				if (j<3) new Label (composite, SWT.NONE).setText(".");
 			}
 		}
-		Button addIpButton = new Button (composite, SWT.PUSH);
-		addIpButton.setText ("Add IP");
-		addIpButton.addSelectionListener(new ButtonHandler() {
-
-			public void widgetSelected(SelectionEvent e) {
-				if (e.getSource() instanceof Button) {
-					
-				}
-			}
-
-
-			public void widgetDefaultSelected(SelectionEvent e){
-				// TODO Auto-generated method stub
-			}
-		});
 		
 		// item configuration
 		items[8] = new ExpandItem (bar, SWT.NONE, 8);
-		items[8].setText("specific IP's");
+		items[8].setText("additional specific IP's");
 		items[8].setHeight(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
 		items[8].setControl(composite);
 		items[8].setImage(image);
 		
-		// Last item
+		/*
+		 * item 9
+		 */
+		composite = new Composite (bar, SWT.NONE);
+		layout = new GridLayout (8, false);
+		layout.marginLeft = layout.marginTop = layout.marginRight = layout.marginBottom = 10;
+		layout.verticalSpacing = 10;
+		composite.setLayout(layout);
+
+		//creation of radio buttons
+		final Button[] excludeIpRadioButton=new Button[2];
+		for (int i=0; i<2; i++) {
+			excludeIpRadioButton[i] = new Button (composite, SWT.RADIO);
+			switch (i)
+			{
+				case Details.excIpRadioOptDontUse:
+					excludeIpRadioButton[Details.excIpRadioOptDontUse].setText ("don't exclude ip's");
+					break;
+				case Details.excIpRadioOptUse:
+					excludeIpRadioButton[Details.excIpRadioOptUse].setText ("exclude these ip's");
+					break;
+				
+			}
+			if (i == 0) excludeIpRadioButton[i].setSelection (true);
+			emptyLabel1 = new Label (composite, SWT.CENTER);
+			emptyLabel1 = new Label (composite, SWT.CENTER);
+			emptyLabel1 = new Label (composite, SWT.CENTER);
+			emptyLabel1 = new Label (composite, SWT.CENTER);
+			emptyLabel1 = new Label (composite, SWT.CENTER);
+			emptyLabel1 = new Label (composite, SWT.CENTER);
+			emptyLabel1 = new Label (composite, SWT.CENTER);
+		}
+		
+		final Spinner excludeIpSpinner[] = new Spinner[40];
+		for (int i=0; i<10; i++){
+			new Label (composite, SWT.NONE).setText(i+1+") ");
+			for (int j=0; j<4; j++){
+				excludeIpSpinner[i*4+j]=new Spinner(composite, SWT.NONE);
+				// don't allow decimal places
+				excludeIpSpinner[i*4+j].setDigits(0);
+				// set the minimum value to 0
+				excludeIpSpinner[i*4+j].setMinimum(0);
+				// set the maximum value to 255
+				excludeIpSpinner[i*4+j].setMaximum(255);
+				// set the increment value to 1
+				excludeIpSpinner[i*4+j].setIncrement(1);
+				// set the selection to 0
+				excludeIpSpinner[i*4+j].setSelection(0);
+				if (j<3) new Label (composite, SWT.NONE).setText(".");
+			}
+		}
+		
+		// item configuration
+		items[9] = new ExpandItem (bar, SWT.NONE, 9);
+		items[9].setText("exclude specific IP's");
+		items[9].setHeight(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
+		items[9].setControl(composite);
+		items[9].setImage(image);
+		
+		// Last item (10)
 		composite = new Composite (bar, SWT.NONE);
 		layout = new GridLayout ();
 		//layout.marginLeft = layout.marginTop = layout.marginRight = layout.marginBottom = 10;
@@ -513,23 +587,65 @@ public class visualizationStartGui {
 					// lines limit selection
 					details.setLimit(((limitSpinner.getSelection())));
 					
-					int counter=0;
-					ArrayList<Integer> listIP=new ArrayList<Integer>();
+					// additional ip's
+					int additionalcounter=0;
+					ArrayList<Integer> additionallistIP=new ArrayList<Integer>();
 					for (int i=0; i<10; i++){
 						if ( 0 < (additionalIpSpinner[i*4].getSelection() +
 								additionalIpSpinner[i*4+1].getSelection() +
 								additionalIpSpinner[i*4+2].getSelection() +
 								additionalIpSpinner[i*4+3].getSelection())){
 
-							counter++;
-							listIP.add(additionalIpSpinner[i*4].getSelection());
-							listIP.add(additionalIpSpinner[i*4+1].getSelection());
-							listIP.add(additionalIpSpinner[i*4+2].getSelection());
-							listIP.add(additionalIpSpinner[i*4+3].getSelection());
+							additionalcounter++;
+							additionallistIP.add(additionalIpSpinner[i*4].getSelection());
+							additionallistIP.add(additionalIpSpinner[i*4+1].getSelection());
+							additionallistIP.add(additionalIpSpinner[i*4+2].getSelection());
+							additionallistIP.add(additionalIpSpinner[i*4+3].getSelection());
 						}
 
 					}
-					details.setAdditionalIp(counter, listIP);
+					details.setAdditionalIp(additionalcounter, additionallistIP);
+					
+					// additional ip's radio button
+					int additionalChoice=-1;
+					String additionalInfo="";
+					for (int i=0; i<3; i++){
+						if (additionalIpRadioButton[i].getSelection()==true) {
+							additionalChoice=i;
+							additionalInfo=additionalIpRadioButton[i].getText();
+						}
+					}
+					details.setAdditionalIpRadioButton(additionalChoice, additionalInfo);
+					
+					// exclude ip's
+					int excludecounter=0;
+					ArrayList<Integer> excludelistIP=new ArrayList<Integer>();
+					for (int i=0; i<10; i++){
+						if ( 0 < (excludeIpSpinner[i*4].getSelection() +
+								excludeIpSpinner[i*4+1].getSelection() +
+								excludeIpSpinner[i*4+2].getSelection() +
+								excludeIpSpinner[i*4+3].getSelection())){
+
+							excludecounter++;
+							excludelistIP.add(excludeIpSpinner[i*4].getSelection());
+							excludelistIP.add(excludeIpSpinner[i*4+1].getSelection());
+							excludelistIP.add(excludeIpSpinner[i*4+2].getSelection());
+							excludelistIP.add(excludeIpSpinner[i*4+3].getSelection());
+						}
+
+					}
+					details.setExcludeIp(excludecounter, excludelistIP);
+					
+					// exclude ip's radio button
+					int excludeChoice=-1;
+					String excludeInfo="";
+					for (int i=0; i<2; i++){
+						if (excludeIpRadioButton[i].getSelection()==true) {
+							excludeChoice=i;
+							excludeInfo=excludeIpRadioButton[i].getText();
+						}
+					}
+					details.setExcludeIpRadioButton(excludeChoice, excludeInfo);
 				}
 				
 				/*MessageBox messageBox = new MessageBox(shell, SWT.OK |SWT.ICON_INFORMATION);
@@ -563,7 +679,10 @@ public class visualizationStartGui {
 							 "2nd schema name - "+details.getSecondSchemaName()+"\n\n" +
 							 "IPs table name - "+details.getIpsTblTableName()+"\n\n"+
 							 "line limit - "+details.getLimit()+"\n\n" +
-							 "additional ip's - "+((1 > details.getAdditionalIpAsString().length())?"None":("\n"+details.getAdditionalIpAsString()))+"\n\n";
+							 "additional ip's choice - "+details.getAdditionalIpRadioButtonInfo()+"\n"+
+							 (details.getAdditionalIpRadioButton()!=0?((1 > details.getAdditionalIpAsString().length())?"":(details.getAdditionalIpAsString())+"\n"):"") +
+							 "\nexclude ip's choice - "+details.getExcludeIpRadioButtonInfo()+"\n"+
+							 (details.getExcludeIpRadioButton()!=0?((1 > details.getExcludeIpAsString().length())?"":(details.getExcludeIpAsString())+"\n\n"):"");
 				mainMessageBox.setMessage(msg);
 				if (mainMessageBox.open() == SWT.OK)
 				{
@@ -609,11 +728,11 @@ public class visualizationStartGui {
 				// TODO Auto-generated method stub
 			}
 		});
-		items[9] = new ExpandItem (bar, SWT.NONE, 9);
-		items[9].setText("finish");
-		items[9].setHeight(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
-		items[9].setControl(composite);
-		items[9].setImage(image);
+		items[10] = new ExpandItem (bar, SWT.NONE, 10);
+		items[10].setText("finish");
+		items[10].setHeight(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
+		items[10].setControl(composite);
+		items[10].setImage(image);
 		
 		bar.setSpacing(8);
 		

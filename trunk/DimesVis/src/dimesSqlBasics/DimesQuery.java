@@ -2,8 +2,6 @@ package dimesSqlBasics;
 
 import java.util.Vector;
 
-import localDataManagement.IpOperations;
-
 public class DimesQuery
 {
 
@@ -114,11 +112,11 @@ public class DimesQuery
 				//return noDateToString();
 				if (0 < this.dayOfYear)
 				{
-					return noDateToString();
+					return withDateToString();
 				}
 				else
 				{
-					return withDateToString();
+					return noDateToString();
 				}
 			
 			case MainQuerySingleIp:
