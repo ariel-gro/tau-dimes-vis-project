@@ -1,5 +1,4 @@
 package dimesVisGui;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -162,13 +161,21 @@ public class visualizationStartGui {
 		layout.marginLeft = layout.marginTop = layout.marginRight = layout.marginBottom = 10;//distance from border
 		layout.verticalSpacing = 10;//distance between lines
 		composite.setLayout(layout);
+		
+		final Button dateCheckBox = new Button(composite, SWT.CHECK);
+		dateCheckBox.setSelection(false);
+		dateCheckBox.setText("get statistics from a specific date?");
+		dateCheckBox.setLocation(50,200);
+		dateCheckBox.pack();
+		
+		final Label emptyLable = new Label(composite, SWT.CENTER);
+		
 		Date cur_date=new Date();
 		final int date[]={cur_date.getDay(),cur_date.getMonth()+1,cur_date.getYear()+1900};
 		Button open = new Button (composite, SWT.PUSH);
 		open.setText ("Change Date");
 		final Label label = new Label (composite, SWT.CENTER);
 		label.setText ("     "+date[0]+" / "+date[1]+" / "+date[2]+"   ");
-		
 		
 		open.addSelectionListener (new SelectionAdapter () {
 			public void widgetSelected (SelectionEvent e) {
@@ -270,7 +277,6 @@ public class visualizationStartGui {
 		rawResTraceTablenameLabel.setText ("Enter Traceroute Results Table Name");
 		rawResTraceTablenameText = new Text(composite, SWT.LEFT | SWT.BORDER);
 		rawResTraceTablenameText.setText("raw_res_traceroute_"+currYear+"_"+currWeekOfYear);
-		
 
 		// item configuration
 		items[5] = new ExpandItem (bar, SWT.NONE, 5);
@@ -334,7 +340,6 @@ public class visualizationStartGui {
 		ipsTblFullTablenameLabel.setText ("Enter IPs Table Name");
 		ipsTblFullTablenameText = new Text(composite, SWT.LEFT | SWT.BORDER);
 		ipsTblFullTablenameText.setText("IPsTblFull");
-		
 
 		// item configuration
 		items[6] = new ExpandItem (bar, SWT.NONE, 6);
@@ -466,6 +471,9 @@ public class visualizationStartGui {
 					
 					// date selection
 					details.setDate(date[0], date[1], date[2]);
+
+					// if specific date selection
+					details.setIsDate(dateCheckBox.getSelection());
 					
 					// Host Name selection
 					details.setFirstHostName(hostnameText.getText());
@@ -531,28 +539,32 @@ public class visualizationStartGui {
 				
 				MessageBox mainMessageBox = new MessageBox(shell, SWT.OK |SWT.ICON_INFORMATION |SWT.CANCEL);
 				mainMessageBox.setText("Please Confirm Your Preferences");
-				mainMessageBox.setMessage(
-									"first view choice - "+details.getFirstRadioButton()+"\n\n"+
-									"second view choice - "+details.getSecondRadioButton()+"\n\n"+
-									"source ip - "+details.getSourceIp()[0]+":"+details.getSourceIp()[1]+":"+details.getSourceIp()[2]+":"+details.getSourceIp()[3]+"\n\n"+
-									"time measurement method - "+details.getTimeChoiceRadioButton()+"\n\n"+
-									"date of measurement - "+details.getDate()[0]+":"+details.getDate()[1]+":"+details.getDate()[2]+"\n\n"+
-									"host 1 name - "+details.getFirstHostName()+"\n\n" +
-									"port 1 number - "+details.getFirstConnectionPort()+"\n\n" +
-									"user 1 name - "+details.getFirstUserName()+"\n\n" +
-									"password 1 - "+details.getFirstPassword()+"\n\n" +
-									"host 2 name - "+details.getSecondHostName()+"\n\n" +
-									"port 2 number - "+details.getSecondConnectionPort()+"\n\n" +
-									"user 2 name - "+details.getSecondUserName()+"\n\n" +
-									"password 2 - "+details.getSecondPassword()+"\n\n" +
-									"1st schema name - "+details.getFirstSchemaName()+"\n\n" +
-									"raw res main table name - "+details.getResMainTableName()+"\n\n" +
-									"raw res traceroute table name - "+details.getResTraceTableName()+"\n\n"+
-									"2nd schema name - "+details.getSecondSchemaName()+"\n\n" +
-									"IPs table name - "+details.getIpsTblTableName()+"\n\n"+
-									"line limit - "+details.getLimit()+"\n\n" +
-									"additional ip's - \n"+details.getAdditionalIpAsString()+"\n\n"
-									);
+				String msg = "first view choice - "+details.getFirstRadioButton()+"\n\n"+
+							 "second view choice - "+details.getSecondRadioButton()+"\n\n"+
+							 "source ip - "+details.getSourceIp()[0]+"."+details.getSourceIp()[1]+"."+details.getSourceIp()[2]+"."+details.getSourceIp()[3]+"\n\n"+
+							 "time measurement method - "+details.getTimeChoiceRadioButton()+"\n\n"+
+							 "do you want specific date : "+details.getIsDate()+"\n\n";
+				if (details.getIsDate())
+				{
+							 msg += "date of measurement - "+details.getDate()[0]+"/"+details.getDate()[1]+"/"+details.getDate()[2]+"\n\n";
+				}
+				
+				msg +=		 "host 1 name - "+details.getFirstHostName()+"\n\n" +
+							 "port 1 number - "+details.getFirstConnectionPort()+"\n\n" +
+							 "user 1 name - "+((details.getFirstUserName().equals(""))?"Default":details.getFirstUserName())+"\n\n" +
+							 "password 1 - "+((details.getFirstPassword().equals(""))?"Default":details.getFirstPassword())+"\n\n" +
+							 "host 2 name - "+details.getSecondHostName()+"\n\n" +
+							 "port 2 number - "+details.getSecondConnectionPort()+"\n\n" +
+							 "user 2 name - "+((details.getSecondUserName().equals(""))?"Default":details.getSecondUserName())+"\n\n" +
+							 "password 2 - "+((details.getSecondPassword().equals(""))?"Default":details.getSecondPassword())+"\n\n" +
+							 "1st schema name - "+details.getFirstSchemaName()+"\n\n" +
+							 "raw res main table name - "+details.getResMainTableName()+"\n\n" +
+							 "raw res traceroute table name - "+details.getResTraceTableName()+"\n\n"+
+							 "2nd schema name - "+details.getSecondSchemaName()+"\n\n" +
+							 "IPs table name - "+details.getIpsTblTableName()+"\n\n"+
+							 "line limit - "+details.getLimit()+"\n\n" +
+							 "additional ip's - "+((1 > details.getAdditionalIpAsString().length())?"None":("\n"+details.getAdditionalIpAsString()))+"\n\n";
+				mainMessageBox.setMessage(msg);
 				if (mainMessageBox.open() == SWT.OK)
 				{
 					System.out.println("Ok is pressed.");
@@ -603,7 +615,6 @@ public class visualizationStartGui {
 		items[9].setControl(composite);
 		items[9].setImage(image);
 		
-		items[0].setExpanded(true);
 		bar.setSpacing(8);
 		
 		/*Label label2 = new Label(bar, SWT.BORDER );
