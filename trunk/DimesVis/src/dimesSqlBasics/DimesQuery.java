@@ -104,6 +104,7 @@ public class DimesQuery
 		this.tables.add(resTraceIndex, tracerouteTable);
 	}
 	
+	private static int limitIterNum = 0;
 	public String toString()
 	{
 		switch (this.queryType)
@@ -137,7 +138,7 @@ public class DimesQuery
 	{
 		String query = null;
 		if ((null == this.schema)	|| (null == this.tables)	||
-			(null == this.srcIp)		|| (null == this.timeOpt)	||
+			(null == this.srcIp)	|| (null == this.timeOpt)	||
 			(0    > this.limit))
 		{
 			return null;
@@ -154,7 +155,8 @@ public class DimesQuery
 		
 		if (this.limit != 0)	  
 		{
-			query += " LIMIT "+this.limit+";";
+			query += " LIMIT "+(limitIterNum*this.limit)+", "+this.limit+";";
+			limitIterNum++;
 		}
 		else
 		{
@@ -186,7 +188,8 @@ public class DimesQuery
 		
 		if (this.limit != 0)	  
 		{
-			query += " LIMIT "+this.limit+";";
+			query += " LIMIT "+(limitIterNum*this.limit)+", "+this.limit+";";
+			limitIterNum++;
 		}
 		else
 		{
@@ -219,7 +222,8 @@ public class DimesQuery
 		
 		if (this.limit != 0)	  
 		{
-			query += " LIMIT "+this.limit+";";
+			query += " LIMIT "+(limitIterNum*this.limit)+", "+this.limit+";";
+			limitIterNum++;
 		}
 		else
 		{
