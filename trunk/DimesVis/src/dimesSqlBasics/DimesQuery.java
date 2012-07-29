@@ -204,7 +204,7 @@ public class DimesQuery
 		String query = null;
 		if ((null == this.schema)	|| (null == this.tables)	||
 			(null == this.srcIp)	|| (null == this.timeOpt)	||
-			(null == this.destIp)	|| (0    >= this.limit))
+			(null == this.destIp))
 		{
 			return null;
 		}
@@ -218,17 +218,7 @@ public class DimesQuery
 			  + "WHERE (("+this.schema+"."+this.tables.get(resMainIndex)+".CommandType ='TRACEROUTE') "
 			  + "AND ("+this.schema+"."+this.tables.get(resMainIndex)+".reachedDest = 1) "
 			  + "AND ("+this.schema+"."+this.tables.get(resMainIndex)+".SourceIP = '"+this.srcIp+"') "
-			  + "AND ("+this.schema+"."+this.tables.get(resMainIndex)+".DestIP = '"+this.destIp+"'))";
-		
-		if (this.limit != 0)	  
-		{
-			query += " LIMIT "+(limitIterNum*this.limit)+", "+this.limit+";";
-			limitIterNum++;
-		}
-		else
-		{
-			query += ";";
-		}
+			  + "AND ("+this.schema+"."+this.tables.get(resMainIndex)+".DestIP = '"+this.destIp+"'));";
 		
 		return query;
 	}

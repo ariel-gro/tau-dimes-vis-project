@@ -13,7 +13,9 @@ public class Details {
 	public static final int excIpRadioOptUse     = 1;
 	
 	private int firstViewRadioButtonNumber;
+	private String firstViewRadioButtonINFO;
 	private int secondViewRadioButtonNumber;
+	private String secondViewRadioButtonINFO;
 	private int[] sourceIp;
 	private DimesQueryTimeOption timeChoiceRadioButtonNumber;
 	private int[] date;
@@ -45,7 +47,9 @@ public class Details {
 	 */
 	public Details(){
 		firstViewRadioButtonNumber=-1;
+		firstViewRadioButtonINFO="";
 		secondViewRadioButtonNumber=-1;
+		secondViewRadioButtonINFO="";
 		sourceIp=new int[4];
 		timeChoiceRadioButtonNumber=DimesQueryTimeOption.None;
 		date=new int[3];
@@ -73,9 +77,11 @@ public class Details {
 	/*
 	 * set 1st radio button
 	 * @param btnNum
+	 * @param info
 	 */
-	public void setFirstRadioButton(int btnNum){
+	public void setFirstRadioButton(int btnNum, String info){
 		firstViewRadioButtonNumber=btnNum;
+		firstViewRadioButtonINFO=info;
 	}
 	
 	/*
@@ -87,11 +93,21 @@ public class Details {
 	}
 	
 	/*
+	 * get 1st radio button info
+	 * @return firstViewRadioButtonINFO
+	 */
+	public String getFirstRadioButtonInfo(){
+		return firstViewRadioButtonINFO;
+	}
+	
+	/*
 	 * set 2nd radio button
 	 * @param btnNum
+	 * @param info
 	 */
-	public void setSecondRadioButton(int btnNum){
+	public void setSecondRadioButton(int btnNum, String info){
 		secondViewRadioButtonNumber=btnNum;
+		secondViewRadioButtonINFO=info;
 	}
 
 	/*
@@ -100,6 +116,14 @@ public class Details {
 	 */
 	public int getSecondRadioButton(){
 		return secondViewRadioButtonNumber;
+	}
+	
+	/*
+	 * get 2nd radio button info
+	 * @return secondViewRadioButtonINFO
+	 */
+	public String getSecondRadioButtonInfo(){
+		return secondViewRadioButtonINFO;
 	}
 
 	/*

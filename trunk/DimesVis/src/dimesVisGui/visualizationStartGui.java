@@ -31,7 +31,7 @@ public class visualizationStartGui {
 		 */	
 		Composite composite = new Composite (bar, SWT.NONE);
 		composite.setBounds(0, 0, 400, 500);
-		GridLayout layout = new GridLayout (4,false);
+		GridLayout layout = new GridLayout (2,false);
 		layout.marginLeft = layout.marginTop = layout.marginRight = layout.marginBottom = 10;//distance from border
 		layout.verticalSpacing = 10;//distance between lines
 		composite.setLayout(layout);
@@ -39,13 +39,45 @@ public class visualizationStartGui {
 
 		//creation of radio buttons
 		final Button[] firstbuttonArr=new Button[5];
-		for (int i=0; i<5; i++) {
-			firstbuttonArr[i] = new Button (composite, SWT.RADIO);
-			firstbuttonArr[i].setText ("("+i+")");
-			if (i == 0) firstbuttonArr[i].setSelection (true);
-			Label label1 = new Label(composite, SWT.BORDER );
-			label1.setImage(new Image(display,"Images\\"+(i+1)+".bmp"));
-		}
+		
+		firstbuttonArr[0] = new Button (composite, SWT.RADIO);
+		firstbuttonArr[0].setText ("view angle of <30':<60'");
+		firstbuttonArr[1] = new Button (composite, SWT.RADIO);
+		firstbuttonArr[1].setText ("view angle of <-90':<0', side map 2D");
+		
+		Label label_0 = new Label(composite, SWT.BORDER );
+		label_0.setImage(new Image(display,"..\\Images\\1.bmp"));
+		Label label_1 = new Label(composite, SWT.BORDER );
+		label_1.setImage(new Image(display,"..\\Images\\2.bmp"));
+		
+		Label label_empty = new Label(composite, SWT.CENTER);
+		label_empty = new Label(composite, SWT.CENTER );
+		
+		firstbuttonArr[2] = new Button (composite, SWT.RADIO);
+		firstbuttonArr[2].setText ("view angle of <0':<90', flat map 2D");
+		firstbuttonArr[3] = new Button (composite, SWT.RADIO);
+		firstbuttonArr[3].setText ("view angle of <-30':<30'");
+		
+		Label label_2 = new Label(composite, SWT.BORDER );
+		label_2.setImage(new Image(display,"..\\Images\\3.bmp"));
+		Label label_3 = new Label(composite, SWT.BORDER );
+		label_3.setImage(new Image(display,"..\\Images\\4.bmp"));
+		
+		label_empty = new Label(composite, SWT.CENTER );
+		label_empty = new Label(composite, SWT.CENTER );
+		
+		firstbuttonArr[4] = new Button (composite, SWT.RADIO);
+		firstbuttonArr[4].setText ("multiple view angles (all 4)");
+		
+		label_empty = new Label(composite, SWT.CENTER );
+		
+		Label label_4 = new Label(composite, SWT.BORDER );
+		label_4.setImage(new Image(display,"..\\Images\\5.bmp"));
+		
+		label_empty = new Label(composite, SWT.CENTER );
+		label_empty.setText("for best appearnace choose low limit");
+		
+		firstbuttonArr[0].setSelection (true);
 
 		// item configuration
 		items[0] = new ExpandItem (bar, SWT.NONE, 0);
@@ -60,7 +92,7 @@ public class visualizationStartGui {
 		 */
 		composite = new Composite (bar, SWT.NONE);
 		composite.setSize(400, 500);
-		layout = new GridLayout (4,false);
+		layout = new GridLayout (2,false);
 		layout.marginLeft = layout.marginTop = layout.marginRight = layout.marginBottom = 10;//distance from border
 		layout.verticalSpacing = 10;//distance between lines
 		composite.setLayout(layout);
@@ -68,13 +100,21 @@ public class visualizationStartGui {
 
 		//creation of radio buttons
 		final Button[] secondbuttonArr=new Button[2];
-		for (int i=0; i<2; i++) {
-			secondbuttonArr[i] = new Button (composite, SWT.RADIO);
-			secondbuttonArr[i].setText ("("+i+")");
-			if (i == 0) secondbuttonArr[i].setSelection (true);
-			Label label1 = new Label(composite, SWT.BORDER );
-			label1.setImage(new Image(display,"Images\\"+(i+5)+".bmp"));
-		}
+
+		secondbuttonArr[0] = new Button (composite, SWT.RADIO);
+		secondbuttonArr[0].setText ("no info");
+		secondbuttonArr[0].setSelection (true);
+		secondbuttonArr[1] = new Button (composite, SWT.RADIO);
+		secondbuttonArr[1].setText ("with Info DATA");
+		
+		Label label1 = new Label(composite, SWT.BORDER );
+		label1.setImage(new Image(display,"..\\Images\\2.bmp"));
+		
+		Label label2 = new Label(composite, SWT.BORDER );
+		label2.setImage(new Image(display,"..\\Images\\6.bmp"));
+		
+		Label label_info = new Label(composite, SWT.LEFT);
+		label_info.setText("* when choosing points with info,\nhaving a large number of points \nmay block some of the plot view");
 
 		// item configuration
 		items[1] = new ExpandItem (bar, SWT.NONE, 1);
@@ -95,10 +135,11 @@ public class visualizationStartGui {
 		 * item 2
 		 */
 		composite = new Composite (bar, SWT.NONE);
-		layout = new GridLayout (7, false);
+		layout = new GridLayout (8, false);
 		layout.marginLeft = layout.marginTop = layout.marginRight = layout.marginBottom = 10;
 		layout.verticalSpacing = 10;
 		composite.setLayout(layout);
+		
 		final Spinner spinner[] = new Spinner[4];
 
 		for (int i=0; i<4; i++){
@@ -115,6 +156,10 @@ public class visualizationStartGui {
 			spinner[i].setSelection(0);
 			if (i<3) new Label (composite, SWT.NONE).setText(".");
 		}
+		
+		Label label_sourcIP = new Label(composite, SWT.CENTER);
+		label_sourcIP.setText("   Please choose the source IP");
+		
 
 		items[2] = new ExpandItem (bar, SWT.NONE, 2);
 		items[2].setText("Source IP");
@@ -510,6 +555,10 @@ public class visualizationStartGui {
 		//layout.marginLeft = layout.marginTop = layout.marginRight = layout.marginBottom = 10;
 		//layout.verticalSpacing = 10;
 		composite.setLayout(layout);
+		
+		Label donetext = new Label(composite, SWT.CENTER);
+		donetext.setText("press 'done' after filling all fields.   ");
+		
 		Button doneButton = new Button (composite, SWT.PUSH);
 		doneButton.setText ("Done");
 
@@ -524,14 +573,14 @@ public class visualizationStartGui {
 					for (int i=0; i<5; i++){
 						if (firstbuttonArr[i].getSelection()==true) x=i;
 					}
-					details.setFirstRadioButton(x);
+					details.setFirstRadioButton(x,firstbuttonArr[x].getText());
 
 					// second view radio button
 					x=-1;
 					for (int i=0; i<2; i++){
 						if (secondbuttonArr[i].getSelection()==true)x=i;
 					}
-					details.setSecondRadioButton(x);
+					details.setSecondRadioButton(x,secondbuttonArr[x].getText());
 
 					// user IP
 					details.setSourceIp(spinner[0].getSelection(), spinner[1].getSelection(), spinner[2].getSelection(), spinner[3].getSelection());
@@ -654,8 +703,8 @@ public class visualizationStartGui {
 
 					MessageBox mainMessageBox = new MessageBox(shell, SWT.OK |SWT.ICON_INFORMATION |SWT.CANCEL);
 					mainMessageBox.setText("Please Confirm Your Preferences");
-					String msg = "first view choice - "+details.getFirstRadioButton()+"\n\n"+
-							"second view choice - "+details.getSecondRadioButton()+"\n\n"+
+					String msg = "first view choice - "+details.getFirstRadioButtonInfo()+"\n\n"+
+							"second view choice - "+details.getSecondRadioButtonInfo()+"\n\n"+
 							"source ip - "+details.getSourceIp()[0]+"."+details.getSourceIp()[1]+"."+details.getSourceIp()[2]+"."+details.getSourceIp()[3]+"\n\n"+
 							"time measurement method - "+details.getTimeChoiceRadioButton()+"\n\n"+
 							"do you want specific date : "+details.getIsDate()+"\n\n";
@@ -707,7 +756,7 @@ public class visualizationStartGui {
 						
 						if ((details.getAdditionalIpRadioButton()!=Details.addIpRadioOptDontUse)&&(details.getAdditionalIp().length<1)){
 							dataValid=false;
-							errormsg=errormsg+"you want to choose additional IPs but didn't choose any !!!\n";
+							errormsg=errormsg+"you want to chose additional IPs but didn't choose any !!!\n";
 						}
 						
 						if ((details.getExcludeIpRadioButton()!=Details.excIpRadioOptDontUse)&&(details.getExcludeIp().length<1)){
@@ -741,7 +790,7 @@ public class visualizationStartGui {
 								try {
 									Runtime rt = Runtime.getRuntime();
 									//Process pr = rt.exec("cmd /c dir");
-									Process pr = rt.exec("d:\\testing java\\runMatlab.cmd");
+									Process pr = rt.exec("..\\runMatlab.cmd");
 
 									if (null != allDestIPsStringsArray)
 									{
@@ -776,11 +825,10 @@ public class visualizationStartGui {
 		items[10].setHeight(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
 		items[10].setControl(composite);
 		items[10].setImage(image);
+		
+		items[10].setExpanded(true);
 
 		bar.setSpacing(8);
-
-		/*Label label2 = new Label(bar, SWT.BORDER );
-		label2.setImage(new Image(display,"startPagePic.bmp"));*/
 
 		shell.setSize(480, 600);
 		shell.open();
