@@ -146,4 +146,9 @@ public class SourceData
 			return null;
 		}
 	}
+	
+	public boolean containsSeqNum(Long SeqNum)
+	{
+		return this.targetsDataMap.containsKey(SeqNum);
+	}
 }

@@ -39,6 +39,7 @@ public class DimesDbOperationsMain
 	public static String startDimesDbOperations(Details guiDetails)
 	{
 		String retVal = "Success";
+		String queryStartTime = null, queryEndTime = null, parsingStartTime = null, parsingEndTime = null;
 		boolean noErrors = true;
 		int additionIpRadioButtonVal = guiDetails.getAdditionalIpRadioButton();
 		boolean isIpList = ((Details.addIpRadioOptAdd == additionIpRadioButtonVal) || (Details.addIpRadioOptOnlyAdd == additionIpRadioButtonVal));
@@ -124,7 +125,7 @@ public class DimesDbOperationsMain
 
 		DimesQuery queryFromGui;
 		String mainQuery;
-		ResultSet rs;
+		ResultSet rs = null, prevRs = null;
 		String dstIp = null;
 		long seqNum = 0, measuredTime = 0;
 		double lat = 0, lon = 0;
@@ -138,15 +139,18 @@ public class DimesDbOperationsMain
 			if (isGenIps)
 			{	
 				queryFromGui = new DimesQuery(QueryType.MainQuery, mainSchema, mainMainTable, mainTracerouteTable, mainSrcIp, mainDayOfYear, mainTimeopt, mainLimit);
-				while(srcData.getNumOfTargets() < mainLimit)
+
+				while((0 == mainLimit) || (srcData.getNumOfTargets() < mainLimit))
 				{
 					mainQuery = queryFromGui.toString();
 
-					System.out.println("Submit Main Statement Started at: " + now());
+					prevRs = rs;
+					queryStartTime = now();
 					rs = mainConnector.submitStatement(mainQuery);
-					System.out.println("Submit Main Statement Ended at: " + now());
+					queryEndTime = now();
 
-					while ((rs != null) && (rs.next()) && (srcData.getNumOfTargets() < mainLimit))
+					parsingStartTime = now();
+					while ((rs != null) && (rs.next()) && (!rs.equals(prevRs)) && ((0 == mainLimit) || (srcData.getNumOfTargets() < mainLimit)))
 					{
 						seqNum = rs.getLong(2);
 						dstIp = rs.getString(3);
@@ -159,8 +163,17 @@ public class DimesDbOperationsMain
 						if ((!isExcludeList) || ((isExcludeList) && (!excludedIps.containsValue(dstIp))))
 						{
 							td = createTargetDataSingleIP(secondSchema, seqNum, dstIp, measuredTime);
-							srcData.addTarget(seqNum, td);
+							
+							if (null != td)
+							{
+								srcData.addTarget(seqNum, td);
+							}
 						}
+					}
+					//when using unlimited query, make sure not to re-enter the loop
+					if (0 == mainLimit)
+					{
+						mainLimit = -1;
 					}
 				}
 			}
@@ -264,6 +277,7 @@ public class DimesDbOperationsMain
 				retVal = (!noErrors)?retVal:"No results were returned";
 				noErrors = false;
 			}
+			parsingEndTime = now();
 			
 			// write data to file
 			DataFileWriter dfw = new DataFileWriter("OutputFiles\\javaTimesfile.txt");
@@ -295,6 +309,10 @@ public class DimesDbOperationsMain
 		{
 			mainConnector.closeConnection();
 			secondConnector.closeConnection();
+			System.out.println("Submit Main Statement Started at: " + queryStartTime);
+			System.out.println("Submit Main Statement Ended at:   " + queryEndTime);
+			System.out.println("Parsing started at: "+parsingStartTime);
+			System.out.println("Parsing ended at:   "+parsingEndTime);
 		}
 		
 		return retVal;
@@ -316,38 +334,37 @@ public class DimesDbOperationsMain
 
 	private static TargetData createTargetDataSingleIP(String secondSchema, long sequenceNum, String targetIp, long measuredTime) throws SQLException
 	{
-		TargetData localTargetData = new TargetData();
+		TargetData localTargetData = null;
 		ResultSet localResultSet;
 
-		localTargetData.setTargetIP(targetIp);
-		localTargetData.setMeasuredTime(measuredTime);
-
-		localResultSet = getLatLong(targetIp);
-
-		if ((localResultSet != null) && (localResultSet.next()))
+		if (!srcData.containsSeqNum(sequenceNum))
 		{
-			localTargetData.setTargetLatitude(localResultSet.getDouble(1));
-			localTargetData.setTargetLongitude(localResultSet.getDouble(2));
-		}
-		else
-		{
-			System.out
-					.println("Error in main: Second result-set is empty for target: "
-							+ targetIp + ", sequence number: " + sequenceNum);
+			localTargetData = new TargetData();
+			localTargetData.setTargetIP(targetIp);
+			localTargetData.setMeasuredTime(measuredTime);
+			
+			localResultSet = getLatLong(targetIp);
+
+			if ((localResultSet != null) && (localResultSet.next()))
+			{
+				localTargetData.setTargetLatitude(localResultSet.getDouble(1));
+				localTargetData.setTargetLongitude(localResultSet.getDouble(2));
+			}
+			else
+			{
+				System.out.println("Error in main: Second result-set is empty for target: " + targetIp + ", sequence number: " + sequenceNum);
+			}
 		}
 
 		return localTargetData;
 	}
 
-	private static TargetData createTargetDataSingleIP(String secondSchema,
-			long sequenceNum, String targetIp, long measuredTime, double lat,
-			double lon)
+	private static TargetData createTargetDataSingleIP(String secondSchema, long sequenceNum, String targetIp, long measuredTime, double lat, double lon)
 	{
 		TargetData localTargetData = new TargetData();
 
 		localTargetData.setTargetIP(targetIp);
 		localTargetData.setMeasuredTime(measuredTime);
-
 		localTargetData.setTargetLatitude(lat);
 		localTargetData.setTargetLongitude(lon);
 
