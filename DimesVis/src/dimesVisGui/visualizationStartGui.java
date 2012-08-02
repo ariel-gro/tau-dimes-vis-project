@@ -419,6 +419,12 @@ public class visualizationStartGui {
 		limitSpinner.setIncrement(1);
 		// set the selection to 250
 		limitSpinner.setSelection(250);
+		
+		final Button saveFileCheckBox = new Button(composite, SWT.CHECK);
+		saveFileCheckBox.setSelection(false);
+		saveFileCheckBox.setText("Check to save data file for future use");
+		saveFileCheckBox.setLocation(50,200);
+		saveFileCheckBox.pack();
 
 		// item configuration
 		items[7] = new ExpandItem (bar, SWT.NONE, 7);
@@ -695,6 +701,10 @@ public class visualizationStartGui {
 						}
 					}
 					details.setExcludeIpRadioButton(excludeChoice, excludeInfo);
+					
+					Calendar currTime = Calendar.getInstance();
+					details.setIsSaveFile(saveFileCheckBox.getSelection());
+					details.setSaveFileName("..\\OutputFiles\\TimesFile_"+currTime.get(Calendar.DAY_OF_MONTH)+"."+(currTime.get(Calendar.MONTH)+1)+"."+currTime.get(Calendar.YEAR)+"_"+currTime.get(Calendar.HOUR_OF_DAY)+"_"+currTime.get(Calendar.MINUTE)+".txt");
 
 					/*MessageBox messageBox = new MessageBox(shell, SWT.OK |SWT.ICON_INFORMATION);
 					messageBox.setText("Please Confirm Your Preferences");
@@ -713,7 +723,7 @@ public class visualizationStartGui {
 						msg += "date of measurement - "+details.getDate()[0]+"/"+details.getDate()[1]+"/"+details.getDate()[2]+"\n\n";
 					}
 
-					msg +=		 "host 1 name - "+details.getFirstHostName()+"\n\n" +
+					msg +=	"host 1 name - "+details.getFirstHostName()+"\n\n" +
 							"port 1 number - "+details.getFirstConnectionPort()+"\n\n" +
 							"user 1 name - "+((details.getFirstUserName().equals(""))?"Default":details.getFirstUserName())+"\n\n" +
 							"password 1 - "+((details.getFirstPassword().equals(""))?"Default":details.getFirstPassword())+"\n\n" +
@@ -729,8 +739,9 @@ public class visualizationStartGui {
 							"line limit - "+details.getLimit()+"\n\n" +
 							"additional ip's choice - "+details.getAdditionalIpRadioButtonInfo()+"\n"+
 							(details.getAdditionalIpRadioButton()!=0?((1 > details.getAdditionalIpAsString().length())?"":(details.getAdditionalIpAsString())+"\n"):"") +
-							"\nexclude ip's choice - "+details.getExcludeIpRadioButtonInfo()+"\n"+
-							(details.getExcludeIpRadioButton()!=0?((1 > details.getExcludeIpAsString().length())?"":(details.getExcludeIpAsString())+"\n\n"):"");
+							"\n"+"exclude ip's choice - "+details.getExcludeIpRadioButtonInfo()+"\n"+
+							(details.getExcludeIpRadioButton()!=0?((1 > details.getExcludeIpAsString().length())?"":(details.getExcludeIpAsString())+"\n\n"):"") +
+							(details.getIsSaveFile()?"\n"+"saving data to "+details.getSaveFileName():"");
 					mainMessageBox.setMessage(msg);
 					
 					if (mainMessageBox.open() == SWT.OK)

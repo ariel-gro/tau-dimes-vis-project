@@ -40,6 +40,8 @@ public class Details {
 	private int[][] excludeIp;
 	private int excludeIpRadioButton;
 	private String excludeIpRadioButtonInfo;
+	private boolean saveFile;
+	private String saveFileName;
 	
 	
 	/*
@@ -72,6 +74,8 @@ public class Details {
 		excludeIpRadioButton=0;
 		additionalIpRadioButtonInfo="";
 		excludeIpRadioButtonInfo="";
+		saveFile=false;
+		saveFileName="";
 	}
 	
 	/*
@@ -565,5 +569,25 @@ public class Details {
 	 */
 	public String getExcludeIpRadioButtonInfo(){
 		return excludeIpRadioButtonInfo;
+	}
+	
+	public void setIsSaveFile(boolean isSaveFile)
+	{
+		saveFile=isSaveFile;
+	}
+	
+	public boolean getIsSaveFile()
+	{
+		return saveFile;
+	}
+	
+	public void setSaveFileName(String saveFileName)
+	{
+		this.saveFileName=saveFileName;
+	}
+	
+	public String getSaveFileName()
+	{
+		return this.saveFileName;
 	}
 }

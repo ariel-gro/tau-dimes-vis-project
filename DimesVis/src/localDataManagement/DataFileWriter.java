@@ -7,13 +7,30 @@ import java.io.IOException;
 
 public class DataFileWriter
 {
+	private static final String defaultPath = "..\\OutputFiles\\javaTimesfile.txt";
 	private File			matlabInput	= null;
 	private FileWriter		fstream		= null;
 	private BufferedWriter	bwriter		= null;
+	private File			extraFile	= null;
+	private FileWriter		extFstream	= null;
+	private BufferedWriter	extBwriter	= null;
+	private boolean			extraOut	= false;
 
 	public DataFileWriter(String path) throws IOException
 	{
-		this.matlabInput = new File(path);
+		this.matlabInput = new File(defaultPath);
+		this.fstream = new FileWriter(matlabInput);
+		this.bwriter = new BufferedWriter(fstream);
+		
+		extraOut = true;
+		this.extraFile   = new File(path);
+		this.extFstream  = new FileWriter(extraFile);
+		this.extBwriter  = new BufferedWriter(extFstream);
+	}
+	
+	public DataFileWriter() throws IOException
+	{
+		this.matlabInput = new File(defaultPath);
 		this.fstream = new FileWriter(matlabInput);
 		this.bwriter = new BufferedWriter(fstream);
 	}
@@ -29,6 +46,12 @@ public class DataFileWriter
 	{
 		this.bwriter.close();
 		this.fstream.close();
+		
+		if (this.extraOut)
+		{
+			this.extBwriter.close();
+			this.extFstream.close();
+		}
 	}
 
 	private void writeSourceData(SourceData sd) throws IOException
@@ -39,6 +62,16 @@ public class DataFileWriter
 		bwriter.newLine();
 		bwriter.write("" + sd.getSourceLongitude()); // source longitude
 		bwriter.newLine();
+		
+		if (this.extraOut)
+		{
+			extBwriter.write("" + sd.getNumOfTargets()); // num of targets
+			extBwriter.newLine();
+			extBwriter.write("" + sd.getSourceLatitude()); // source latitude
+			extBwriter.newLine();
+			extBwriter.write("" + sd.getSourceLongitude()); // source longitude
+			extBwriter.newLine();
+		}
 	}
 
 	private void writeAllDestData(SourceData sd) throws IOException
@@ -76,6 +109,20 @@ public class DataFileWriter
 		bwriter.newLine();
 		bwriter.write(dstTimes);
 		bwriter.newLine();
+		
+		if (this.extraOut)
+		{
+			extBwriter.write(dstNums);
+			extBwriter.newLine();
+			extBwriter.write(dstNames);
+			extBwriter.newLine();
+			extBwriter.write(dstLats);
+			extBwriter.newLine();
+			extBwriter.write(dstLongs);
+			extBwriter.newLine();
+			extBwriter.write(dstTimes);
+			extBwriter.newLine();
+		}
 	}
 	
 	private void writeOptions(int firstRadioButton, int secondRadioButton) throws IOException
@@ -83,5 +130,12 @@ public class DataFileWriter
 		bwriter.write(firstRadioButton+"");
 		bwriter.newLine();
 		bwriter.write(secondRadioButton+"");
+		
+		if (this.extraOut)
+		{
+			extBwriter.write(firstRadioButton+"");
+			extBwriter.newLine();
+			extBwriter.write(secondRadioButton+"");
+		}
 	}
 }
