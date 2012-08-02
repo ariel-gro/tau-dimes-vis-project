@@ -310,7 +310,15 @@ public class DimesDbOperationsMain
 			parsingEndTime = now();
 			
 			// write data to file
-			DataFileWriter dfw = new DataFileWriter("OutputFiles\\javaTimesfile.txt");
+			DataFileWriter dfw;
+			if (guiDetails.getIsSaveFile())
+			{
+				dfw = new DataFileWriter(guiDetails.getSaveFileName());
+			}
+			else
+			{
+				dfw = new DataFileWriter();
+			}
 			dfw.writeFullDataToFile(srcData, guiDetails.getFirstRadioButton(), guiDetails.getSecondRadioButton());
 			dfw.closeDataFileWriter();
 		}
