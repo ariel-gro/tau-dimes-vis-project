@@ -125,13 +125,14 @@ public class DimesDbOperationsMain
 
 		DimesQuery queryFromGui;
 		String mainQuery;
-		ResultSet rs = null, prevRs = null;
+		ResultSet rs;
 		String dstIp = null;
 		long seqNum = 0, measuredTime = 0;
 		double lat = 0, lon = 0;
 		srcData = new SourceData(mainSrcIp);
 		TargetData td = null;
 		ResultSet secRs;
+		int removedDests = 0;
 
 		try
 		{
@@ -140,17 +141,47 @@ public class DimesDbOperationsMain
 			{	
 				queryFromGui = new DimesQuery(QueryType.MainQuery, mainSchema, mainMainTable, mainTracerouteTable, mainSrcIp, mainDayOfYear, mainTimeopt, mainLimit);
 
-				while((0 == mainLimit) || (srcData.getNumOfTargets() < mainLimit))
+				mainQuery = queryFromGui.toString();
+
+				queryStartTime = now();
+				rs = mainConnector.submitStatement(mainQuery);
+				queryEndTime = now();
+
+				parsingStartTime = now();
+				while ((rs != null) && (rs.next()))
 				{
-					mainQuery = queryFromGui.toString();
+					seqNum = rs.getLong(2);
+					dstIp = rs.getString(3);
+					measuredTime = rs.getLong(4);
 
-					prevRs = rs;
-					queryStartTime = now();
+					//insert destination if:
+					//there is no exclude list
+					//or
+					//there is an exclude list and the destination is not in it 
+					if ((!isExcludeList) || ((isExcludeList) && (!excludedIps.containsValue(dstIp))))
+					{
+						td = createTargetDataSingleIP(secondSchema, seqNum, dstIp, measuredTime);
+
+						if (null != td)
+						{
+							srcData.addTarget(seqNum, td);
+						}
+					}
+					else
+					{
+						removedDests++;
+					}
+				}
+				
+				while (removedDests > 0)
+				{
+					mainQuery = queryFromGui.getExtraIpsQueryString(removedDests);
+					
+					removedDests = 0;
+
 					rs = mainConnector.submitStatement(mainQuery);
-					queryEndTime = now();
 
-					parsingStartTime = now();
-					while ((rs != null) && (rs.next()) && (!rs.equals(prevRs)) && ((0 == mainLimit) || (srcData.getNumOfTargets() < mainLimit)))
+					while ((rs != null) && (rs.next()))
 					{
 						seqNum = rs.getLong(2);
 						dstIp = rs.getString(3);
@@ -163,17 +194,16 @@ public class DimesDbOperationsMain
 						if ((!isExcludeList) || ((isExcludeList) && (!excludedIps.containsValue(dstIp))))
 						{
 							td = createTargetDataSingleIP(secondSchema, seqNum, dstIp, measuredTime);
-							
+
 							if (null != td)
 							{
 								srcData.addTarget(seqNum, td);
 							}
 						}
-					}
-					//when using unlimited query, make sure not to re-enter the loop
-					if (0 == mainLimit)
-					{
-						mainLimit = -1;
+						else
+						{
+							removedDests++;
+						}
 					}
 				}
 			}
@@ -196,7 +226,7 @@ public class DimesDbOperationsMain
 				
 				while (index < additionalDestArr.length)
 				{
-					queryFromGui = new DimesQuery(QueryType.MainQuerySingleIp, mainSchema, mainMainTable, mainTracerouteTable, mainSrcIp, additionalDestArr[index], mainDayOfYear, mainTimeopt, mainLimit);
+					queryFromGui = new DimesQuery(QueryType.MainQuerySingleIp, mainSchema, mainMainTable, mainTracerouteTable, mainSrcIp, additionalDestArr[index], mainDayOfYear, mainTimeopt);
 					mainQuery = queryFromGui.toString();
 					rs = mainConnector.submitStatement(mainQuery);
 

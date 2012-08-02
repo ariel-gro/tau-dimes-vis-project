@@ -44,7 +44,7 @@ public class DimesQuery
 		this.tables.add(resTraceIndex, tracerouteTable);
 	}
 	
-	DimesQuery(QueryType queryType, String schemaName, String mainTable, String tracerouteTable, String sourceIP, String destIp, int dayOfYear, DimesQueryTimeOption queryTimeOption, int limit)
+	DimesQuery(QueryType queryType, String schemaName, String mainTable, String tracerouteTable, String sourceIP, String destIp, int dayOfYear, DimesQueryTimeOption queryTimeOption)
 	{
 		this.queryType = queryType;
 		
@@ -61,7 +61,6 @@ public class DimesQuery
 		this.destIp    = destIp;
 		this.dayOfYear = dayOfYear;
 		this.timeOpt   = queryTimeOption;
-		this.limit     = limit;
 		
 		this.tables.add(resMainIndex, mainTable);
 		this.tables.add(resTraceIndex, tracerouteTable);
@@ -104,7 +103,6 @@ public class DimesQuery
 		this.tables.add(resTraceIndex, tracerouteTable);
 	}
 	
-	private static int limitIterNum = 0;
 	public String toString()
 	{
 		switch (this.queryType)
@@ -151,12 +149,12 @@ public class DimesQuery
 			  + "AND ("+this.schema+"."+this.tables.get(resMainIndex)+".DestAddress = "+this.schema+"."+this.tables.get(resTraceIndex)+".hopAddress)) "
 			  + "WHERE (("+this.schema+"."+this.tables.get(resMainIndex)+".CommandType ='TRACEROUTE') "
 			  + "AND ("+this.schema+"."+this.tables.get(resMainIndex)+".reachedDest = 1) "
-			  + "AND ("+this.schema+"."+this.tables.get(resMainIndex)+".SourceIP = '"+this.srcIp+"'))";
+			  + "AND ("+this.schema+"."+this.tables.get(resMainIndex)+".SourceIP = '"+this.srcIp+"')) "
+			  + "GROUP BY SequenceNum";
 		
 		if (this.limit != 0)	  
 		{
-			query += " LIMIT "+(limitIterNum*this.limit)+", "+this.limit+";";
-			limitIterNum++;
+			query += " LIMIT "+this.limit+";";
 		}
 		else
 		{
@@ -184,12 +182,12 @@ public class DimesQuery
 			  + "WHERE (("+this.schema+"."+this.tables.get(resMainIndex)+".CommandType ='TRACEROUTE') "
 			  + "AND ("+this.schema+"."+this.tables.get(resMainIndex)+".reachedDest = 1) "
 			  + "AND ("+this.schema+"."+this.tables.get(resMainIndex)+".SourceIP = '"+this.srcIp+"') "
-			  + "AND (DAYOFYEAR("+this.schema+"."+this.tables.get(resMainIndex)+".InsertTime) = "+this.dayOfYear+"))";
+			  + "AND (DAYOFYEAR("+this.schema+"."+this.tables.get(resMainIndex)+".InsertTime) = "+this.dayOfYear+")) "
+			  + "GROUP BY SequenceNum";
 		
 		if (this.limit != 0)	  
 		{
-			query += " LIMIT "+(limitIterNum*this.limit)+", "+this.limit+";";
-			limitIterNum++;
+			query += " LIMIT "+this.limit+";";
 		}
 		else
 		{
@@ -262,5 +260,13 @@ public class DimesQuery
 	public void setDestIp(String newDestIp)
 	{
 		this.destIp = newDestIp;
+	}
+	
+	public String getExtraIpsQueryString(int numOfExtraIps)
+	{
+		 String retVal = this.toString().replace(" LIMIT "+this.limit, " LIMIT "+this.limit+", "+numOfExtraIps);
+		
+		this.limit += numOfExtraIps;
+		return retVal;
 	}
 }
