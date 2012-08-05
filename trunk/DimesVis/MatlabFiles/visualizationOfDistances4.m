@@ -50,7 +50,7 @@ end
 
 avals = fnval(st,xy);
 
-if (viewoption==5)
+if (viewoption==4)
 figure('Position',[50,60,850,760]);    
 subplot(2,2,1)
 fnplt(st), hold on
@@ -124,7 +124,7 @@ ylabel('Lan')
 title('dist ratio, virtual/geographic',... 
   'FontWeight','bold')
 
-elseif (viewoption==1)
+elseif (viewoption==0)
 figure('Position',[50,80,700,600]);
 fnplt(st), hold on
 plot3(xy(1,:),xy(2,:),distance_ratio,'wo','markerfacecolor','k');
@@ -143,7 +143,7 @@ ylabel('Lan')
 title('dist ratio, virtual/geographic',... 
   'FontWeight','bold')
 
-elseif (viewoption==3)
+elseif (viewoption==2)
 figure('Position',[50,80,700,600]);
 fnplt(st), hold on
 plot3(xy(1,:),xy(2,:),distance_ratio,'wo','markerfacecolor','k');
@@ -162,7 +162,7 @@ ylabel('Lan')
 title('dist ratio, virtual/geographic',... 
   'FontWeight','bold')
 
-elseif (viewoption==4)
+elseif (viewoption==3)
 figure('Position',[50,80,700,600]);
 fnplt(st), hold on
 plot3(xy(1,:),xy(2,:),distance_ratio,'wo','markerfacecolor','k');
@@ -181,7 +181,7 @@ ylabel('Lan')
 title('dist ratio, virtual/geographic',... 
   'FontWeight','bold')  
 
-elseif (viewoption==2)
+elseif (viewoption==1)
 figure('Position',[50,80,700,600]);
 fnplt(st), hold on
 plot3(xy(1,:),xy(2,:),distance_ratio,'wo','markerfacecolor','k');
