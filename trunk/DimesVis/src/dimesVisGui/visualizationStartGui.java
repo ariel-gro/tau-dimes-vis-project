@@ -1,7 +1,6 @@
 package dimesVisGui;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import org.eclipse.swt.*;
 import org.eclipse.swt.layout.*;
 import org.eclipse.swt.widgets.*;
@@ -52,9 +51,9 @@ public class visualizationStartGui {
 		firstbuttonArr[1].setText ("view angle of <-90':<0', side map 2D");
 		
 		Label label_0 = new Label(composite, SWT.BORDER );
-		label_0.setImage(new Image(display,"..\\Images\\1.bmp"));
+		label_0.setImage(new Image(display,"../Images/1.bmp"));
 		Label label_1 = new Label(composite, SWT.BORDER );
-		label_1.setImage(new Image(display,"..\\Images\\2.bmp"));
+		label_1.setImage(new Image(display,"../Images/2.bmp"));
 		
 		Label label_empty = new Label(composite, SWT.CENTER);
 		label_empty = new Label(composite, SWT.CENTER );
@@ -65,9 +64,9 @@ public class visualizationStartGui {
 		firstbuttonArr[3].setText ("view angle of <-30':<30'");
 		
 		Label label_2 = new Label(composite, SWT.BORDER );
-		label_2.setImage(new Image(display,"..\\Images\\3.bmp"));
+		label_2.setImage(new Image(display,"../Images/3.bmp"));
 		Label label_3 = new Label(composite, SWT.BORDER );
-		label_3.setImage(new Image(display,"..\\Images\\4.bmp"));
+		label_3.setImage(new Image(display,"../Images/4.bmp"));
 		
 		label_empty = new Label(composite, SWT.CENTER );
 		label_empty = new Label(composite, SWT.CENTER );
@@ -78,7 +77,7 @@ public class visualizationStartGui {
 		label_empty = new Label(composite, SWT.CENTER );
 		
 		Label label_4 = new Label(composite, SWT.BORDER );
-		label_4.setImage(new Image(display,"..\\Images\\5.bmp"));
+		label_4.setImage(new Image(display,"../Images/5.bmp"));
 		
 		label_empty = new Label(composite, SWT.CENTER );
 		label_empty.setText("for best appearnace choose low limit");
@@ -114,10 +113,10 @@ public class visualizationStartGui {
 		secondbuttonArr[1].setText ("with Info DATA");
 		
 		Label label1 = new Label(composite, SWT.BORDER );
-		label1.setImage(new Image(display,"..\\Images\\1.bmp"));
+		label1.setImage(new Image(display,"../Images/1.bmp"));
 		
 		Label label2 = new Label(composite, SWT.BORDER );
-		label2.setImage(new Image(display,"..\\Images\\6.bmp"));
+		label2.setImage(new Image(display,"../Images/6.bmp"));
 		
 		Label label_info = new Label(composite, SWT.LEFT);
 		label_info.setText("* when choosing points with info,\nhaving a large number of points \nmay block some of the plot view");
@@ -710,7 +709,7 @@ public class visualizationStartGui {
 					
 					Calendar currTime = Calendar.getInstance();
 					details.setIsSaveFile(saveFileCheckBox.getSelection());
-					details.setSaveFileName("..\\OutputFiles\\TimesFile_"+currTime.get(Calendar.DAY_OF_MONTH)+"."+(currTime.get(Calendar.MONTH)+1)+"."+currTime.get(Calendar.YEAR)+"_"+currTime.get(Calendar.HOUR_OF_DAY)+"_"+currTime.get(Calendar.MINUTE)+".txt");
+					details.setSaveFileName("../OutputFiles/TimesFile_"+currTime.get(Calendar.DAY_OF_MONTH)+"."+(currTime.get(Calendar.MONTH)+1)+"."+currTime.get(Calendar.YEAR)+"_"+currTime.get(Calendar.HOUR_OF_DAY)+"_"+currTime.get(Calendar.MINUTE)+".txt");
 
 					/*MessageBox messageBox = new MessageBox(shell, SWT.OK |SWT.ICON_INFORMATION);
 					messageBox.setText("Please Confirm Your Preferences");
@@ -807,7 +806,7 @@ public class visualizationStartGui {
 								try {
 									Runtime rt = Runtime.getRuntime();
 									//Process pr = rt.exec("cmd /c dir");
-									Process pr = rt.exec("..\\runMatlab.cmd");
+									Process pr = rt.exec("../runMatlab.cmd");
 
 									if (null != allDestIPsStringsArray)
 									{

@@ -7,7 +7,7 @@ import java.io.IOException;
 
 public class DataFileWriter
 {
-	private static final String defaultPath = "..\\OutputFiles\\javaTimesfile.txt";
+	private static final String defaultPath = "../OutputFiles/javaTimesfile.txt";
 	private File			matlabInput	= null;
 	private FileWriter		fstream		= null;
 	private BufferedWriter	bwriter		= null;
