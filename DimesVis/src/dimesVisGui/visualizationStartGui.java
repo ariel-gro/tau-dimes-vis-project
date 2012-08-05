@@ -5,6 +5,7 @@ import java.util.Date;
 import org.eclipse.swt.*;
 import org.eclipse.swt.layout.*;
 import org.eclipse.swt.widgets.*;
+import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.*;
@@ -19,10 +20,15 @@ public class visualizationStartGui {
 
 		final Display display = new Display ();
 		final Shell shell = new Shell (display);
-		shell.setMinimumSize(480,600);
+		shell.setLayout(new FillLayout());
+		shell.setMinimumSize(180,300);
 		shell.setText("Welcome to Visual Distance");
-		ExpandBar bar = new ExpandBar (shell, SWT.V_SCROLL);
+		SashForm sashForm = new SashForm(shell, SWT.VERTICAL);
+		ExpandBar bar = new ExpandBar (sashForm, SWT.V_SCROLL);
 		bar.setBounds(0, 0, 471, 566);
+		//Label imagelabel = new Label(sashForm, SWT.BORDER );
+		//imagelabel.setImage(new Image(display,"..\\Images\\startPagePic.bmp"));
+		//imagelabel.setAlignment(SWT.CENTER);
 		ExpandItem items[] = new ExpandItem[11];
 		Image image = display.getSystemImage(SWT.ICON_QUESTION);
 
@@ -108,7 +114,7 @@ public class visualizationStartGui {
 		secondbuttonArr[1].setText ("with Info DATA");
 		
 		Label label1 = new Label(composite, SWT.BORDER );
-		label1.setImage(new Image(display,"..\\Images\\2.bmp"));
+		label1.setImage(new Image(display,"..\\Images\\1.bmp"));
 		
 		Label label2 = new Label(composite, SWT.BORDER );
 		label2.setImage(new Image(display,"..\\Images\\6.bmp"));
@@ -767,7 +773,7 @@ public class visualizationStartGui {
 						
 						if ((details.getAdditionalIpRadioButton()!=Details.addIpRadioOptDontUse)&&(details.getAdditionalIp().length<1)){
 							dataValid=false;
-							errormsg=errormsg+"you want to chose additional IPs but didn't choose any !!!\n";
+							errormsg=errormsg+"you want to choose additional IPs but didn't choose any !!!\n";
 						}
 						
 						if ((details.getExcludeIpRadioButton()!=Details.excIpRadioOptDontUse)&&(details.getExcludeIp().length<1)){
