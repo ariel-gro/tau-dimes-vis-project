@@ -13,7 +13,7 @@ import dimesSqlBasics.DimesDbOperationsMain;
 
 public class visualizationStartGui {
 
-	public static Details startMenu()
+	public static void startMenu()
 	{
 		final Details details=new Details();
 
@@ -21,13 +21,10 @@ public class visualizationStartGui {
 		final Shell shell = new Shell (display);
 		shell.setLayout(new FillLayout());
 		shell.setMinimumSize(180,300);
-		shell.setText("Welcome to Visual Distance");
+		shell.setText("Welcome to Visualization of  Network Distances");
 		SashForm sashForm = new SashForm(shell, SWT.VERTICAL);
 		ExpandBar bar = new ExpandBar (sashForm, SWT.V_SCROLL);
 		bar.setBounds(0, 0, 471, 566);
-		//Label imagelabel = new Label(sashForm, SWT.BORDER );
-		//imagelabel.setImage(new Image(display,"..\\Images\\startPagePic.bmp"));
-		//imagelabel.setAlignment(SWT.CENTER);
 		ExpandItem items[] = new ExpandItem[11];
 		Image image = display.getSystemImage(SWT.ICON_QUESTION);
 
@@ -46,9 +43,9 @@ public class visualizationStartGui {
 		final Button[] firstbuttonArr=new Button[5];
 		
 		firstbuttonArr[0] = new Button (composite, SWT.RADIO);
-		firstbuttonArr[0].setText ("view angle of <30':<60'");
+		firstbuttonArr[0].setText ("View angle of <30':<60'");
 		firstbuttonArr[1] = new Button (composite, SWT.RADIO);
-		firstbuttonArr[1].setText ("view angle of <-90':<0', side map 2D");
+		firstbuttonArr[1].setText ("View angle of <-90':<0', side map 2D");
 		
 		Label label_0 = new Label(composite, SWT.BORDER );
 		label_0.setImage(new Image(display,"../Images/1.bmp"));
@@ -59,9 +56,9 @@ public class visualizationStartGui {
 		label_empty = new Label(composite, SWT.CENTER );
 		
 		firstbuttonArr[2] = new Button (composite, SWT.RADIO);
-		firstbuttonArr[2].setText ("view angle of <0':<90', flat map 2D");
+		firstbuttonArr[2].setText ("View angle of <0':<90', flat map 2D");
 		firstbuttonArr[3] = new Button (composite, SWT.RADIO);
-		firstbuttonArr[3].setText ("view angle of <-30':<30'");
+		firstbuttonArr[3].setText ("View angle of <-30':<30'");
 		
 		Label label_2 = new Label(composite, SWT.BORDER );
 		label_2.setImage(new Image(display,"../Images/3.bmp"));
@@ -72,7 +69,7 @@ public class visualizationStartGui {
 		label_empty = new Label(composite, SWT.CENTER );
 		
 		firstbuttonArr[4] = new Button (composite, SWT.RADIO);
-		firstbuttonArr[4].setText ("multiple view angles (all 4)");
+		firstbuttonArr[4].setText ("Multiple view angles (all 4)");
 		
 		label_empty = new Label(composite, SWT.CENTER );
 		
@@ -80,13 +77,13 @@ public class visualizationStartGui {
 		label_4.setImage(new Image(display,"../Images/5.bmp"));
 		
 		label_empty = new Label(composite, SWT.CENTER );
-		label_empty.setText("for best appearnace choose low limit");
+		label_empty.setText("For best appearnace choose low limit");
 		
 		firstbuttonArr[0].setSelection (true);
 
 		// item configuration
 		items[0] = new ExpandItem (bar, SWT.NONE, 0);
-		items[0].setText("visual preferences");
+		items[0].setText("Visual Preferences");
 		items[0].setHeight(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
 		items[0].setControl(composite);
 		items[0].setImage(image);
@@ -107,10 +104,10 @@ public class visualizationStartGui {
 		final Button[] secondbuttonArr=new Button[2];
 
 		secondbuttonArr[0] = new Button (composite, SWT.RADIO);
-		secondbuttonArr[0].setText ("no info");
+		secondbuttonArr[0].setText ("Without Info");
 		secondbuttonArr[0].setSelection (true);
 		secondbuttonArr[1] = new Button (composite, SWT.RADIO);
-		secondbuttonArr[1].setText ("with Info DATA");
+		secondbuttonArr[1].setText ("With Info Data");
 		
 		Label label1 = new Label(composite, SWT.BORDER );
 		label1.setImage(new Image(display,"../Images/1.bmp"));
@@ -119,21 +116,14 @@ public class visualizationStartGui {
 		label2.setImage(new Image(display,"../Images/6.bmp"));
 		
 		Label label_info = new Label(composite, SWT.LEFT);
-		label_info.setText("* when choosing points with info,\nhaving a large number of points \nmay block some of the plot view");
+		label_info.setText("*Note: When choosing points with info,\nhaving a large number of points \nmay block some of the plot view");
 
 		// item configuration
 		items[1] = new ExpandItem (bar, SWT.NONE, 1);
-		items[1].setText("visual data");
+		items[1].setText("Visual Info Data");
 		items[1].setHeight(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
 		items[1].setControl(composite);
 		items[1].setImage(image);
-		items[1].addListener(1, new Listener() {
-
-			public void handleEvent(Event event) {
-				System.out.println("aaa");
-			}
-
-		});
 
 
 		/*
@@ -187,9 +177,9 @@ public class visualizationStartGui {
 		final Button[] thirdbuttonArr=new Button[3];
 		for (int i=0; i<3; i++) {
 			thirdbuttonArr[i] = new Button (composite, SWT.RADIO);
-			if (i==0) thirdbuttonArr[i].setText ("( Best time )");
-			if (i==1) thirdbuttonArr[i].setText ("( Average time )");
-			if (i==2) thirdbuttonArr[i].setText ("( Worst time )");
+			if (i==0) thirdbuttonArr[i].setText (" Best time ");
+			if (i==1) thirdbuttonArr[i].setText (" Average time ");
+			if (i==2) thirdbuttonArr[i].setText (" Worst time ");
 
 			//set average as default
 			if (i == 1) thirdbuttonArr[i].setSelection (true);
@@ -197,7 +187,7 @@ public class visualizationStartGui {
 
 		// item configuration
 		items[3] = new ExpandItem (bar, SWT.NONE, 3);
-		items[3].setText("time measurement");
+		items[3].setText("Time Measurement");
 		items[3].setHeight(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
 		items[3].setControl(composite);
 		items[3].setImage(image);
@@ -214,11 +204,11 @@ public class visualizationStartGui {
 
 		final Button dateCheckBox = new Button(composite, SWT.CHECK);
 		dateCheckBox.setSelection(false);
-		dateCheckBox.setText("get statistics from a specific date?");
+		dateCheckBox.setText("Get results for a specific date?");
 		dateCheckBox.setLocation(50,200);
 		dateCheckBox.pack();
 
-		final Label emptyLabel = new Label (composite, SWT.CENTER);
+		new Label (composite, SWT.CENTER);
 
 		Calendar cur_date = Calendar.getInstance();
 		final int date[]={cur_date.get(Calendar.DAY_OF_MONTH),cur_date.get(Calendar.MONTH)+1,cur_date.get(Calendar.YEAR)};
@@ -255,7 +245,7 @@ public class visualizationStartGui {
 
 		// item configuration
 		items[4] = new ExpandItem (bar, SWT.NONE, 4);
-		items[4].setText("choose date");
+		items[4].setText("Choose Date");
 		items[4].setHeight(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
 		items[4].setControl(composite);
 		items[4].setImage(image);
@@ -274,7 +264,7 @@ public class visualizationStartGui {
 		final Label hostnameLabel;
 		final Text hostnameText;
 		hostnameLabel = new Label (composite, SWT.CENTER);
-		hostnameLabel.setText ("Enter Host Name");
+		hostnameLabel.setText ("Enter host name");
 		hostnameText = new Text(composite, SWT.LEFT | SWT.BORDER);
 		hostnameText.setText("127.0.0.1");
 
@@ -282,7 +272,7 @@ public class visualizationStartGui {
 		final Label portnumberLabel;
 		final Text portnumberText;
 		portnumberLabel = new Label (composite, SWT.CENTER);
-		portnumberLabel.setText ("Enter Port Number");
+		portnumberLabel.setText ("Enter port number");
 		portnumberText = new Text(composite, SWT.LEFT | SWT.BORDER);
 		portnumberText.setText("3306");
 
@@ -308,7 +298,7 @@ public class visualizationStartGui {
 		final Label firstSchemaLabel;
 		final Text firstSchemaText;
 		firstSchemaLabel = new Label (composite, SWT.CENTER);
-		firstSchemaLabel.setText ("Enter Schema Name for raw_res_main/traceroute");
+		firstSchemaLabel.setText ("Enter schema name for raw_res_main/traceroute");
 		firstSchemaText = new Text(composite, SWT.LEFT | SWT.BORDER);
 		firstSchemaText.setText("dimes_results_"+currYear);
 
@@ -316,7 +306,7 @@ public class visualizationStartGui {
 		final Label rawResMainTablenameLabel;
 		final Text rawResMainTablenameText;
 		rawResMainTablenameLabel = new Label (composite, SWT.CENTER);
-		rawResMainTablenameLabel.setText ("Enter Main Results Table Name");
+		rawResMainTablenameLabel.setText ("Enter main results table name");
 		rawResMainTablenameText = new Text(composite, SWT.LEFT | SWT.BORDER);
 		rawResMainTablenameText.setText("raw_res_main_"+currYear+"_"+currWeekOfYear);
 
@@ -324,7 +314,7 @@ public class visualizationStartGui {
 		final Label rawResTraceTablenameLabel;
 		final Text rawResTraceTablenameText;
 		rawResTraceTablenameLabel = new Label (composite, SWT.CENTER);
-		rawResTraceTablenameLabel.setText ("Enter Traceroute Results Table Name");
+		rawResTraceTablenameLabel.setText ("Enter traceroute results table name");
 		rawResTraceTablenameText = new Text(composite, SWT.LEFT | SWT.BORDER);
 		rawResTraceTablenameText.setText("raw_res_traceroute_"+currYear+"_"+currWeekOfYear);
 
@@ -349,7 +339,7 @@ public class visualizationStartGui {
 		final Label hostnameLabel2;
 		final Text hostnameText2;
 		hostnameLabel2 = new Label (composite, SWT.CENTER);
-		hostnameLabel2.setText ("Enter Host Name");
+		hostnameLabel2.setText ("Enter host name");
 		hostnameText2 = new Text(composite, SWT.LEFT | SWT.BORDER);
 		hostnameText2.setText("127.0.0.1");
 
@@ -357,7 +347,7 @@ public class visualizationStartGui {
 		final Label portnumberLabel2;
 		final Text portnumberText2;
 		portnumberLabel2 = new Label (composite, SWT.CENTER);
-		portnumberLabel2.setText ("Enter Port Number");
+		portnumberLabel2.setText ("Enter port number");
 		portnumberText2 = new Text(composite, SWT.LEFT | SWT.BORDER);
 		portnumberText2.setText("3306");
 
@@ -379,7 +369,7 @@ public class visualizationStartGui {
 		final Label secondSchemaLabel;
 		final Text secondSchemaText;
 		secondSchemaLabel = new Label (composite, SWT.CENTER);
-		secondSchemaLabel.setText ("Enter Schema Name for IPs Table");
+		secondSchemaLabel.setText ("Enter schema name for IPs table");
 		secondSchemaText = new Text(composite, SWT.LEFT | SWT.BORDER);
 		secondSchemaText.setText("DIMES");
 
@@ -387,7 +377,7 @@ public class visualizationStartGui {
 		final Label ipsTblFullTablenameLabel;
 		final Text ipsTblFullTablenameText;
 		ipsTblFullTablenameLabel = new Label (composite, SWT.CENTER);
-		ipsTblFullTablenameLabel.setText ("Enter IPs Table Name");
+		ipsTblFullTablenameLabel.setText ("Enter IPs table name");
 		ipsTblFullTablenameText = new Text(composite, SWT.LEFT | SWT.BORDER);
 		ipsTblFullTablenameText.setText("IPsTblFull");
 
@@ -411,8 +401,9 @@ public class visualizationStartGui {
 
 
 		//limit number of returned lines
-		final Label limitLabel = new Label (composite, SWT.CENTER);
-		limitLabel.setText("Set limit to the number of returned lines (0 = Unlimited (Might cause memory problems))");
+		final Label limitLabel = new Label (composite, SWT.LEFT);
+		limitLabel.setText("Set limit to the number of returned lines (0 = Unlimited (Might cause memory problems))\n\n"
+						  +"* Note: Limit does not include additional IPs");
 		final Spinner limitSpinner = new Spinner(composite, SWT.NONE);
 		// don't allow decimal places
 		limitSpinner.setDigits(0);
@@ -423,7 +414,7 @@ public class visualizationStartGui {
 		// set the increment value to 1
 		limitSpinner.setIncrement(1);
 		// set the selection to 250
-		limitSpinner.setSelection(250);
+		limitSpinner.setSelection(50);
 		
 		final Button saveFileCheckBox = new Button(composite, SWT.CHECK);
 		saveFileCheckBox.setSelection(false);
@@ -449,29 +440,29 @@ public class visualizationStartGui {
 
 		//creation of radio buttons
 				final Button[] additionalIpRadioButton=new Button[3];
-				Label emptyLabel1;
+
 				for (int i=0; i<3; i++) {
 					additionalIpRadioButton[i] = new Button (composite, SWT.RADIO);
 					switch (i)
 					{
 						case Details.addIpRadioOptDontUse:
-							additionalIpRadioButton[Details.addIpRadioOptDontUse].setText ("don't use additional ip's");
+							additionalIpRadioButton[Details.addIpRadioOptDontUse].setText ("Don't use additional IPs");
 							break;
 						case Details.addIpRadioOptAdd:
-							additionalIpRadioButton[Details.addIpRadioOptAdd].setText ("add as additional ip's");
+							additionalIpRadioButton[Details.addIpRadioOptAdd].setText ("Add as additional IPs");
 							break;
 						case Details.addIpRadioOptOnlyAdd:
-							additionalIpRadioButton[Details.addIpRadioOptOnlyAdd].setText ("use only these ip's");
+							additionalIpRadioButton[Details.addIpRadioOptOnlyAdd].setText ("Use only these IPs");
 							break;
 					}
 					if (i == 0) additionalIpRadioButton[i].setSelection (true);
-					emptyLabel1 = new Label (composite, SWT.CENTER);
-					emptyLabel1 = new Label (composite, SWT.CENTER);
-					emptyLabel1 = new Label (composite, SWT.CENTER);
-					emptyLabel1 = new Label (composite, SWT.CENTER);
-					emptyLabel1 = new Label (composite, SWT.CENTER);
-					emptyLabel1 = new Label (composite, SWT.CENTER);
-					emptyLabel1 = new Label (composite, SWT.CENTER);
+					new Label (composite, SWT.CENTER);
+					new Label (composite, SWT.CENTER);
+					new Label (composite, SWT.CENTER);
+					new Label (composite, SWT.CENTER);
+					new Label (composite, SWT.CENTER);
+					new Label (composite, SWT.CENTER);
+					new Label (composite, SWT.CENTER);
 				}
 				
 				
@@ -496,7 +487,7 @@ public class visualizationStartGui {
 
 		// item configuration
 		items[8] = new ExpandItem (bar, SWT.NONE, 8);
-		items[8].setText("additional specific IP's");
+		items[8].setText("Additional Specific IPs");
 		items[8].setHeight(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
 		items[8].setControl(composite);
 		items[8].setImage(image);
@@ -517,21 +508,21 @@ public class visualizationStartGui {
 			switch (i)
 			{
 				case Details.excIpRadioOptDontUse:
-					excludeIpRadioButton[Details.excIpRadioOptDontUse].setText ("don't exclude ip's");
+					excludeIpRadioButton[Details.excIpRadioOptDontUse].setText ("Don't exclude IPs");
 					break;
 				case Details.excIpRadioOptUse:
-					excludeIpRadioButton[Details.excIpRadioOptUse].setText ("exclude these ip's");
+					excludeIpRadioButton[Details.excIpRadioOptUse].setText ("Exclude these IPs");
 					break;
 
 			}
 			if (i == 0) excludeIpRadioButton[i].setSelection (true);
-			emptyLabel1 = new Label (composite, SWT.CENTER);
-			emptyLabel1 = new Label (composite, SWT.CENTER);
-			emptyLabel1 = new Label (composite, SWT.CENTER);
-			emptyLabel1 = new Label (composite, SWT.CENTER);
-			emptyLabel1 = new Label (composite, SWT.CENTER);
-			emptyLabel1 = new Label (composite, SWT.CENTER);
-			emptyLabel1 = new Label (composite, SWT.CENTER);
+			new Label (composite, SWT.CENTER);
+			new Label (composite, SWT.CENTER);
+			new Label (composite, SWT.CENTER);
+			new Label (composite, SWT.CENTER);
+			new Label (composite, SWT.CENTER);
+			new Label (composite, SWT.CENTER);
+			new Label (composite, SWT.CENTER);
 		}
 
 		final Spinner excludeIpSpinner[] = new Spinner[40];
@@ -555,7 +546,7 @@ public class visualizationStartGui {
 
 		// item configuration
 		items[9] = new ExpandItem (bar, SWT.NONE, 9);
-		items[9].setText("exclude specific IP's");
+		items[9].setText("Exclude Specific IPs");
 		items[9].setHeight(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
 		items[9].setControl(composite);
 		items[9].setImage(image);
@@ -567,8 +558,7 @@ public class visualizationStartGui {
 		//layout.verticalSpacing = 10;
 		composite.setLayout(layout);
 		
-		Label donetext = new Label(composite, SWT.CENTER);
-		donetext.setText("press 'done' after filling all fields.   ");
+		new Label(composite, SWT.CENTER);
 		
 		Button doneButton = new Button (composite, SWT.PUSH);
 		doneButton.setText ("Done");
@@ -720,9 +710,9 @@ public class visualizationStartGui {
 					mainMessageBox.setText("Please Confirm Your Preferences");
 					String msg = "first view choice - "+details.getFirstRadioButtonInfo()+"\n\n"+
 							"second view choice - "+details.getSecondRadioButtonInfo()+"\n\n"+
-							"source ip - "+details.getSourceIp()[0]+"."+details.getSourceIp()[1]+"."+details.getSourceIp()[2]+"."+details.getSourceIp()[3]+"\n\n"+
+							"source IP - "+details.getSourceIp()[0]+"."+details.getSourceIp()[1]+"."+details.getSourceIp()[2]+"."+details.getSourceIp()[3]+"\n\n"+
 							"time measurement method - "+details.getTimeChoiceRadioButton()+"\n\n"+
-							"do you want specific date : "+details.getIsDate()+"\n\n";
+							"use specific date? - "+details.getIsDate()+"\n\n";
 					if (details.getIsDate())
 					{
 						msg += "date of measurement - "+details.getDate()[0]+"/"+details.getDate()[1]+"/"+details.getDate()[2]+"\n\n";
@@ -744,7 +734,7 @@ public class visualizationStartGui {
 							"line limit - "+details.getLimit()+"\n\n" +
 							"additional ip's choice - "+details.getAdditionalIpRadioButtonInfo()+"\n"+
 							(details.getAdditionalIpRadioButton()!=0?((1 > details.getAdditionalIpAsString().length())?"":(details.getAdditionalIpAsString())+"\n"):"") +
-							"\n"+"exclude ip's choice - "+details.getExcludeIpRadioButtonInfo()+"\n"+
+							"\n"+"exclude IPs choice - "+details.getExcludeIpRadioButtonInfo()+"\n"+
 							(details.getExcludeIpRadioButton()!=0?((1 > details.getExcludeIpAsString().length())?"":(details.getExcludeIpAsString())+"\n\n"):"") +
 							(details.getIsSaveFile()?"\n"+"saving data to "+details.getSaveFileName():"");
 					mainMessageBox.setMessage(msg);
@@ -762,9 +752,10 @@ public class visualizationStartGui {
 							for (int i=0; i<exclude.length; i++){
 								
 								//if there is a match between the n'th ip and the i'th ip
-								if ((additional[n][0]==exclude[i][0])&&(additional[n][1]==exclude[i][1])&&(additional[n][2]==exclude[i][2])&&(additional[n][3]==exclude[i][3])){
+								if (((details.getAdditionalIpRadioButton() > 0) && (details.getExcludeIpRadioButton() > 0)) &&
+									(additional[n][0]==exclude[i][0])&&(additional[n][1]==exclude[i][1])&&(additional[n][2]==exclude[i][2])&&(additional[n][3]==exclude[i][3])){
 									dataValid=false;
-									errormsg=errormsg+"you have the same IP in additional IPs, and exclude IPs !!!\n";
+									errormsg=errormsg+"You have the same IP in additional IPs, and exclude IPs !!!\n";
 									break;
 								}
 							}
@@ -772,12 +763,12 @@ public class visualizationStartGui {
 						
 						if ((details.getAdditionalIpRadioButton()!=Details.addIpRadioOptDontUse)&&(details.getAdditionalIp().length<1)){
 							dataValid=false;
-							errormsg=errormsg+"you want to choose additional IPs but didn't choose any !!!\n";
+							errormsg=errormsg+"You want to choose additional IPs but didn't choose any !!!\n";
 						}
 						
 						if ((details.getExcludeIpRadioButton()!=Details.excIpRadioOptDontUse)&&(details.getExcludeIp().length<1)){
 							dataValid=false;
-							errormsg=errormsg+"you chose to exclude IPs but didn't choose any !!!\n";
+							errormsg=errormsg+"You chose to exclude IPs but didn't choose any !!!\n";
 						}
 						
 						if (dataValid){
@@ -805,7 +796,6 @@ public class visualizationStartGui {
 								allDestIPsStringsArray = DimesDbOperationsMain.getDestStringsArray();
 								try {
 									Runtime rt = Runtime.getRuntime();
-									//Process pr = rt.exec("cmd /c dir");
 									Process pr = rt.exec("../runMatlab.cmd");
 
 									if (null != allDestIPsStringsArray)
@@ -833,11 +823,10 @@ public class visualizationStartGui {
 				}
 			}
 			public void widgetDefaultSelected(SelectionEvent e){
-				// TODO Auto-generated method stub
 			}
 		});
 		items[10] = new ExpandItem (bar, SWT.NONE, 10);
-		items[10].setText("finish");
+		items[10].setText("Finish");
 		items[10].setHeight(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
 		items[10].setControl(composite);
 		items[10].setImage(image);
@@ -855,8 +844,6 @@ public class visualizationStartGui {
 		}
 		image.dispose();
 		display.dispose();
-
-		return details;
 	}
 
 }
