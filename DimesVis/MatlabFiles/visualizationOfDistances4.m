@@ -38,7 +38,7 @@ x=[source_lat,x];
 y=[source_lon,y];
 xy=[x;y];
 
-st = tpaps(xy,distance_ratio,0.9); 
+st = tpaps(xy,distance_ratio,0.5); 
 strings=[' ',strings];
 strings=strcat('\bf\color{magenta}',strings);
 str='S )   - source';
