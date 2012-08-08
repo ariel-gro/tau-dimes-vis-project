@@ -24,8 +24,7 @@ public class IpOperations
 		for (int i = 0; i < addrArray.length; i++)
 		{
 			power = addrArray.length - 1 - i;
-			retVal += ((Integer.parseInt(addrArray[i]) % 256 * Math.pow(256,
-					power)));
+			retVal += ((Integer.parseInt(addrArray[i]) % 256 * Math.pow(256, power)));
 		}
 
 		return retVal;
