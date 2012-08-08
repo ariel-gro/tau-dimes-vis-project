@@ -13,7 +13,9 @@ public class IpOperations
 
 	public static long ipStrToLong(String ipAddrStr)
 	{
-		if ((null == ipAddrStr) || (ipAddrStr.equalsIgnoreCase("null")))
+		if ((null == ipAddrStr)						||
+			(ipAddrStr.equalsIgnoreCase("null"))	||
+			(ipAddrStr.equalsIgnoreCase("unknown")))
 		{
 			return 0;
 		}
