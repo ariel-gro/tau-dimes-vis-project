@@ -61,19 +61,7 @@ public class DimesDbOperationsMain
 				excludedIps.put(exInd, exIp);
 			}
 		}
-									// from guiDetails
-		// "SELECT SourceIP, SequenceNum, DestIP, avgTime "
-		// +
-		// "FROM dimes_results_2007.raw_res_main_2007, dimes_results_2007.raw_res_tr_2007 "
-		// + "WHERE ((dimes_results_2007.raw_res_main_2007.reachedDest = 1) "
-		// +
-		// "AND (dimes_results_2007.raw_res_main_2007.DestAddress = dimes_results_2007.raw_res_tr_2007.hopAddress) "
-		// +
-		// "AND (dimes_results_2007.raw_res_main_2007.SequenceNum = dimes_results_2007.raw_res_tr_2007.MainSequenceNum) "
-		// +
-		// "AND (dimes_results_2007.raw_res_main_2007.SourceIP = '141.35.186.237')) "
-		// + "LIMIT 150;";
-		// '130.37.193.141'
+		
 		// get parameters of first connection from the GUI
 		int mainPort = guiDetails.getFirstConnectionPort();
 		String mainUserName = guiDetails.getFirstUserName();
@@ -103,11 +91,6 @@ public class DimesDbOperationsMain
 
 		secondConnector = new Connector(secondPort, secondUserName, secondPassword, secondSchema, secondHostName);
 		secondConnector.connect();
-
-		// DimesQuery dimesQuery = new DimesQuery(QueryType.MainQuery,
-		// "dimes_results_2007", "141.35.186.237", null,
-		// DimesQueryTimeOption.Average, 100);
-		// String mainQuery = dimesQuery.toString();
 
 		String mainMainTable = guiDetails.getResMainTableName();
 		String mainTracerouteTable = guiDetails.getResTraceTableName();
