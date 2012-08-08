@@ -844,6 +844,8 @@ public class visualizationStartGui {
 		}
 		image.dispose();
 		display.dispose();
+		
+		return;
 	}
 
 }
