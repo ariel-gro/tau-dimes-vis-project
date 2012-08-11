@@ -1,0 +1,3 @@
+echo running Java now...
+cd bin
+java -jar DimesVis.jar
