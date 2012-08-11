@@ -1,0 +1,3 @@
+echo running matlab now...
+cd ..\MatlabFiles
+matlab -nosplash -nodesktop -minimize -r visualizationOfDistances4('..\OutputFiles\javaTimesfile.txt')
